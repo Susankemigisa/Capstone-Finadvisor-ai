@@ -46,27 +46,27 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
 
   useEffect(() => { if (isMobile && onMobileClose) onMobileClose() }, [pathname])
 
-  // Clear search when leaving chat page
   useEffect(() => {
     if (pathname !== "/chat") { const timer = setTimeout(() => setSearchQuery(""), 0); return () => clearTimeout(timer); }
   }, [pathname])
 
-  // Filter sessions by search query
   const filteredSessions = useMemo(() => {
     if (!searchQuery.trim()) return sessions
     const q = searchQuery.toLowerCase()
     return sessions.filter(s => (s.title || 'New Chat').toLowerCase().includes(q))
   }, [sessions, searchQuery])
 
-  // Sessions to display — always cap at 12 in sidebar; use /history for full list
   const displayedSessions = useMemo(() => {
     if (searchQuery.trim()) return filteredSessions
     return sessions.slice(0, 12)
   }, [filteredSessions, sessions, searchQuery])
 
+  // CHANGE 1: Removed /plugins from nav. Renamed group labels to plain English.
+  // MAIN → no label (it's the top section, no heading needed)
+  // TOOLS → More
   const NAV_GROUPS = [
     {
-      label: 'MAIN',
+      label: '',
       items: [
         { href: '/chat',      icon: '◈', label: t('nav.chat') },
         { href: '/portfolio', icon: '◎', label: t('nav.portfolio') },
@@ -74,7 +74,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       ]
     },
     {
-      label: 'FINANCE',
+      label: 'Finance',
       items: [
         { href: '/watchlist', icon: '👁',  label: t('nav.watchlist') },
         { href: '/goals',     icon: '🎯', label: t('nav.goals') },
@@ -83,16 +83,15 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       ]
     },
     {
-      label: 'TOOLS',
+      label: 'More',
       items: [
-        { href: '/plugins',   icon: '🔌', label: t('nav.plugins') },
         { href: '/alerts',    icon: '🔔', label: t('nav.alerts') },
         { href: '/export',    icon: '⬇',  label: t('nav.export') },
         { href: '/history',   icon: '🕘', label: t('nav.history') || 'Chat History' },
       ]
     },
     {
-      label: 'ACCOUNT',
+      label: 'Account',
       items: [
         { href: '/settings',  icon: '⚙',  label: t('nav.settings') },
         { href: '/billing',   icon: '◆',  label: user?.tier === 'pro' ? 'Pro ✓' : t('nav.upgrade') },
@@ -128,7 +127,8 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       <div style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
         {NAV_GROUPS.map((group, gi) => (
           <div key={gi} style={{ marginBottom: '4px' }}>
-            {(!collapsed || isMobile) && (
+            {/* Only render group label if it has text */}
+            {group.label && (!collapsed || isMobile) && (
               <div style={{ fontSize: '9px', color: 'var(--text-dim)', letterSpacing: '0.1em', padding: '8px 10px 4px', textTransform: 'uppercase' }}>
                 {group.label}
               </div>
@@ -152,11 +152,9 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
           </div>
         ))}
 
-        {/* Chat section — only visible on /chat page */}
+        {/* Chat sessions — only on /chat */}
         {pathname === '/chat' && (!collapsed || isMobile) && (
           <div style={{ padding: '4px 0 6px' }}>
-
-            {/* New chat button */}
             <button onClick={() => { newSession(); setSearchQuery(''); if (isMobile && onMobileClose) onMobileClose() }}
               style={{ width: '100%', background: 'transparent', border: '1px dashed var(--border)', borderRadius: '6px', color: 'var(--text-dim)', padding: '7px', fontSize: '12px', cursor: 'pointer', transition: 'all 0.15s', marginBottom: '8px' }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold-dim)'; e.currentTarget.style.color = 'var(--text-secondary)' }}
@@ -164,29 +162,13 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
               {t('nav.newChat')}
             </button>
 
-            {/* Search bar — only shows when there are sessions */}
             {sessions.length > 0 && (
               <div style={{ position: 'relative', marginBottom: '6px' }}>
                 <span style={{ position: 'absolute', left: '9px', top: '50%', transform: 'translateY(-50%)', fontSize: '11px', color: 'var(--text-dim)', pointerEvents: 'none' }}>🔍</span>
-                <input
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  onFocus={() => setSearchFocused(true)}
-                  onBlur={() => setSearchFocused(false)}
+                <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                  onFocus={() => setSearchFocused(true)} onBlur={() => setSearchFocused(false)}
                   placeholder={t('nav.searchChats') || 'Search chats...'}
-                  style={{
-                    width: '100%',
-                    background: searchFocused ? 'var(--bg-elevated)' : 'var(--bg-base)',
-                    border: `1px solid ${searchFocused ? 'var(--gold-dim)' : 'var(--border)'}`,
-                    borderRadius: '6px',
-                    padding: '6px 28px 6px 28px',
-                    fontSize: '12px',
-                    color: 'var(--text-primary)',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    transition: 'all 0.15s',
-                  }}
-                />
+                  style={{ width: '100%', background: searchFocused ? 'var(--bg-elevated)' : 'var(--bg-base)', border: `1px solid ${searchFocused ? 'var(--gold-dim)' : 'var(--border)'}`, borderRadius: '6px', padding: '6px 28px', fontSize: '12px', color: 'var(--text-primary)', outline: 'none', boxSizing: 'border-box', transition: 'all 0.15s' }} />
                 {searchQuery && (
                   <button onClick={() => setSearchQuery('')}
                     style={{ position: 'absolute', right: '7px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', fontSize: '11px', padding: 0 }}>✕</button>
@@ -194,22 +176,16 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
               </div>
             )}
 
-            {/* Sessions list */}
             {sessions.length > 0 && (
               <div>
                 <div style={{ fontSize: '9px', color: 'var(--text-dim)', letterSpacing: '0.08em', padding: '4px 8px', textTransform: 'uppercase', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>
-                    {searchQuery
-                      ? `${filteredSessions.length} result${filteredSessions.length !== 1 ? 's' : ''}`
-                      : t('nav.recent')}
-                  </span>
+                  <span>{searchQuery ? `${filteredSessions.length} result${filteredSessions.length !== 1 ? 's' : ''}` : t('nav.recent')}</span>
                   <Link href="/history" style={{ color: 'var(--gold)', fontSize: '9px', textDecoration: 'none', letterSpacing: '0.06em', opacity: 0.8 }}
                     onMouseEnter={e => e.currentTarget.style.opacity = '1'}
                     onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}>
                     {t('nav.viewAll') || 'View all'} →
                   </Link>
                 </div>
-
                 {displayedSessions.length === 0 && searchQuery ? (
                   <div style={{ padding: '16px 8px', fontSize: '12px', color: 'var(--text-dim)', textAlign: 'center' }}>
                     {t('nav.noResults') || 'No chats found'}
@@ -221,8 +197,6 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
                       onDelete={() => deleteSession(s.id)} />
                   ))
                 )}
-
-                {/* Show all → navigate to /history page instead of expanding in sidebar */}
                 {!searchQuery && sessions.length > 12 && (
                   <Link href="/history" style={{ textDecoration: 'none', display: 'block', marginTop: '4px' }}>
                     <div style={{ width: '100%', padding: '6px', background: 'none', border: '1px solid var(--border)', borderRadius: '6px', color: 'var(--gold)', fontSize: '11px', cursor: 'pointer', textAlign: 'center', letterSpacing: '0.04em' }}>

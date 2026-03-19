@@ -6,13 +6,24 @@ import { useThemeStore } from '@/stores/themeStore'
 import { useTranslate } from '@/stores/langStore'
 import Sidebar from '@/components/layout/Sidebar'
 
+// CHANGES:
+// - Removed token counts (prompt_tokens / completion_tokens) — jargon
+// - Removed cost in USD — that's our infra cost, not theirs
+// - Renamed labels to plain English:
+//     total_requests  → "Questions asked"
+//     sessions_count  → "Conversations"
+//     tokens          → removed entirely
+//     avg_response_ms → "Avg response time"
+// - Daily chart now shows "questions per day" not "tokens per day"
+// - Model breakdown: removed cost column, shows usage % only
+// - Removed LangSmith/cache panel — internal developer info
+// - Export renamed: "CSV" → "Spreadsheet (.csv)", "JSON" → "Data file (.json)"
+
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 function req(path) {
   const token = localStorage.getItem('access_token')
-  return fetch(`${API}${path}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  }).then(r => r.json())
+  return fetch(`${API}${path}`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json())
 }
 
 function StatCard({ icon, label, value, sub, color }) {
@@ -27,8 +38,7 @@ function StatCard({ icon, label, value, sub, color }) {
   )
 }
 
-// Simple bar chart using divs
-function BarChart({ data, valueKey = 'tokens', labelKey = 'date', color = 'var(--gold)' }) {
+function BarChart({ data, valueKey = 'requests', labelKey = 'date', color = 'var(--gold)' }) {
   const buildGrid = () => {
     const map = {}
     ;(data || []).forEach(d => { if (d[labelKey]) map[d[labelKey]] = d[valueKey] || 0 })
@@ -51,14 +61,13 @@ function BarChart({ data, valueKey = 'tokens', labelKey = 'date', color = 'var(-
         {grid.map((d, i) => {
           const h = d.value > 0 ? Math.max((d.value / max) * 76, 6) : 6
           return (
-            <div key={i} title={`${d.label}: ${d.value.toLocaleString()}`}
+            <div key={i} title={`${d.label}: ${d.value}`}
               style={{ flex: 1, height: `${h}px`, background: d.value > 0 ? color : 'var(--border)', borderRadius: '2px 2px 0 0', opacity: d.value > 0 ? 0.9 : 0.25, cursor: 'default', transition: 'opacity 0.15s' }}
               onMouseEnter={e => e.currentTarget.style.opacity = '1'}
               onMouseLeave={e => e.currentTarget.style.opacity = d.value > 0 ? '0.9' : '0.25'} />
           )
         })}
       </div>
-      {/* Date labels — show every 2nd day */}
       <div style={{ display: 'flex', gap: '3px', padding: '0 2px' }}>
         {grid.map((d, i) => (
           <div key={i} style={{ flex: 1, fontSize: '8px', color: i % 2 === 0 ? 'var(--text-dim)' : 'transparent', textAlign: 'center', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -68,6 +77,23 @@ function BarChart({ data, valueKey = 'tokens', labelKey = 'date', color = 'var(-
       </div>
     </div>
   )
+}
+
+// Friendly model display names — hide raw IDs from users
+const MODEL_LABELS = {
+  'gpt-4o':                     'GPT-4o',
+  'gpt-4o-mini':                'GPT-4o Mini',
+  'claude-3-5-sonnet-20241022': 'Claude Sonnet',
+  'claude-haiku-4-5-20251001':  'Claude Haiku',
+  'claude-sonnet-4-20250514':   'Claude Sonnet',
+  'claude-opus-4-6':            'Claude Opus',
+  'gemini-1.5-flash':           'Gemini Flash',
+  'gemini-1.5-pro':             'Gemini Pro',
+  'gemini-2.0-flash':           'Gemini 2.0',
+  'groq-llama-3.3-70b':         'Llama 3.3',
+  'groq-llama-3.1-8b-instant':  'Llama 3.1 Fast',
+  'llama-3.3-70b-versatile':    'Llama 3.3',
+  'llama-3.1-8b-instant':       'Llama 3.1 Fast',
 }
 
 export default function AnalyticsPage() {
@@ -121,8 +147,32 @@ export default function AnalyticsPage() {
     </div>
   )
 
-  const topTools = data?.tools_used ? Object.entries(data.tools_used).slice(0, 6) : []
-  const topModels = data?.by_model ? Object.entries(data.by_model).sort((a, b) => b[1].requests - a[1].requests) : []
+  // Top features used (renamed from "tools")
+  const topFeatures = data?.tools_used
+    ? Object.entries(data.tools_used)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6)
+        .map(([key, count]) => {
+          // Convert tool IDs to friendly feature names
+          const friendlyNames = {
+            get_stock_price:    'Stock prices',
+            get_crypto_price:   'Crypto prices',
+            get_market_overview:'Market overview',
+            get_portfolio:      'Portfolio view',
+            get_budget_summary: 'Budget summary',
+            calculate_roi:      'ROI calculator',
+            compound_interest:  'Compound interest',
+            retirement_calculator: 'Retirement planner',
+            search_documents:   'Document search',
+            get_financial_news: 'Financial news',
+          }
+          return [friendlyNames[key] || key.replace(/_/g, ' '), count]
+        })
+    : []
+
+  const topModels = data?.by_model
+    ? Object.entries(data.by_model).sort((a, b) => b[1].requests - a[1].requests)
+    : []
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
@@ -134,20 +184,10 @@ export default function AnalyticsPage() {
             <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('analytics.title')}</h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>{t('analytics.subtitle')}</p>
           </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button onClick={() => handleExport('csv')} disabled={!!exporting}
-              style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', padding: '8px 14px', cursor: 'pointer', fontSize: '12px', opacity: exporting === 'json' ? 0.5 : 1 }}>
-              {exporting === 'csv' ? t('analytics.exporting') : '↓ Export CSV'}
-            </button>
-            <button onClick={() => handleExport('json')} disabled={!!exporting}
-              style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', padding: '8px 14px', cursor: 'pointer', fontSize: '12px', opacity: exporting === 'csv' ? 0.5 : 1 }}>
-              {exporting === 'json' ? t('analytics.exporting') : '↓ Export JSON'}
-            </button>
-            <button onClick={fetchAnalytics}
-              style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', padding: '8px 14px', cursor: 'pointer', fontSize: '12px' }}>
-              ↺ {t('analytics.refresh') || 'Refresh'}
-            </button>
-          </div>
+          <button onClick={fetchAnalytics}
+            style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', padding: '8px 14px', cursor: 'pointer', fontSize: '12px' }}>
+            ↺ Refresh
+          </button>
         </div>
 
         <div style={{ padding: '24px 28px' }}>
@@ -157,7 +197,7 @@ export default function AnalyticsPage() {
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '16px', padding: '60px', textAlign: 'center' }}>
               <div style={{ fontSize: '40px', marginBottom: '16px' }}>◉</div>
               <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '22px', fontStyle: 'italic', marginBottom: '8px' }}>{t('analytics.noData')}</h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '24px' }}>Start chatting to see your usage stats here</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '24px' }}>Start chatting to see your activity here</p>
               <button onClick={() => router.push('/chat')}
                 style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '12px 28px', cursor: 'pointer', fontSize: '13px', fontWeight: 700 }}>
                 Go to Chat →
@@ -165,50 +205,42 @@ export default function AnalyticsPage() {
             </div>
           ) : (
             <>
-              {/* Summary stats */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
-                <StatCard icon="◈" label={t('analytics.totalRequests')} value={data.total_requests.toLocaleString()} sub={`${data.sessions_count} ${t('analytics.sessions')}`} />
-                <StatCard icon="◎" label={t('analytics.tokensUsed')} value={data.total_tokens >= 1000 ? `${(data.total_tokens/1000).toFixed(1)}K` : data.total_tokens.toLocaleString()}
-                  sub={`${data.prompt_tokens.toLocaleString()} prompt · ${data.completion_tokens.toLocaleString()} completion`} />
-                <StatCard icon="$" label={t('analytics.totalCost')} value={`$${data.total_cost_usd.toFixed(4)}`}
-                  sub={`~$${(data.total_cost_usd / Math.max(data.total_requests, 1) * 100).toFixed(3)}¢ ${t('analytics.perRequest')}`}
-                  color="var(--gold)" />
-                <StatCard icon="⚡" label={t('analytics.avgResponse')} value={`${(data.avg_response_ms / 1000).toFixed(1)}s`} sub={t('analytics.avgResponseTime')} />
+              {/* Plain-language summary stats — no tokens, no cost */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px', marginBottom: '24px' }}>
+                <StatCard icon="💬" label="Questions asked"
+                  value={data.total_requests.toLocaleString()}
+                  sub={`across ${data.sessions_count} conversation${data.sessions_count !== 1 ? 's' : ''}`} />
+                <StatCard icon="📅" label="This month"
+                  value={(data.monthly_requests ?? data.total_requests).toLocaleString()}
+                  sub="questions this month" />
+                <StatCard icon="⚡" label="Avg response time"
+                  value={`${(data.avg_response_ms / 1000).toFixed(1)}s`}
+                  sub="per question" />
+              </div>
+
+              {/* Daily activity chart — one chart, requests only */}
+              <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 600 }}>Questions per day</span>
+                  <span style={{ fontSize: '10px', color: 'var(--text-dim)', fontFamily: 'DM Mono, monospace' }}>Last 14 days</span>
+                </div>
+                <BarChart data={data.daily} valueKey="requests" labelKey="date" color="var(--gold)" />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
-                {/* Daily activity chart */}
+                {/* AI model usage — friendly names, no cost */}
                 <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 600 }}>{t('analytics.dailyRequests')}</span>
-                    <span style={{ fontSize: '10px', color: 'var(--text-dim)', fontFamily: 'DM Mono, monospace' }}>{t('analytics.last14Days')}</span>
-                  </div>
-                  <BarChart data={data.daily} valueKey="requests" labelKey="date" color="var(--gold)" />
-                </div>
-
-                {/* Daily tokens chart */}
-                <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 600 }}>{t('analytics.dailyTokens')}</span>
-                    <span style={{ fontSize: '10px', color: 'var(--text-dim)', fontFamily: 'DM Mono, monospace' }}>{t('analytics.last14Days')}</span>
-                  </div>
-                  <BarChart data={data.daily} valueKey="tokens" labelKey="date" color="#4a9eff" />
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
-                {/* Model breakdown */}
-                <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px' }}>
-                  <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>{t('analytics.modelsUsed')}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>AI model used</div>
                   {topModels.length === 0 ? (
-                    <div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{t('analytics.noData')}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>No data yet</div>
                   ) : topModels.map(([model, stats]) => {
-                    const pct = (stats.requests / data.total_requests) * 100
+                    const pct        = (stats.requests / data.total_requests) * 100
+                    const label      = MODEL_LABELS[model] || model
                     return (
                       <div key={model} style={{ marginBottom: '14px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                          <span style={{ fontSize: '12px', fontFamily: 'DM Mono, monospace', color: 'var(--text-primary)' }}>{model}</span>
-                          <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>{stats.requests} req · ${stats.cost.toFixed(4)}</span>
+                          <span style={{ fontSize: '12px', color: 'var(--text-primary)' }}>{label}</span>
+                          <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>{Math.round(pct)}%</span>
                         </div>
                         <div style={{ height: '4px', background: 'var(--bg-elevated)', borderRadius: '2px' }}>
                           <div style={{ height: '100%', width: `${pct}%`, background: 'var(--gold)', borderRadius: '2px', transition: 'width 0.5s' }} />
@@ -218,18 +250,18 @@ export default function AnalyticsPage() {
                   })}
                 </div>
 
-                {/* Tools used */}
+                {/* Most used features — renamed from "tools" */}
                 <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px' }}>
-                  <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>{t('analytics.topTools')}</div>
-                  {topTools.length === 0 ? (
-                    <div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{t('analytics.noData')}</div>
-                  ) : topTools.map(([tool, count]) => {
-                    const maxCount = topTools[0][1]
-                    const pct = (count / maxCount) * 100
+                  <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '16px' }}>Most used features</div>
+                  {topFeatures.length === 0 ? (
+                    <div style={{ fontSize: '12px', color: 'var(--text-dim)' }}>No data yet</div>
+                  ) : topFeatures.map(([feature, count]) => {
+                    const maxCount = topFeatures[0][1]
+                    const pct      = (count / maxCount) * 100
                     return (
-                      <div key={tool} style={{ marginBottom: '14px' }}>
+                      <div key={feature} style={{ marginBottom: '14px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                          <span style={{ fontSize: '12px', fontFamily: 'DM Mono, monospace', color: 'var(--text-primary)' }}>{tool}</span>
+                          <span style={{ fontSize: '12px', color: 'var(--text-primary)', textTransform: 'capitalize' }}>{feature}</span>
                           <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>{count}×</span>
                         </div>
                         <div style={{ height: '4px', background: 'var(--bg-elevated)', borderRadius: '2px' }}>
@@ -241,38 +273,18 @@ export default function AnalyticsPage() {
                 </div>
               </div>
 
-              {/* LangSmith + Cache Stats */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px' }}>
-                  <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.08em', marginBottom: '12px' }}>{`◆ ${t('analytics.langsmithTracing')}`}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: data?.langsmith_enabled ? '#22c55e' : '#6b7280', flexShrink: 0 }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600 }}>{data?.langsmith_enabled ? t('analytics.active') : t('common.disabled')}</span>
-                  </div>
-                  {data?.langsmith_enabled
-                    ? <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Project: <span style={{ color: 'var(--gold)' }}>{data.langsmith_project}</span></div>
-                    : <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Add LANGCHAIN_API_KEY to Railway to enable</div>
-                  }
-                </div>
-                <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px' }}>
-                  <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.08em', marginBottom: '12px' }}>{`⚡ ${t('analytics.responseCache')}`}</div>
-                  <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'DM Mono, monospace', color: 'var(--gold)', marginBottom: '4px' }}>{data?.cache_stats?.active ?? 0}</div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>active entries · {data?.cache_stats?.total ?? 0} total</div>
-                </div>
-              </div>
-
-              {/* Export section */}
+              {/* Export section — renamed buttons */}
               <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '20px' }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>Export Chat History</div>
-                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '16px' }}>Download all your conversations from all sessions</p>
+                <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>Download your chat history</div>
+                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '16px' }}>Export all your conversations from every session</p>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <button onClick={() => handleExport('csv')} disabled={!!exporting}
                     style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-primary)', padding: '10px 20px', cursor: 'pointer', fontSize: '13px', fontWeight: 500 }}>
-                    {exporting === 'csv' ? 'Downloading...' : '↓ Download CSV'}
+                    {exporting === 'csv' ? 'Downloading...' : '↓ Spreadsheet (.csv)'}
                   </button>
                   <button onClick={() => handleExport('json')} disabled={!!exporting}
                     style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-primary)', padding: '10px 20px', cursor: 'pointer', fontSize: '13px', fontWeight: 500 }}>
-                    {exporting === 'json' ? 'Downloading...' : '↓ Download JSON'}
+                    {exporting === 'json' ? 'Downloading...' : '↓ Data file (.json)'}
                   </button>
                 </div>
               </div>
