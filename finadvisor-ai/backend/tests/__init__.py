@@ -1,1 +1,1 @@
-
+"""FinAdvisor AI test suite."""
