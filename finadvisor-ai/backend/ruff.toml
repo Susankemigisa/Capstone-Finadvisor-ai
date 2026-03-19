@@ -1,0 +1,25 @@
+# Ruff configuration — replaces Black, Flake8, and Pylint
+line-length = 100
+target-version = "py312"
+
+[lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long — handled by formatter
+    "B008",  # function calls in default args (common in FastAPI)
+    "B904",  # raise from — too strict for our use
+]
+
+[lint.isort]
+known-first-party = ["src"]
+
+[format]
+quote-style = "double"
+indent-style = "space"

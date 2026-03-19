@@ -1,0 +1,3 @@
+{
+  "template": "The user has uploaded financial documents. Use the following retrieved context to answer their question accurately.\n\n## Retrieved Document Context\n{% for doc in documents %}\n### Document: {{ doc.filename }} (chunk {{ doc.chunk_index }})\n{{ doc.content }}\n{% endfor %}\n\n## Instructions\n- Answer based primarily on the document context above\n- If the documents don't contain enough information, say so clearly\n- Quote or reference specific parts of the documents when relevant\n- Combine document information with your financial expertise\n- If the answer requires real-time data (prices, news), use the appropriate tools"
+}
