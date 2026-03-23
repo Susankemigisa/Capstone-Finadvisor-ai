@@ -50,9 +50,10 @@ def create_user(email: str, password_hash: str, full_name: str = "") -> Optional
 
 
 def update_user(user_id: str, updates: dict) -> Optional[dict]:
-    updates.pop("password_hash", None)
+    # Allow password_hash updates (for password reset/change flows)
     try:
         result = _db().table("users").update(updates).eq("id", user_id).execute()
+
         return result.data[0] if result.data else None
     except Exception as e:
         logger.error("update_user_failed", user_id=user_id, error=sanitize_error(e))
