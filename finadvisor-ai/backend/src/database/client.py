@@ -22,13 +22,9 @@ def get_supabase():
         )
 
     from supabase import create_client
-    from supabase.lib.client_options import ClientOptions
     _client = create_client(
         settings.SUPABASE_URL,
         settings.SUPABASE_SERVICE_ROLE_KEY,
-        options=ClientOptions(
-            headers={"Authorization": f"Bearer {settings.SUPABASE_SERVICE_ROLE_KEY}"}
-        )
     )
     logger.info("supabase_client_created", url=settings.SUPABASE_URL)
     return _client
