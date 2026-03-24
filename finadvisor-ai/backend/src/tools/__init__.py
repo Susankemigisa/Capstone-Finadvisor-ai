@@ -40,7 +40,7 @@ TOOL_REGISTRY = [
     # Documents & Images
     {"id": "search_documents",     "name": "Document Search",      "category": "Documents",  "desc": "Search uploaded documents", "default": True},
     {"id": "generate_chart_image", "name": "Chart Generator",      "category": "Images",     "desc": "Generate financial charts", "default": True},
-    {"id": "generate_financial_infographic","name": "Infographics","category": "Images",     "desc": "Generate infographics", "default": False},
+    {"id": "generate_financial_infographic","name": "Infographics","category": "Images",     "desc": "Generate infographics", "default": True},
 ]
 
 
