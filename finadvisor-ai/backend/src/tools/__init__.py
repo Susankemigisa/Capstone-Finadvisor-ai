@@ -34,13 +34,22 @@ TOOL_REGISTRY = [
     {"id": "retirement_calculator","name": "Retirement Planner",   "category": "Planning",   "desc": "Retirement savings projection", "default": True},
     {"id": "emergency_fund_calculator","name": "Emergency Fund",   "category": "Planning",   "desc": "Emergency fund target", "default": True},
     {"id": "debt_payoff_calculator","name": "Debt Payoff",         "category": "Planning",   "desc": "Debt repayment strategies", "default": True},
-    # News & Media
+    # News
     {"id": "get_financial_news",   "name": "Financial News",       "category": "News",       "desc": "Latest market news", "default": True},
     {"id": "get_stock_news",       "name": "Stock News",           "category": "News",       "desc": "News per stock", "default": True},
-    # Documents & Images
+    # Documents
     {"id": "search_documents",     "name": "Document Search",      "category": "Documents",  "desc": "Search uploaded documents", "default": True},
-    {"id": "generate_chart_image", "name": "Chart Generator",      "category": "Images",     "desc": "Generate financial charts", "default": True},
-    {"id": "generate_financial_infographic","name": "Infographics","category": "Images",     "desc": "Generate infographics", "default": True},
+    # Data-driven charts (matplotlib — no API key required)
+    {"id": "generate_bar_chart",       "name": "Bar Chart",       "category": "Charts", "desc": "Bar chart from real data — stock comparison, budget, expenses", "default": True},
+    {"id": "generate_line_chart",      "name": "Line Chart",      "category": "Charts", "desc": "Line chart for price history, trends, portfolio growth", "default": True},
+    {"id": "generate_pie_chart",       "name": "Pie Chart",       "category": "Charts", "desc": "Pie chart for allocation, budget breakdown, asset split", "default": True},
+    {"id": "generate_portfolio_chart", "name": "Portfolio Chart", "category": "Charts", "desc": "Auto pie chart from your live portfolio data", "default": True},
+    # PDF & Excel exports
+    {"id": "generate_pdf_report",   "name": "PDF Report",   "category": "Export", "desc": "Generate a PDF financial report (portfolio, budget, goals)", "default": True},
+    {"id": "generate_excel_report", "name": "Excel Report", "category": "Export", "desc": "Generate an Excel workbook with all your financial data", "default": True},
+    # AI image generation (requires OPENAI_API_KEY)
+    {"id": "generate_chart_image",           "name": "AI Chart Image", "category": "Images", "desc": "AI-generated chart illustration (requires OpenAI key)", "default": True},
+    {"id": "generate_financial_infographic", "name": "AI Infographic", "category": "Images", "desc": "AI-generated financial infographic (requires OpenAI key)", "default": True},
 ]
 
 
@@ -58,6 +67,8 @@ def get_all_tools(enabled_tool_ids: list[str] = None) -> list[Any]:
     from src.tools.planning_tools import retirement_calculator, emergency_fund_calculator, debt_payoff_calculator
     from src.tools.news_tools import get_financial_news, get_stock_news
     from src.tools.rag_tools import search_documents
+    from src.tools.chart_tools import generate_bar_chart, generate_line_chart, generate_pie_chart, generate_portfolio_chart
+    from src.tools.document_export_tools import generate_pdf_report, generate_excel_report
     from src.tools.image_tools import generate_chart_image, generate_financial_infographic
 
     all_tools = {
@@ -89,12 +100,20 @@ def get_all_tools(enabled_tool_ids: list[str] = None) -> list[Any]:
         "get_financial_news": get_financial_news,
         "get_stock_news": get_stock_news,
         "search_documents": search_documents,
+        # Data-driven charts
+        "generate_bar_chart": generate_bar_chart,
+        "generate_line_chart": generate_line_chart,
+        "generate_pie_chart": generate_pie_chart,
+        "generate_portfolio_chart": generate_portfolio_chart,
+        # PDF & Excel
+        "generate_pdf_report": generate_pdf_report,
+        "generate_excel_report": generate_excel_report,
+        # AI image generation
         "generate_chart_image": generate_chart_image,
         "generate_financial_infographic": generate_financial_infographic,
     }
 
     if enabled_tool_ids is None:
-        # Return all default tools
         default_ids = {t["id"] for t in TOOL_REGISTRY if t["default"]}
         return [v for k, v in all_tools.items() if k in default_ids]
 
