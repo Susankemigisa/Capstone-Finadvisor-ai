@@ -1,7 +1,7 @@
 'use client'
 import { useMemo, useState } from 'react'
 
-// lightweight markdown parser
+// ── Markdown renderer ─────────────────────────────────────────
 function renderMarkdown(text) {
   if (!text) return ''
   let html = text
@@ -18,60 +18,97 @@ function renderMarkdown(text) {
   return '<p>' + html + '</p>'
 }
 
-// ── Extract inline base64 charts (CHART_BASE64:<b64>) ─────────
+// ── Extract ALL base64 images from any format the LLM might use ──
+// Handles:
+//   1. CHART_BASE64:<b64>                          (our tool prefix)
+//   2. ![alt](data:image/png;base64,<b64>)         (LLM markdown format)
+//   3. (data:image/png;base64,<b64>)               (bare parenthesised)
+//   4. data:image/png;base64,<b64>                 (completely bare)
 function extractCharts(text) {
   if (!text) return []
   const charts = []
-  const re = /CHART_BASE64:([A-Za-z0-9+/=]+)/g
+  const seen = new Set()
+
+  const add = (b64) => {
+    const key = b64.slice(0, 40)
+    if (!seen.has(key)) { seen.add(key); charts.push(b64) }
+  }
+
+  // Format 1: our explicit prefix
+  const re1 = /CHART_BASE64:([A-Za-z0-9+/=\s]+?)(?:\s|$|CHART_BASE64|FILE_BASE64)/g
   let m
-  while ((m = re.exec(text)) !== null) charts.push(m[1])
+  while ((m = re1.exec(text)) !== null) add(m[1].replace(/\s/g, ''))
+
+  // Format 2: markdown image with data URI  ![anything](data:image/png;base64,<b64>)
+  const re2 = /!\[[^\]]*\]\(data:image\/(?:png|jpeg|webp|gif);base64,([A-Za-z0-9+/=\s]+?)\)/g
+  while ((m = re2.exec(text)) !== null) add(m[1].replace(/\s/g, ''))
+
+  // Format 3: bare parenthesised  (data:image/png;base64,<b64>)
+  const re3 = /\(data:image\/(?:png|jpeg|webp|gif);base64,([A-Za-z0-9+/=\s]+?)\)/g
+  while ((m = re3.exec(text)) !== null) add(m[1].replace(/\s/g, ''))
+
+  // Format 4: completely bare data URI on its own line
+  const re4 = /(?:^|\s)data:image\/(?:png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)/gm
+  while ((m = re4.exec(text)) !== null) add(m[1].replace(/\s/g, ''))
+
   return charts
 }
 
-// ── Extract file downloads (FILE_BASE64_PDF:<b64> / FILE_BASE64_XLSX:<b64>) ──
+// ── Extract file downloads ────────────────────────────────────
 function extractFiles(text) {
   if (!text) return []
   const files = []
-  const pdfRe  = /FILE_BASE64_PDF:([A-Za-z0-9+/=]+)/g
-  const xlsxRe = /FILE_BASE64_XLSX:([A-Za-z0-9+/=]+)/g
+  const pdfRe  = /FILE_BASE64_PDF:([A-Za-z0-9+/=\s]+?)(?:\s|$|FILE_BASE64)/g
+  const xlsxRe = /FILE_BASE64_XLSX:([A-Za-z0-9+/=\s]+?)(?:\s|$|FILE_BASE64)/g
   let m
-  while ((m = pdfRe.exec(text))  !== null) files.push({ type: 'pdf',  b64: m[1] })
-  while ((m = xlsxRe.exec(text)) !== null) files.push({ type: 'xlsx', b64: m[1] })
+  while ((m = pdfRe.exec(text))  !== null) files.push({ type: 'pdf',  b64: m[1].replace(/\s/g, '') })
+  while ((m = xlsxRe.exec(text)) !== null) files.push({ type: 'xlsx', b64: m[1].replace(/\s/g, '') })
   return files
 }
 
-// ── Extract DALL-E / remote image URLs ───────────────────────
-function extractImages(text) {
+// ── Extract remote image URLs (DALL-E etc.) ───────────────────
+function extractRemoteImages(text) {
   if (!text) return []
   const urls = []
-  const urlPattern  = /URL:\s*(https?:\/\/[^\s\n]+)/g
-  const mdPattern   = /!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/g
-  const dallePattern = /(https?:\/\/(?:oaidalleapiprodscus|dalleprodsec)[^\s\n"')]+)/g
-  const barePattern  = /(https?:\/\/[^\s\n"')]+\.(?:png|jpg|jpeg|webp|gif)(?:[^\s\n"')]*)?)/gi
+  const patterns = [
+    /URL:\s*(https?:\/\/[^\s\n]+)/g,
+    /!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/g,
+    /(https?:\/\/(?:oaidalleapiprodscus|dalleprodsec)[^\s\n"')]+)/g,
+    /(https?:\/\/[^\s\n"')]+\.(?:png|jpg|jpeg|webp|gif)(?:[^\s\n"')]*)?)/gi,
+  ]
   let m
-  while ((m = urlPattern.exec(text))   !== null) urls.push(m[1].trim())
-  while ((m = mdPattern.exec(text))    !== null) urls.push(m[1].trim())
-  while ((m = dallePattern.exec(text)) !== null) urls.push(m[1].trim())
-  while ((m = barePattern.exec(text))  !== null) urls.push(m[1].trim())
-  return [...new Set(urls)]
+  for (const re of patterns) {
+    while ((m = re.exec(text)) !== null) {
+      const url = m[1].trim()
+      if (!urls.includes(url)) urls.push(url)
+    }
+  }
+  return urls
 }
 
-// ── Strip all special tokens from displayed text ─────────────
+// ── Strip everything special from displayed text ──────────────
 function stripSpecialTokens(text) {
   return text
-    .replace(/CHART_BASE64:[A-Za-z0-9+/=]+/g, '')
-    .replace(/FILE_BASE64_PDF:[A-Za-z0-9+/=]+/g, '')
-    .replace(/FILE_BASE64_XLSX:[A-Za-z0-9+/=]+/g, '')
+    // our prefixes
+    .replace(/CHART_BASE64:[A-Za-z0-9+/=\s]+/g, '')
+    .replace(/FILE_BASE64_PDF:[A-Za-z0-9+/=\s]+/g, '')
+    .replace(/FILE_BASE64_XLSX:[A-Za-z0-9+/=\s]+/g, '')
+    // markdown images with data URIs
+    .replace(/!\[[^\]]*\]\(data:image\/[^)]+\)/g, '')
+    // bare data URIs
+    .replace(/\(?data:image\/[^\s)]+\)?/g, '')
+    // remote image URLs
     .replace(/URL:\s*https?:\/\/[^\s\n]+/g, '')
     .replace(/!\[[^\]]*\]\(https?:\/\/[^\s)]+\)/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim()
 }
 
-// ── Chart card (inline base64 PNG) ───────────────────────────
+// ── Chart card ────────────────────────────────────────────────
 function ChartCard({ b64 }) {
   const src = `data:image/png;base64,${b64}`
   const [loaded, setLoaded] = useState(false)
+  const [error,  setError]  = useState(false)
 
   const handleDownload = () => {
     const a = document.createElement('a')
@@ -80,11 +117,17 @@ function ChartCard({ b64 }) {
     a.click()
   }
 
+  if (error) return (
+    <div style={{ marginTop: '12px', padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', color: 'var(--text-dim)', fontSize: '12px' }}>
+      ⚠️ Chart could not be rendered. Try asking again.
+    </div>
+  )
+
   return (
-    <div style={{ marginTop: '12px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-elevated)' }}>
+    <div style={{ marginTop: '12px', borderRadius: '10px', overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-elevated)' }}>
       {!loaded && (
-        <div style={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dim)', fontSize: '12px', fontFamily: 'DM Mono, monospace' }}>
-          Rendering chart...
+        <div style={{ height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dim)', fontSize: '12px', fontFamily: 'DM Mono, monospace' }}>
+          📊 Rendering chart...
         </div>
       )}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -92,13 +135,15 @@ function ChartCard({ b64 }) {
         src={src}
         alt="Financial chart"
         onLoad={() => setLoaded(true)}
-        style={{ width: '100%', maxWidth: '680px', display: loaded ? 'block' : 'none' }}
+        onError={() => setError(true)}
+        style={{ width: '100%', maxWidth: '700px', display: loaded ? 'block' : 'none' }}
       />
       {loaded && (
-        <div style={{ padding: '8px 12px', display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{ padding: '8px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border)' }}>
+          <span style={{ fontSize: '11px', color: 'var(--text-dim)', fontFamily: 'DM Mono, monospace' }}>Generated by FinAdvisor AI</span>
           <button onClick={handleDownload}
             style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '11px', color: 'var(--gold)', fontFamily: 'DM Mono, monospace' }}>
-            ↓ Download chart
+            ↓ Download PNG
           </button>
         </div>
       )}
@@ -106,26 +151,30 @@ function ChartCard({ b64 }) {
   )
 }
 
-// ── File download card (PDF / Excel) ─────────────────────────
+// ── File download card ────────────────────────────────────────
 function FileDownloadCard({ type, b64 }) {
-  const isPdf = type === 'pdf'
-  const mime  = isPdf ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-  const ext   = isPdf ? 'pdf' : 'xlsx'
-  const icon  = isPdf ? '📄' : '📊'
-  const label = isPdf ? 'PDF Report' : 'Excel Workbook'
-  const color = isPdf ? '#C81E1E' : '#057A55'
+  const isPdf  = type === 'pdf'
+  const mime   = isPdf ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  const ext    = isPdf ? 'pdf' : 'xlsx'
+  const icon   = isPdf ? '📄' : '📊'
+  const label  = isPdf ? 'PDF Report' : 'Excel Workbook'
+  const color  = isPdf ? '#C81E1E' : '#057A55'
 
   const handleDownload = () => {
-    const byteStr = atob(b64)
-    const arr = new Uint8Array(byteStr.length)
-    for (let i = 0; i < byteStr.length; i++) arr[i] = byteStr.charCodeAt(i)
-    const blob = new Blob([arr], { type: mime })
-    const url  = URL.createObjectURL(blob)
-    const a    = document.createElement('a')
-    a.href     = url
-    a.download = `finadvisor-report-${Date.now()}.${ext}`
-    a.click()
-    URL.revokeObjectURL(url)
+    try {
+      const byteStr = atob(b64)
+      const arr = new Uint8Array(byteStr.length)
+      for (let i = 0; i < byteStr.length; i++) arr[i] = byteStr.charCodeAt(i)
+      const blob = new Blob([arr], { type: mime })
+      const url  = URL.createObjectURL(blob)
+      const a    = document.createElement('a')
+      a.href = url
+      a.download = `finadvisor-report-${Date.now()}.${ext}`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (e) {
+      console.error('Download failed', e)
+    }
   }
 
   return (
@@ -138,7 +187,7 @@ function FileDownloadCard({ type, b64 }) {
         </div>
       </div>
       <button onClick={handleDownload}
-        style={{ background: color, color: '#fff', border: 'none', borderRadius: '6px', padding: '7px 16px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, fontFamily: 'DM Sans, sans-serif' }}>
+        style={{ background: color, color: '#fff', border: 'none', borderRadius: '6px', padding: '7px 16px', cursor: 'pointer', fontSize: '12px', fontWeight: 600 }}>
         ↓ Download
       </button>
     </div>
@@ -146,7 +195,7 @@ function FileDownloadCard({ type, b64 }) {
 }
 
 // ── Remote image card (DALL-E URLs) ──────────────────────────
-function ImageCard({ url }) {
+function RemoteImageCard({ url }) {
   const [loaded, setLoaded] = useState(false)
   const [error,  setError]  = useState(false)
   if (error) return null
@@ -160,14 +209,14 @@ function ImageCard({ url }) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={url}
-        alt="Generated financial chart"
+        alt="Generated financial image"
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
         style={{ width: '100%', maxWidth: '600px', display: loaded ? 'block' : 'none', borderRadius: '8px' }}
       />
       {loaded && (
         <div style={{ padding: '8px 12px', display: 'flex', justifyContent: 'flex-end' }}>
-          <a href={url} target="_blank" rel="noopener noreferrer" download
+          <a href={url} target="_blank" rel="noopener noreferrer"
             style={{ fontSize: '11px', color: 'var(--gold)', textDecoration: 'none', fontFamily: 'DM Mono, monospace' }}>
             ↓ Download image
           </a>
@@ -200,12 +249,12 @@ export default function MessageBubble({ message, isStreaming = false, onRegenera
     setSubmitting(false)
   }
 
-  const charts       = useMemo(() => isUser ? [] : extractCharts(content),  [content, isUser])
-  const fileDownloads = useMemo(() => isUser ? [] : extractFiles(content),   [content, isUser])
-  const images       = useMemo(() => isUser ? [] : extractImages(content),   [content, isUser])
-  const hasSpecial   = charts.length > 0 || fileDownloads.length > 0 || images.length > 0
-  const cleanContent = useMemo(() => hasSpecial ? stripSpecialTokens(content) : content, [content, hasSpecial])
-  const html         = useMemo(() => renderMarkdown(cleanContent), [cleanContent])
+  const charts        = useMemo(() => isUser ? [] : extractCharts(content),       [content, isUser])
+  const fileDownloads = useMemo(() => isUser ? [] : extractFiles(content),         [content, isUser])
+  const remoteImages  = useMemo(() => isUser ? [] : extractRemoteImages(content),  [content, isUser])
+  const hasSpecial    = charts.length > 0 || fileDownloads.length > 0 || remoteImages.length > 0
+  const cleanContent  = useMemo(() => hasSpecial ? stripSpecialTokens(content) : content, [content, hasSpecial])
+  const html          = useMemo(() => renderMarkdown(cleanContent), [cleanContent])
 
   return (
     <div className="fade-in" style={{ display: 'flex', justifyContent: isUser ? 'flex-end' : 'flex-start', marginBottom: '16px', paddingLeft: isUser ? '48px' : '0', paddingRight: isUser ? '0' : '48px' }}>
@@ -219,12 +268,13 @@ export default function MessageBubble({ message, isStreaming = false, onRegenera
           ) : (
             <>
               <div className={`prose-chat${isStreaming ? ' typing-cursor' : ''}`} dangerouslySetInnerHTML={{ __html: html }} />
-              {charts.map((b64, i)       => <ChartCard        key={`chart-${i}`}  b64={b64} />)}
-              {fileDownloads.map((f, i)  => <FileDownloadCard key={`file-${i}`}   type={f.type} b64={f.b64} />)}
-              {images.map((url, i)       => <ImageCard        key={`img-${i}`}    url={url} />)}
+              {charts.map((b64, i)         => <ChartCard        key={`chart-${i}`}  b64={b64} />)}
+              {fileDownloads.map((f, i)    => <FileDownloadCard key={`file-${i}`}   type={f.type} b64={f.b64} />)}
+              {remoteImages.map((url, i)   => <RemoteImageCard  key={`img-${i}`}    url={url} />)}
             </>
           )}
         </div>
+
         {!isStreaming && !isUser && (
           <div style={{ marginTop: '6px', paddingLeft: '2px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             {message.created_at && (
