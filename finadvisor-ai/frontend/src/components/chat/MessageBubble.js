@@ -313,4 +313,4 @@ export default function MessageBubble({ message, isStreaming = false, onRegenera
       </div>
     </div>
   )
-}
+}// chart fix Fri, Mar 27, 2026 11:51:35 PM
