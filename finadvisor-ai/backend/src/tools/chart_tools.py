@@ -18,6 +18,7 @@ Tools:
 import base64
 import io
 import json
+import math
 
 from langchain_core.tools import tool
 
@@ -35,16 +36,52 @@ def _fig_to_base64(fig) -> str:
 
 
 def _apply_style(fig, ax):
-    """Apply a clean, professional financial style to the chart."""
+    """
+    Apply a clean, professional dark-friendly financial style.
+
+    FIX: original used #FFFFFF figure + #F8F9FA axes → near-zero contrast,
+    making bars invisible when they rendered against the light background.
+    Now uses a slightly darker axes background (#F0F2F5) with the same white
+    figure surround so the chart area is visually distinct and bars always show.
+    """
     fig.patch.set_facecolor("#FFFFFF")
-    ax.set_facecolor("#F8F9FA")
+    ax.set_facecolor("#F0F2F5")          # FIX: was #F8F9FA — too close to white
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.spines["left"].set_color("#CCCCCC")
-    ax.spines["bottom"].set_color("#CCCCCC")
-    ax.tick_params(colors="#555555", labelsize=9)
-    ax.yaxis.grid(True, color="#E0E0E0", linestyle="--", linewidth=0.7)
+    ax.spines["left"].set_color("#AAAAAA")
+    ax.spines["bottom"].set_color("#AAAAAA")
+    ax.tick_params(colors="#333333", labelsize=9)
+    ax.yaxis.grid(True, color="#D0D0D0", linestyle="--", linewidth=0.7)
     ax.set_axisbelow(True)
+
+
+def _scale_disparity(values: list) -> float:
+    """Return max/min ratio. > 100 means values span incompatible scales."""
+    pos = [v for v in values if v and v > 0]
+    if len(pos) < 2:
+        return 1.0
+    return max(pos) / min(pos)
+
+
+def _clean_values(labels: list, values: list) -> tuple[list, list]:
+    """
+    FIX: Remove any None, NaN, or zero-or-negative entries that would produce
+    invisible zero-height bars and make the chart appear blank.
+    Returns the cleaned (labels, values) pair.
+    """
+    clean_l, clean_v = [], []
+    for l, v in zip(labels, values):
+        try:
+            fv = float(v)
+            if fv != fv:   # NaN check
+                continue
+            if fv <= 0:    # zero / negative = invisible bar
+                continue
+            clean_l.append(l)
+            clean_v.append(fv)
+        except (TypeError, ValueError):
+            continue
+    return clean_l, clean_v
 
 
 @tool
@@ -79,17 +116,26 @@ def generate_bar_chart(
 
         if len(label_list) != len(value_list):
             return "❌ labels and values must have the same number of items."
+
+        # FIX: strip NaN / zero / negative values that produce invisible bars
+        label_list, value_list = _clean_values(label_list, value_list)
+
         if len(label_list) == 0:
-            return "❌ No data provided."
+            return "❌ No valid (non-zero, non-NaN) data to plot."
 
         color_map = {
-            "blue":   ["#1A56DB", "#3B82F6", "#60A5FA", "#93C5FD", "#BFDBFE"],
-            "green":  ["#057A55", "#0E9F6E", "#31C48D", "#6EE7B7", "#A7F3D0"],
-            "red":    ["#C81E1E", "#E02424", "#F05252", "#F98080", "#FCA5A5"],
-            "mixed":  ["#1A56DB", "#057A55", "#C81E1E", "#9333EA", "#D97706",
-                       "#0891B2", "#65A30D", "#DB2777"],
+            "blue":  ["#1A56DB", "#3B82F6", "#60A5FA", "#93C5FD", "#BFDBFE"],
+            "green": ["#057A55", "#0E9F6E", "#31C48D", "#6EE7B7", "#A7F3D0"],
+            "red":   ["#C81E1E", "#E02424", "#F05252", "#F98080", "#FCA5A5"],
+            "mixed": ["#1A56DB", "#057A55", "#C81E1E", "#9333EA", "#D97706",
+                      "#0891B2", "#65A30D", "#DB2777"],
         }
         colors = (color_map.get(color_scheme, color_map["blue"]) * 10)[:len(label_list)]
+
+        # FIX: detect scale disparity — when values span >100x range (e.g. VIX=18 vs
+        # DOW=42000) the small bars render at ~0 pixels and appear invisible.
+        # Solution: use a logarithmic y-axis so every bar has visible height.
+        use_log = _scale_disparity(value_list) > 100
 
         fig, ax = plt.subplots(figsize=(max(6, len(label_list) * 0.9), 4.5))
         _apply_style(fig, ax)
@@ -97,25 +143,39 @@ def generate_bar_chart(
         x = np.arange(len(label_list))
         bars = ax.bar(x, value_list, color=colors, width=0.6, zorder=2)
 
+        if use_log:
+            ax.set_yscale("log")
+            ax.yaxis.grid(True, which="both", color="#D0D0D0", linestyle="--", linewidth=0.5)
+
         # Value labels on top of bars
         for bar, val in zip(bars, value_list):
+            if use_log:
+                # On log scale place text just above bar using a small offset
+                y_pos = bar.get_height() * 1.15
+            else:
+                y_pos = bar.get_height() * 1.01
+
             label = f"${val:,.2f}" if val >= 1 else f"${val:.4f}"
             ax.text(
                 bar.get_x() + bar.get_width() / 2,
-                bar.get_height() * 1.01,
+                y_pos,
                 label,
-                ha="center", va="bottom", fontsize=8, color="#333333"
+                ha="center", va="bottom", fontsize=8, color="#111111",
+                fontweight="bold",
             )
 
         ax.set_xticks(x)
         ax.set_xticklabels(label_list, rotation=15 if len(label_list) > 5 else 0, ha="right")
-        ax.set_ylabel(y_label, fontsize=9, color="#555555")
+        ax.set_ylabel(y_label + (" (log scale)" if use_log else ""), fontsize=9, color="#333333")
         ax.set_title(title, fontsize=13, fontweight="bold", color="#111827", pad=12)
+
+        if use_log:
+            ax.set_ylim(bottom=min(value_list) * 0.5)
 
         b64 = _fig_to_base64(fig)
         plt.close(fig)
 
-        logger.info("bar_chart_generated", title=title, items=len(label_list))
+        logger.info("bar_chart_generated", title=title, items=len(label_list), log_scale=use_log)
         return f"CHART_BASE64:{b64}"
 
     except json.JSONDecodeError:
@@ -153,43 +213,51 @@ def generate_line_chart(
         import numpy as np
 
         x_list = json.loads(x_labels)
-        y_list = [float(v) for v in json.loads(y_values)]
+        raw_y  = json.loads(y_values)
 
-        if len(x_list) != len(y_list):
-            return "❌ x_labels and y_values must have the same number of items."
-        if len(x_list) == 0:
-            return "❌ No data provided."
+        # FIX: filter NaN / None pairs together
+        clean_x, clean_y = [], []
+        for xl, yv in zip(x_list, raw_y):
+            try:
+                fv = float(yv)
+                if fv == fv:   # NaN check
+                    clean_x.append(xl)
+                    clean_y.append(fv)
+            except (TypeError, ValueError):
+                continue
+
+        if not clean_x:
+            return "❌ No valid data points to plot."
 
         fig, ax = plt.subplots(figsize=(9, 4.5))
         _apply_style(fig, ax)
 
-        x = np.arange(len(x_list))
+        x = np.arange(len(clean_x))
         color = "#1A56DB"
 
-        ax.plot(x, y_list, color=color, linewidth=2, zorder=3)
-        ax.fill_between(x, y_list, alpha=0.08, color=color)
-        ax.scatter(x, y_list, color=color, s=30, zorder=4)
+        ax.plot(x, clean_y, color=color, linewidth=2.5, zorder=3)
+        ax.fill_between(x, clean_y, alpha=0.10, color=color)
+        ax.scatter(x, clean_y, color=color, s=30, zorder=4)
 
-        # Show min/max annotations
-        min_i, max_i = int(np.argmin(y_list)), int(np.argmax(y_list))
-        ax.annotate(f"Low: {y_list[min_i]:,.2f}", xy=(x[min_i], y_list[min_i]),
+        min_i, max_i = int(np.argmin(clean_y)), int(np.argmax(clean_y))
+        ax.annotate(f"Low: {clean_y[min_i]:,.2f}", xy=(x[min_i], clean_y[min_i]),
                     xytext=(5, -18), textcoords="offset points",
-                    fontsize=7.5, color="#C81E1E")
-        ax.annotate(f"High: {y_list[max_i]:,.2f}", xy=(x[max_i], y_list[max_i]),
+                    fontsize=7.5, color="#C81E1E", fontweight="bold")
+        ax.annotate(f"High: {clean_y[max_i]:,.2f}", xy=(x[max_i], clean_y[max_i]),
                     xytext=(5, 8), textcoords="offset points",
-                    fontsize=7.5, color="#057A55")
+                    fontsize=7.5, color="#057A55", fontweight="bold")
 
-        step = max(1, len(x_list) // 10)
+        step = max(1, len(clean_x) // 10)
         ax.set_xticks(x[::step])
-        ax.set_xticklabels(x_list[::step], rotation=30, ha="right", fontsize=8)
-        ax.set_ylabel(y_label, fontsize=9, color="#555555")
+        ax.set_xticklabels(clean_x[::step], rotation=30, ha="right", fontsize=8)
+        ax.set_ylabel(y_label, fontsize=9, color="#333333")
         ax.set_title(title, fontsize=13, fontweight="bold", color="#111827", pad=12)
         ax.legend([series_name], loc="upper left", fontsize=9)
 
         b64 = _fig_to_base64(fig)
         plt.close(fig)
 
-        logger.info("line_chart_generated", title=title, points=len(x_list))
+        logger.info("line_chart_generated", title=title, points=len(clean_x))
         return f"CHART_BASE64:{b64}"
 
     except json.JSONDecodeError:
@@ -226,10 +294,12 @@ def generate_pie_chart(
 
         if len(label_list) != len(value_list):
             return "❌ labels and values must have the same number of items."
-        if len(label_list) == 0:
-            return "❌ No data provided."
-        if any(v < 0 for v in value_list):
-            return "❌ Pie chart values must all be positive."
+
+        # FIX: filter zero/NaN/negative slices — they produce invisible slivers
+        label_list, value_list = _clean_values(label_list, value_list)
+
+        if not label_list:
+            return "❌ No valid (positive, non-NaN) data to plot."
 
         palette = [
             "#1A56DB", "#057A55", "#C81E1E", "#9333EA", "#D97706",
@@ -297,20 +367,24 @@ def generate_portfolio_chart(user_id: str) -> str:
         if not positions:
             return "❌ Your portfolio is empty. Add some positions first with the 'Add Position' tool."
 
-        # Group by ticker with value = shares * avg_buy_price as proxy
         labels = []
         values = []
         for p in positions:
             ticker = p.get("ticker", "?")
-            shares = float(p.get("shares", 0))
-            price = float(p.get("avg_buy_price", 0))
-            val = shares * price
+            shares = float(p.get("shares", 0) or 0)
+            price  = float(p.get("avg_buy_price", 0) or 0)
+            val    = shares * price
             if val > 0:
                 labels.append(ticker)
                 values.append(val)
 
         if not labels:
             return "❌ Could not calculate portfolio values — check that positions have shares and prices set."
+
+        # FIX: filter zero/NaN entries just like other chart tools
+        labels, values = _clean_values(labels, values)
+        if not labels:
+            return "❌ All portfolio positions have zero or invalid values."
 
         total = sum(values)
         palette = [
