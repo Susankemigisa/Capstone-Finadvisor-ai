@@ -86,36 +86,63 @@ export const useChatStore = create((set, get) => ({
       const decoder = new TextDecoder()
       let buffer = ''
 
+      // FIX 2 (helper): process a single SSE line and return true if 'done' was handled
+      const processLine = (line) => {
+        if (!line.startsWith('data: ')) return false
+        try {
+          const event = JSON.parse(line.slice(6))
+          if (event.type === 'token') {
+            fullContent += event.content
+            set({ streamingContent: fullContent })
+          } else if (event.type === 'done') {
+            // FIX 1: fall back to event.content / event.full_content when nothing was streamed
+            // (image generation and other non-streaming responses send content on the done event)
+            const finalContent = fullContent || event.content || event.full_content || ''
+
+            // FIX 3: merge session_id update + message commit into a single set() call
+            // to avoid the race-condition double-render
+            set((s) => ({
+              messages: [
+                ...s.messages,
+                {
+                  // Use the real DB message id from the done event when available
+                  id: event.message_id || Date.now() + 1,
+                  role: 'assistant',
+                  content: finalContent,
+                  created_at: new Date().toISOString()
+                }
+              ],
+              streaming: false,
+              streamingContent: '',
+              // Only update currentSessionId if we didn't have one yet
+              ...(event.session_id && !s.currentSessionId ? { currentSessionId: event.session_id } : {})
+            }))
+            // Reload sessions after every completed message so sidebar stays fresh
+            get().loadSessions()
+            return true
+          } else if (event.type === 'error') {
+            set({ streaming: false, streamingContent: '', error: event.message })
+            return true
+          }
+        } catch {}
+        return false
+      }
+
       while (true) {
         const { done, value } = await reader.read()
-        if (done) break
+        if (done) {
+          // FIX 2: flush any remaining data in the buffer after the stream closes.
+          // Without this, the last SSE frame (often the 'done' event) is silently
+          // dropped when the server doesn't send a trailing newline, leaving the
+          // spinner running forever and the message never committed.
+          if (buffer.trim()) processLine(buffer.trim())
+          break
+        }
         buffer += decoder.decode(value, { stream: true })
         const lines = buffer.split('\n')
         buffer = lines.pop()
-
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const event = JSON.parse(line.slice(6))
-              if (event.type === 'token') {
-                fullContent += event.content
-                set({ streamingContent: fullContent })
-              } else if (event.type === 'done') {
-                if (event.session_id && !currentSessionId) {
-                  set({ currentSessionId: event.session_id })
-                }
-                set((s) => ({
-                  messages: [...s.messages, { id: Date.now() + 1, role: 'assistant', content: fullContent, created_at: new Date().toISOString() }],
-                  streaming: false,
-                  streamingContent: ''
-                }))
-                // Reload sessions after every completed message so sidebar stays fresh
-                get().loadSessions()
-              } else if (event.type === 'error') {
-                set({ streaming: false, streamingContent: '', error: event.message })
-              }
-            } catch {}
-          }
+          processLine(line)
         }
       }
     } catch (e) {

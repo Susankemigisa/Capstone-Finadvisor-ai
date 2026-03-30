@@ -12,10 +12,35 @@ function renderMarkdown(text) {
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
     .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-    .replace(/^[•\-] (.+)$/gm, '<li>$1</li>')
+    // FIX 6: wrap consecutive list items in <ul> so the HTML is valid
+    .replace(/((?:^[•\-] .+$\n?)+)/gm, (block) => {
+      const items = block.replace(/^[•\-] (.+)$/gm, '<li>$1</li>')
+      return `<ul>${items}</ul>`
+    })
     .replace(/\n\n/g, '</p><p>')
     .replace(/\n/g, '<br/>')
   return '<p>' + html + '</p>'
+}
+
+// ── Strip special tokens BEFORE markdown rendering ────────────
+// FIX 7: must run BEFORE renderMarkdown so the code-fence regex
+// cannot accidentally wrap CHART_BASE64 blocks in <pre><code>.
+function stripSpecialTokens(text) {
+  return text
+    // our prefixes — use a non-greedy match terminated by the next prefix or end-of-string
+    // so we don't accidentally eat surrounding prose
+    .replace(/CHART_BASE64:[A-Za-z0-9+/=\r\n]+?(?=\s*(?:CHART_BASE64:|FILE_BASE64_|$))/g, '')
+    .replace(/FILE_BASE64_PDF:[A-Za-z0-9+/=\r\n]+?(?=\s*(?:CHART_BASE64:|FILE_BASE64_|$))/g, '')
+    .replace(/FILE_BASE64_XLSX:[A-Za-z0-9+/=\r\n]+?(?=\s*(?:CHART_BASE64:|FILE_BASE64_|$))/g, '')
+    // markdown images with data URIs
+    .replace(/!\[[^\]]*\]\(data:image\/[^)]+\)/g, '')
+    // bare data URIs
+    .replace(/\(?data:image\/[^\s)]+\)?/g, '')
+    // remote image URLs
+    .replace(/URL:\s*https?:\/\/[^\s\n]+/g, '')
+    .replace(/!\[[^\]]*\]\(https?:\/\/[^\s)]+\)/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 }
 
 // ── Extract ALL base64 images from any format the LLM might use ──
@@ -34,8 +59,10 @@ function extractCharts(text) {
     if (!seen.has(key)) { seen.add(key); charts.push(b64) }
   }
 
-  // Format 1: our explicit prefix
-  const re1 = /CHART_BASE64:([A-Za-z0-9+/=\s]+?)(?:\s|$|CHART_BASE64|FILE_BASE64)/g
+  // FIX 4: was using a lazy +? quantifier that stopped at the first whitespace character,
+  // truncating base64 strings that span multiple lines. Now uses a greedy match up to
+  // the next prefix keyword or end-of-string so multi-line base64 is captured in full.
+  const re1 = /CHART_BASE64:([A-Za-z0-9+/=\s]+?)(?=\s*(?:CHART_BASE64:|FILE_BASE64_|$))/g
   let m
   while ((m = re1.exec(text)) !== null) add(m[1].replace(/\s/g, ''))
 
@@ -58,8 +85,8 @@ function extractCharts(text) {
 function extractFiles(text) {
   if (!text) return []
   const files = []
-  const pdfRe  = /FILE_BASE64_PDF:([A-Za-z0-9+/=\s]+?)(?:\s|$|FILE_BASE64)/g
-  const xlsxRe = /FILE_BASE64_XLSX:([A-Za-z0-9+/=\s]+?)(?:\s|$|FILE_BASE64)/g
+  const pdfRe  = /FILE_BASE64_PDF:([A-Za-z0-9+/=\s]+?)(?=\s*(?:CHART_BASE64:|FILE_BASE64_|$))/g
+  const xlsxRe = /FILE_BASE64_XLSX:([A-Za-z0-9+/=\s]+?)(?=\s*(?:CHART_BASE64:|FILE_BASE64_|$))/g
   let m
   while ((m = pdfRe.exec(text))  !== null) files.push({ type: 'pdf',  b64: m[1].replace(/\s/g, '') })
   while ((m = xlsxRe.exec(text)) !== null) files.push({ type: 'xlsx', b64: m[1].replace(/\s/g, '') })
@@ -84,24 +111,6 @@ function extractRemoteImages(text) {
     }
   }
   return urls
-}
-
-// ── Strip everything special from displayed text ──────────────
-function stripSpecialTokens(text) {
-  return text
-    // our prefixes
-    .replace(/CHART_BASE64:[A-Za-z0-9+/=\s]+/g, '')
-    .replace(/FILE_BASE64_PDF:[A-Za-z0-9+/=\s]+/g, '')
-    .replace(/FILE_BASE64_XLSX:[A-Za-z0-9+/=\s]+/g, '')
-    // markdown images with data URIs
-    .replace(/!\[[^\]]*\]\(data:image\/[^)]+\)/g, '')
-    // bare data URIs
-    .replace(/\(?data:image\/[^\s)]+\)?/g, '')
-    // remote image URLs
-    .replace(/URL:\s*https?:\/\/[^\s\n]+/g, '')
-    .replace(/!\[[^\]]*\]\(https?:\/\/[^\s)]+\)/g, '')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim()
 }
 
 // ── Chart card ────────────────────────────────────────────────
@@ -249,10 +258,15 @@ export default function MessageBubble({ message, isStreaming = false, onRegenera
     setSubmitting(false)
   }
 
-  const charts        = useMemo(() => isUser ? [] : extractCharts(content),       [content, isUser])
-  const fileDownloads = useMemo(() => isUser ? [] : extractFiles(content),         [content, isUser])
-  const remoteImages  = useMemo(() => isUser ? [] : extractRemoteImages(content),  [content, isUser])
+  // FIX 5: during streaming, skip all extraction to avoid rendering broken partial base64.
+  // extractCharts / extractFiles / extractRemoteImages only run on the final committed message.
+  const charts        = useMemo(() => (isUser || isStreaming) ? [] : extractCharts(content),       [content, isUser, isStreaming])
+  const fileDownloads = useMemo(() => (isUser || isStreaming) ? [] : extractFiles(content),         [content, isUser, isStreaming])
+  const remoteImages  = useMemo(() => (isUser || isStreaming) ? [] : extractRemoteImages(content),  [content, isUser, isStreaming])
   const hasSpecial    = charts.length > 0 || fileDownloads.length > 0 || remoteImages.length > 0
+
+  // FIX 7: strip special tokens BEFORE passing to renderMarkdown so the code-fence
+  // regex inside renderMarkdown cannot wrap CHART_BASE64 blocks in <pre><code>.
   const cleanContent  = useMemo(() => hasSpecial ? stripSpecialTokens(content) : content, [content, hasSpecial])
   const html          = useMemo(() => renderMarkdown(cleanContent), [cleanContent])
 
@@ -313,4 +327,4 @@ export default function MessageBubble({ message, isStreaming = false, onRegenera
       </div>
     </div>
   )
-}// chart fix Fri, Mar 27, 2026 11:51:35 PM
+}
