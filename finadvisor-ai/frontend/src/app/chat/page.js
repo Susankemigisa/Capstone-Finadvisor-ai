@@ -26,10 +26,7 @@ function getGreeting(t) {
     'chat.greetSaturday',
   ]
 
-  // Morning window — show day-of-week greeting
   if (hour >= 5  && hour < 10) return t(DAY_KEYS[day])
-
-  // Time of day
   if (hour >= 0  && hour < 5)  return t('chat.greetMidnight')
   if (hour >= 10 && hour < 12) return t('chat.greetMidMorning')
   if (hour === 12)              return t('chat.greetMidday')
@@ -104,6 +101,8 @@ export default function ChatPage() {
   const greeting = getGreeting(t)
   const displayName = user?.preferred_name || user?.full_name?.split(' ')[0] || 'there'
   const promptList = t('chat.prompts')
+  // CP-1: derive a single boolean so we can pass it consistently to both HelpGuide and ChatInput
+  const isBusy = streaming || !!(error && error.startsWith('rate_limit:'))
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
@@ -192,10 +191,11 @@ export default function ChatPage() {
         })()}
 
         {/* Input area */}
-        <HelpGuide onExample={(example) => sendMessage(example)} />
+        {/* CP-1 FIX: pass isBusy as `disabled` so HelpGuide can block example clicks during streaming */}
+        <HelpGuide onExample={(example) => sendMessage(example)} disabled={isBusy} />
         <ChatInput
           onSend={sendMessage}
-          disabled={streaming || (error && error.startsWith('rate_limit:'))}
+          disabled={isBusy}
           placeholder={t('chat.placeholder')}
         />
       </div>

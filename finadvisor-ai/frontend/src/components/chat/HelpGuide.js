@@ -14,8 +14,18 @@ const TIPS = [
   { icon: '🌍', title: 'Currency', example: 'How much is 1000 USD in Ugandan Shillings?', desc: 'Live exchange rates' },
 ]
 
-export default function HelpGuide({ onExample }) {
+// HG-1 + HG-2 FIX: accept a `disabled` prop so the parent can block example clicks while
+// a stream is in progress. Without this, clicking any example card during streaming fired a
+// second concurrent sendMessage() call, corrupting shared store state and producing empty replies.
+export default function HelpGuide({ onExample, disabled = false }) {
   const [open, setOpen] = useState(false)
+
+  const handleExample = (example) => {
+    // HG-1 FIX: guard against firing while streaming
+    if (disabled) return
+    onExample(example)
+    setOpen(false)
+  }
 
   return (
     <>
@@ -32,7 +42,9 @@ export default function HelpGuide({ onExample }) {
             <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '20px', fontStyle: 'italic', fontWeight: 400 }}>What can I help you with? 💡</h2>
-                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>Click any example to try it</p>
+                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                  {disabled ? '⏳ Wait for the current reply to finish…' : 'Click any example to try it'}
+                </p>
               </div>
               <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', fontSize: '18px', padding: '4px' }}>✕</button>
             </div>
@@ -40,9 +52,20 @@ export default function HelpGuide({ onExample }) {
             {/* Tips grid */}
             <div style={{ padding: '20px 24px', overflow: 'auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               {TIPS.map((tip, i) => (
-                <button key={i} onClick={() => { onExample(tip.example); setOpen(false) }}
-                  style={{ textAlign: 'left', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px', cursor: 'pointer', transition: 'border-color 0.15s' }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gold-dim)'}
+                <button key={i} onClick={() => handleExample(tip.example)}
+                  disabled={disabled}
+                  style={{
+                    textAlign: 'left',
+                    background: 'var(--bg-elevated)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '10px',
+                    padding: '14px',
+                    // HG-1 FIX: visually communicate that cards are inactive while streaming
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    opacity: disabled ? 0.5 : 1,
+                    transition: 'border-color 0.15s, opacity 0.15s',
+                  }}
+                  onMouseEnter={e => { if (!disabled) e.currentTarget.style.borderColor = 'var(--gold-dim)' }}
                   onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
                   <div style={{ fontSize: '20px', marginBottom: '6px' }}>{tip.icon}</div>
                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>{tip.title}</div>
