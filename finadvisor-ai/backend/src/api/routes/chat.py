@@ -1,3 +1,4 @@
+import asyncio
 import json
 import uuid
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -26,6 +27,12 @@ from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 router = APIRouter()
+
+# How often to send a keep-alive comment during silent tool execution (seconds).
+# Vercel's edge network and most nginx proxies kill idle SSE after 60-120s.
+# Sending a harmless SSE comment every 15s keeps the connection alive while
+# yfinance / chart generation runs in the background.
+_SSE_KEEPALIVE_INTERVAL = 15
 
 
 class ChatRequest(BaseModel):
@@ -88,11 +95,6 @@ def _fallback_title(message: str) -> str:
 
 
 def _find_empty_session(sessions: list) -> str | None:
-    """
-    Return the session_id of the most recent session with no messages.
-    Uses message_count if available (requires updated get_user_sessions),
-    otherwise falls back to title-based check.
-    """
     for s in sessions:
         if "message_count" in s:
             if s["message_count"] == 0:
@@ -109,23 +111,23 @@ async def _get_user_context(user_id: str, model_id: str = None) -> dict:
     if not user:
         raise HTTPException(status_code=404, detail="User not found.")
     portfolio = get_portfolio(user_id)
-    memories = get_user_memories(user_id)
+    memories  = get_user_memories(user_id)
     return {
-        "user_name": user.get("preferred_name") or (user.get("full_name", "").split()[0] if user.get("full_name") else ""),
+        "user_name":          user.get("preferred_name") or (user.get("full_name", "").split()[0] if user.get("full_name") else ""),
         "preferred_language": user.get("preferred_language", "en"),
         "preferred_currency": user.get("preferred_currency", "USD"),
-        "tier": user.get("tier", "free"),
-        "model_id": model_id or user.get("preferred_model", "gpt-4o-mini"),
-        "temperature": float(user.get("temperature", 0.3)),
-        "top_p": float(user.get("top_p", 1.0)),
-        "portfolio_summary": _build_portfolio_summary(portfolio),
-        "memories": [m["content"] for m in memories[:10]],
+        "tier":               user.get("tier", "free"),
+        "model_id":           model_id or user.get("preferred_model", "gpt-4o-mini"),
+        "temperature":        float(user.get("temperature", 0.3)),
+        "top_p":              float(user.get("top_p", 1.0)),
+        "portfolio_summary":  _build_portfolio_summary(portfolio),
+        "memories":           [m["content"] for m in memories[:10]],
     }
 
 
 @router.get("/sessions")
 async def list_sessions(limit: int = 1000, current_user: dict = Depends(get_current_user)):
-    user_id = current_user["user_id"]
+    user_id  = current_user["user_id"]
     sessions = get_user_sessions(user_id, limit=limit)
     return {"sessions": sessions}
 
@@ -135,7 +137,6 @@ async def create_session(
     body: NewSessionRequest,
     current_user: dict = Depends(get_current_user),
 ):
-    """Create a new chat session."""
     session_id = str(uuid.uuid4())
     ctx = await _get_user_context(current_user["user_id"], body.model_id)
     session = create_chat_session(
@@ -154,7 +155,6 @@ async def get_messages(
     session_id: str,
     current_user: dict = Depends(get_current_user),
 ):
-    """Get all messages for a session."""
     messages = get_session_messages(session_id)
     return {"messages": messages}
 
@@ -164,7 +164,6 @@ async def remove_session(
     session_id: str,
     current_user: dict = Depends(get_current_user),
 ):
-    """Delete a chat session and all its messages."""
     from src.database.operations import delete_session as db_delete
     deleted = db_delete(session_id, current_user["user_id"])
     if not deleted:
@@ -181,7 +180,7 @@ async def send_message(
 
     limit_result = check_user_message_limit(user_id)
     if not limit_result["allowed"]:
-        resets_in = limit_result.get("resets_in_minutes", 180)
+        resets_in    = limit_result.get("resets_in_minutes", 180)
         window_hours = limit_result.get("window_hours", 3)
         window_limit = limit_result.get("window_limit", 10)
         raise HTTPException(
@@ -189,7 +188,7 @@ async def send_message(
             detail=f"rate_limit:{resets_in}:{window_hours}:{window_limit}",
         )
 
-    ctx = await _get_user_context(user_id, body.model_id)
+    ctx        = await _get_user_context(user_id, body.model_id)
     session_id = body.session_id
     is_new_session = not session_id
 
@@ -209,7 +208,7 @@ async def send_message(
         update_session_title(session_id, _auto_title(body.message))
 
     from src.tools.portfolio_tools import set_user_context as set_portfolio_ctx
-    from src.tools.budget_tools import set_user_context as set_budget_ctx
+    from src.tools.budget_tools    import set_user_context as set_budget_ctx
     set_portfolio_ctx(user_id)
     set_budget_ctx(user_id)
 
@@ -221,14 +220,14 @@ async def send_message(
             _stream_response(body.message, session_id, user_id, ctx),
             media_type="text/event-stream",
             headers={
-                "Cache-Control": "no-cache",
+                "Cache-Control":    "no-cache",
                 "X-Accel-Buffering": "no",
-                "X-Session-ID": session_id,
+                "X-Session-ID":     session_id,
             },
         )
 
     import time as _time
-    _t0 = _time.time()
+    _t0    = _time.time()
     result = await run_agent(
         user_message=body.message,
         user_id=user_id,
@@ -271,12 +270,12 @@ async def send_message(
 
     return {
         "session_id": session_id,
-        "response": result["response"],
+        "response":   result["response"],
         "tools_used": result.get("tools_used", []),
         "usage": {
-            "prompt_tokens": result.get("prompt_tokens", 0),
+            "prompt_tokens":     result.get("prompt_tokens", 0),
             "completion_tokens": result.get("completion_tokens", 0),
-            "cost_usd": result.get("cost_usd", 0.0),
+            "cost_usd":          result.get("cost_usd", 0.0),
         },
     }
 
@@ -287,65 +286,116 @@ async def _stream_response(
     user_id: str,
     ctx: dict,
 ) -> AsyncGenerator[str, None]:
-    """SSE generator — streams agent tokens to the client."""
+    """
+    SSE generator — streams agent tokens to the client.
+
+    FIX: added a keep-alive heartbeat that fires every _SSE_KEEPALIVE_INTERVAL
+    seconds while the stream is silent (i.e. during tool execution).
+
+    Without this, when the agent calls get_market_overview() (8 parallel yfinance
+    requests) or generate_bar_chart() (matplotlib rendering), the SSE connection
+    sends nothing for potentially 10-30 seconds. Vercel's edge network and most
+    reverse proxies (nginx, Cloudflare) treat an idle SSE connection as dead and
+    close it after 60-120s — which is why the chart never arrived.
+
+    SSE comments (lines starting with ':') are ignored by the EventSource spec
+    on the client side, so the heartbeat is invisible to the frontend.
+    """
 
     def sse(data: dict) -> str:
         return f"data: {json.dumps(data)}\n\n"
 
-    full_response = ""
-    actual_tools_used = []
+    def sse_keepalive() -> str:
+        # SSE comment — ignored by EventSource, keeps TCP connection alive
+        return ": keepalive\n\n"
+
+    full_response      = ""
+    actual_tools_used  = []
     import time as _time
     _t0 = _time.time()
 
-    try:
-        async for chunk in stream_agent(
-            user_message=message,
-            user_id=user_id,
-            session_id=session_id,
-            model_id=ctx["model_id"],
-            user_name=ctx["user_name"],
-            preferred_currency=ctx["preferred_currency"],
-            preferred_language=ctx["preferred_language"],
-            tier=ctx["tier"],
-            portfolio_summary=ctx["portfolio_summary"],
-            memories=ctx["memories"],
-            temperature=ctx.get("temperature", 0.3),
-            top_p=ctx.get("top_p", 1.0),
-        ):
-            if chunk.startswith("__TOOLS_USED__:"):
-                import json as _json
-                try:
-                    actual_tools_used = _json.loads(chunk[len("__TOOLS_USED__:"):])
-                except Exception:
-                    pass
-            else:
-                full_response += chunk
-                yield sse({"type": "token", "content": chunk})
+    # Wrap stream_agent in an async queue so we can interleave keep-alive ticks
+    queue: asyncio.Queue = asyncio.Queue()
 
-    except Exception as e:
-        logger.error("stream_error", user_id=user_id, error=str(e))
-        yield sse({"type": "error", "message": "An error occurred. Please try again."})
-        return
+    async def _producer():
+        """Push chunks from stream_agent into the queue, then signal done."""
+        try:
+            async for chunk in stream_agent(
+                user_message=message,
+                user_id=user_id,
+                session_id=session_id,
+                model_id=ctx["model_id"],
+                user_name=ctx["user_name"],
+                preferred_currency=ctx["preferred_currency"],
+                preferred_language=ctx["preferred_language"],
+                tier=ctx["tier"],
+                portfolio_summary=ctx["portfolio_summary"],
+                memories=ctx["memories"],
+                temperature=ctx.get("temperature", 0.3),
+                top_p=ctx.get("top_p", 1.0),
+            ):
+                await queue.put(("chunk", chunk))
+        except Exception as e:
+            await queue.put(("error", str(e)))
+        finally:
+            await queue.put(("done", None))
+
+    producer_task = asyncio.create_task(_producer())
+
+    try:
+        while True:
+            try:
+                # Wait up to _SSE_KEEPALIVE_INTERVAL seconds for the next chunk.
+                # If nothing arrives in that window, send a keep-alive comment so
+                # the proxy knows the connection is still alive.
+                kind, value = await asyncio.wait_for(
+                    queue.get(),
+                    timeout=_SSE_KEEPALIVE_INTERVAL,
+                )
+            except asyncio.TimeoutError:
+                # No chunk arrived in time — send heartbeat and keep waiting
+                yield sse_keepalive()
+                continue
+
+            if kind == "done":
+                break
+            elif kind == "error":
+                logger.error("stream_error", user_id=user_id, error=value)
+                yield sse({"type": "error", "message": "An error occurred. Please try again."})
+                return
+            else:
+                # kind == "chunk"
+                chunk = value
+                if chunk.startswith("__TOOLS_USED__:"):
+                    try:
+                        actual_tools_used = json.loads(chunk[len("__TOOLS_USED__:"):])
+                    except Exception:
+                        pass
+                else:
+                    full_response += chunk
+                    yield sse({"type": "token", "content": chunk})
+
+    finally:
+        producer_task.cancel()
 
     response_time_ms = int((_time.time() - _t0) * 1000)
 
     completion_tokens = max(1, len(full_response.split()) * 4 // 3)
-    prompt_tokens = max(1, len(message.split()) * 4 // 3)
-    model_id = ctx["model_id"]
+    prompt_tokens     = max(1, len(message.split()) * 4 // 3)
+    model_id          = ctx["model_id"]
     if "gpt-4o-mini" in model_id:
         cost_usd = round((prompt_tokens * 0.00000015) + (completion_tokens * 0.0000006), 6)
     elif "gpt-4o" in model_id:
-        cost_usd = round((prompt_tokens * 0.0000025) + (completion_tokens * 0.00001), 6)
+        cost_usd = round((prompt_tokens * 0.0000025)  + (completion_tokens * 0.00001),   6)
     else:
         cost_usd = 0.0
-    tools_used = actual_tools_used
 
     save_message(
         session_id=session_id,
         role="assistant",
         content=full_response,
         model_used=ctx["model_id"],
-        tool_calls=tools_used,
+        tool_calls=actual_tools_used,
         prompt_tokens=prompt_tokens,
         completion_tokens=completion_tokens,
     )
@@ -358,7 +408,7 @@ async def _stream_response(
             prompt_tokens=prompt_tokens,
             completion_tokens=completion_tokens,
             cost_usd=cost_usd,
-            tools_used=tools_used,
+            tools_used=actual_tools_used,
             response_time_ms=response_time_ms,
         )
     except Exception:
@@ -383,7 +433,7 @@ async def submit_feedback(
         user_id = current_user["user_id"]
 
         _db().table("messages").update({
-            "feedback": body.rating,
+            "feedback":    body.rating,
             "feedback_at": "now()",
         }).eq("id", body.message_id).eq("role", "assistant").execute()
 
@@ -392,11 +442,11 @@ async def submit_feedback(
             if msg.data:
                 bad_response = msg.data[0].get("content", "")[:200]
                 _db().table("agent_memories").insert({
-                    "user_id": user_id,
-                    "content": f"User gave thumbs down on this type of response: '{bad_response[:100]}...' — avoid similar responses",
+                    "user_id":     user_id,
+                    "content":     f"User gave thumbs down on this type of response: '{bad_response[:100]}...' — avoid similar responses",
                     "memory_type": "feedback",
-                    "importance": 0.8,
-                    "is_active": True,
+                    "importance":  0.8,
+                    "is_active":   True,
                 }).execute()
 
         return {"status": "ok", "rating": body.rating}
@@ -412,7 +462,7 @@ async def get_tool_registry(current_user: dict = Depends(get_current_user)):
     user_id = current_user["user_id"]
     try:
         from src.database.operations import _db
-        result = _db().table("users").select("enabled_tools").eq("id", user_id).execute()
+        result  = _db().table("users").select("enabled_tools").eq("id", user_id).execute()
         enabled = result.data[0].get("enabled_tools") if result.data else None
         if enabled is None:
             enabled = [t["id"] for t in TOOL_REGISTRY if t["default"]]
