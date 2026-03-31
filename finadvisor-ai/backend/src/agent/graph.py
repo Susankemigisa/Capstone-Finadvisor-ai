@@ -34,6 +34,18 @@ logger = get_logger(__name__)
 
 _graph = None
 
+# Prefixes that signal binary payloads inside ToolMessage content.
+# These must be forwarded directly to the frontend — the LLM will never
+# copy a 40KB base64 string into its prose response.
+_BINARY_PREFIXES = ("CHART_BASE64:", "FILE_BASE64_PDF:", "FILE_BASE64_XLSX:")
+
+
+def _is_binary_tool_result(content: str) -> bool:
+    """Return True if the tool result is a binary payload (chart/file base64)."""
+    if not isinstance(content, str):
+        return False
+    return any(content.startswith(p) for p in _BINARY_PREFIXES)
+
 
 def _build_graph():
     """
@@ -44,18 +56,14 @@ def _build_graph():
     """
     builder = StateGraph(AgentState)
 
-    # ── Register nodes ────────────────────────────────────────
     builder.add_node("rag",          rag_node)
     builder.add_node("planner",      planner_node)
     builder.add_node("human_review", human_review_node)
     builder.add_node("tools",        tool_executor_node)
 
-    # ── Entry point ───────────────────────────────────────────
-    # RAG runs first on every turn — cheap no-op if not needed
     builder.add_edge(START, "rag")
     builder.add_edge("rag", "planner")
 
-    # ── After planner: review gate → tools or END ─────────────
     builder.add_conditional_edges(
         "planner",
         should_require_human_review,
@@ -66,19 +74,13 @@ def _build_graph():
         },
     )
 
-    # ── After human review: always proceed to tools ───────────
-    # If the user rejected, human_review_node sets is_done=True
-    # and injects a cancellation message — the planner then ends.
     builder.add_edge("human_review", "tools")
-
-    # ── After tools: back to planner to process results ───────
     builder.add_edge("tools", "planner")
 
-    # ── Compile with short-term memory checkpointer ───────────
     checkpointer = get_checkpointer()
     graph = builder.compile(
         checkpointer=checkpointer,
-        interrupt_before=["human_review"],  # LangGraph pauses BEFORE this node
+        interrupt_before=["human_review"],
     )
 
     logger.info("agent_graph_compiled", nodes=["rag", "planner", "human_review", "tools"])
@@ -110,18 +112,18 @@ async def run_agent(
     enabled_tools:      list  = None,
 ) -> dict:
     """
-    Run the agent for one user message turn.
+    Run the agent for one user message turn (non-streaming).
 
     Returns a dict with:
-        response:          str   — final text response
-        tools_used:        list  — tool names called this turn
-        scratchpad:        list  — internal step log
+        response:          str   — final text response (with binary payloads appended)
+        tools_used:        list
+        scratchpad:        list
         prompt_tokens:     int
         completion_tokens: int
         cost_usd:          float
-        hitl_pending:      bool  — True if waiting for user confirmation
-        hitl_payload:      dict  — confirmation details (when hitl_pending=True)
-        error:             str   — empty on success
+        hitl_pending:      bool
+        hitl_payload:      dict
+        error:             str
     """
     from langchain_core.messages import HumanMessage
     from src.agent.state import default_state
@@ -148,7 +150,6 @@ async def run_agent(
         logger.error("graph_run_failed", user_id=user_id, error=str(e))
         return _error_response(str(e))
 
-    # Check for HITL interrupt
     if result.get("hitl_pending") or result.get("requires_human_review"):
         return {**_empty_response(), "hitl_pending": True, "hitl_payload": result.get("__interrupt__", {})}
 
@@ -176,11 +177,27 @@ async def stream_agent(
     Yields string chunks. Used by the SSE chat endpoint.
 
     Special yielded values:
-        "__TOOLS_USED__:[...]"  — JSON list of tool names (final chunk)
-        "__HITL__:{...}"        — HITL interrupt payload (replaces normal response)
+        "CHART_BASE64:..."        — chart/image base64 payload (yielded from ToolMessage)
+        "FILE_BASE64_PDF:..."     — PDF file payload
+        "FILE_BASE64_XLSX:..."    — Excel file payload
+        "__TOOLS_USED__:[...]"    — JSON list of tool names (final chunk)
+        "__HITL__:{...}"          — HITL interrupt payload
+
+    ROOT CAUSE FIX:
+        The original implementation only yielded content from the "planner" node
+        (AIMessage chunks). Chart and image tools return their base64 payload as a
+        ToolMessage (node="tools"), which was silently filtered out.
+
+        The LLM planner receives the ToolMessage as context but writes a short prose
+        response ("Here's your chart!") — it never copies the 40KB base64 string back
+        into its own text. So the frontend received the text but never the image.
+
+        Fix: when a ToolMessage in the "tools" node contains a binary prefix
+        (CHART_BASE64:, FILE_BASE64_PDF:, FILE_BASE64_XLSX:), yield it directly.
+        The frontend MessageBubble already handles all these prefixes correctly.
     """
     import json
-    from langchain_core.messages import HumanMessage
+    from langchain_core.messages import HumanMessage, ToolMessage
     from src.agent.state import default_state
     from src.memory.short_term import get_session_config
 
@@ -207,14 +224,16 @@ async def stream_agent(
                 message, metadata = chunk
                 node = metadata.get("langgraph_node", "")
 
-                # Capture tool names as they're called
+                # Track tool names as the planner emits tool_call chunks
                 if hasattr(message, "tool_calls") and message.tool_calls:
                     for tc in message.tool_calls:
                         name = tc.get("name") if isinstance(tc, dict) else getattr(tc, "name", None)
                         if name and name not in tools_called:
                             tools_called.append(name)
 
-                # Stream text tokens from the planner only
+                # ── Planner text tokens ───────────────────────────────
+                # Stream prose tokens from the planner's AIMessage/AIMessageChunk.
+                # Skip ToolMessages (they have tool_call_id) — those are handled below.
                 if (
                     node == "planner"
                     and hasattr(message, "content")
@@ -222,6 +241,20 @@ async def stream_agent(
                     and not hasattr(message, "tool_call_id")
                 ):
                     yield message.content
+
+                # ── Binary tool results ───────────────────────────────
+                # ROOT CAUSE FIX: ToolMessages from chart/image/export tools carry
+                # their entire payload (base64 PNG, PDF, XLSX) as the message content.
+                # The planner never copies these back into its prose response.
+                # We must yield them here, directly from the tools node, so the
+                # frontend can extract and render them.
+                elif (
+                    node == "tools"
+                    and isinstance(message, ToolMessage)
+                    and isinstance(message.content, str)
+                    and _is_binary_tool_result(message.content)
+                ):
+                    yield message.content  # e.g. "CHART_BASE64:iVBOR..." or "FILE_BASE64_PDF:..."
 
             # Handle HITL interrupt event
             elif isinstance(chunk, dict) and chunk.get("__interrupt__"):
@@ -231,7 +264,7 @@ async def stream_agent(
 
     except Exception as e:
         logger.error("stream_failed", user_id=user_id, error=str(e))
-        yield f"\n\nI encountered an error. Please try again."
+        yield "\n\nI encountered an error. Please try again."
 
     if tools_called:
         yield f"__TOOLS_USED__:{json.dumps(tools_called)}"
@@ -240,12 +273,39 @@ async def stream_agent(
 # ── Helpers ───────────────────────────────────────────────────
 
 def _extract_response(result: dict) -> dict:
-    messages = result.get("messages", [])
+    """
+    Extract the final text response from the graph result.
+
+    ROOT CAUSE FIX (non-streaming path):
+        The original code only looked at AIMessages (skipped ToolMessages via
+        the tool_call_id check). Binary tool results were silently discarded.
+
+        Fix: collect binary payloads from ToolMessages and append them to the
+        prose response so the saved message content contains both the text and
+        the CHART_BASE64/FILE_BASE64 tokens. The frontend's MessageBubble will
+        extract and render them on load.
+    """
+    from langchain_core.messages import ToolMessage
+
+    messages      = result.get("messages", [])
     response_text = ""
+    binary_parts  = []
+
     for msg in reversed(messages):
-        if hasattr(msg, "content") and msg.content and not hasattr(msg, "tool_call_id"):
-            response_text = msg.content
-            break
+        # Find the last planner prose response
+        if not response_text:
+            if hasattr(msg, "content") and msg.content and not hasattr(msg, "tool_call_id"):
+                response_text = msg.content
+
+        # Collect binary tool payloads (charts, files)
+        if isinstance(msg, ToolMessage) and isinstance(msg.content, str):
+            if _is_binary_tool_result(msg.content):
+                binary_parts.insert(0, msg.content)
+
+    # Append binary payloads after the prose so the frontend can strip + render them
+    if binary_parts:
+        response_text = (response_text or "") + "\n" + "\n".join(binary_parts)
+
     return {
         "response":          response_text or "I couldn't generate a response. Please try again.",
         "tools_used":        result.get("tools_used", []),
