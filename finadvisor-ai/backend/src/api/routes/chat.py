@@ -371,6 +371,13 @@ async def _stream_response(
                         actual_tools_used = json.loads(chunk[len("__TOOLS_USED__:"):])
                     except Exception:
                         pass
+                elif any(chunk.startswith(p) for p in ("CHART_BASE64:", "FILE_BASE64_PDF:", "FILE_BASE64_XLSX:")):
+                    # Binary payload (chart/image/PDF/Excel) — send as a dedicated
+                    # event type so the frontend knows NOT to display it as text.
+                    # The full base64 payload is sent in one event after tool execution,
+                    # so there is no risk of fragmentation across multiple SSE frames.
+                    full_response += chunk
+                    yield sse({"type": "binary", "content": chunk})
                 else:
                     full_response += chunk
                     yield sse({"type": "token", "content": chunk})
@@ -414,7 +421,7 @@ async def _stream_response(
     except Exception:
         pass
 
-    yield sse({"type": "done", "session_id": session_id})
+    yield sse({"type": "done", "session_id": session_id, "full_content": full_response})
 
 
 class FeedbackRequest(BaseModel):
