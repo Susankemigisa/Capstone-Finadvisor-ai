@@ -149,7 +149,7 @@ app.include_router(exports.router,       prefix="/export",        tags=["Exports
 async def health_check():
     """
     Uptime and configuration health check.
-    Safe to call without authentication — used by Railway / Vercel monitors.
+    Safe to call without authentication — used by Render / Vercel monitors.
     """
     return {
         "status":           "healthy",

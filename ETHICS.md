@@ -35,7 +35,7 @@ The application header and onboarding screen also display:
 | Row-Level Security (RLS) | Supabase RLS ensures each user can only read and write their own records — the database layer enforces user isolation even if a query bug occurs |
 | Password hashing | bcrypt with appropriate cost factor — plaintext passwords are never written to any store |
 | Short-lived JWT tokens | Access tokens expire after 30 minutes; refresh tokens expire after 7 days and are invalidated on logout |
-| Server-side API keys | OpenAI, Supabase service role, Stripe, and SendGrid keys are stored in Railway environment variables and never exposed to the browser |
+| Server-side API keys | OpenAI, Supabase service role, Stripe, and SendGrid keys are stored in Render environment variables and never exposed to the browser |
 | Document isolation | Uploaded documents are stored per-user; the retrieval system is scoped by `user_id` — a user cannot access another user's document chunks |
 | Minimal LLM context | Only the minimum necessary context is sent to LLM providers per query — full financial history is not bulk-transmitted |
 | Stripe-hosted checkout | Card data never touches our servers; all payment UI is handled by Stripe's PCI-compliant hosted checkout |

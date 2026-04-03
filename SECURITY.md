@@ -83,13 +83,13 @@ The following secrets must never be committed to the repository:
 
 | Secret | Where It Lives |
 |--------|---------------|
-| `SECRET_KEY` | Backend `.env` / Railway env vars |
-| `SUPABASE_SERVICE_ROLE_KEY` | Backend `.env` / Railway env vars |
-| `STRIPE_SECRET_KEY` | Backend `.env` / Railway env vars |
-| `OPENAI_API_KEY` | Backend `.env` / Railway env vars |
-| `SENDGRID_API_KEY` | Backend `.env` / Railway env vars |
-| `GOOGLE_CLIENT_SECRET` | Backend `.env` / Railway env vars |
-| `GITHUB_CLIENT_SECRET` | Backend `.env` / Railway env vars |
+| `SECRET_KEY` | Backend `.env` / Render env vars |
+| `SUPABASE_SERVICE_ROLE_KEY` | Backend `.env` / Render env vars |
+| `STRIPE_SECRET_KEY` | Backend `.env` / Render env vars |
+| `OPENAI_API_KEY` | Backend `.env` / Render env vars |
+| `SENDGRID_API_KEY` | Backend `.env` / Render env vars |
+| `GOOGLE_CLIENT_SECRET` | Backend `.env` / Render env vars |
+| `GITHUB_CLIENT_SECRET` | Backend `.env` / Render env vars |
 
 The `.gitignore` excludes `.env`, `.env.local`, and `.env.*.local`. If you accidentally commit a secret, rotate it immediately — git history cannot be trusted after a secret has been pushed.
 

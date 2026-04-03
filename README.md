@@ -66,8 +66,8 @@ The project implements **Case 2 (AI Agent for Task Automation)** as its primary 
 FinAdvisor AI is a full-stack AI-powered financial advisor application. It combines real-time market data, multi-model AI chat, portfolio tracking, budgeting, tax records, watchlists, financial goals, and price alerts — all in one platform with 20-language support.
 
 **Live Demo:** https://finadvisor-ai-app-two.vercel.app
-**API:** https://finadvisor-ai-production-c72b.up.railway.app
-**API Docs:** https://finadvisor-ai-production-c72b.up.railway.app/docs *(requires DEBUG=true)*
+**API:** https://finadvisor-ai-production-c72b.up.Render.app
+**API Docs:** https://finadvisor-ai-production-c72b.up.Render.app/docs *(requires DEBUG=true)*
 
 > ⚠️ FinAdvisor AI is for informational purposes only and is not a licensed financial advisor. Always consult a qualified professional for major financial decisions.
 
@@ -142,7 +142,7 @@ FinAdvisor AI is a full-stack AI-powered financial advisor application. It combi
 | Image Generation | OpenAI DALL-E 3 |
 | Observability | LangSmith |
 | Scheduling | APScheduler (price alert background job) |
-| Hosting | Vercel (frontend) + Railway (backend) |
+| Hosting | Vercel (frontend) + Render (backend) |
 
 ---
 
@@ -471,7 +471,7 @@ LANGCHAIN_PROJECT=finadvisor-ai
 ### Frontend `.env.local`
 
 ```env
-NEXT_PUBLIC_API_URL=https://your-backend.up.railway.app
+NEXT_PUBLIC_API_URL=https://your-backend.up.Render.app
 ```
 
 ---
@@ -493,14 +493,14 @@ create extension if not exists vector;
 
 ### Frontend — Vercel
 1. Connect GitHub repo in Vercel dashboard
-2. Set `NEXT_PUBLIC_API_URL=https://your-backend.up.railway.app`
+2. Set `NEXT_PUBLIC_API_URL=https://your-backend.up.Render.app`
 3. Deploy
 
-### Backend — Railway
-1. Connect GitHub repo in Railway
-2. Add all backend env vars in Railway dashboard
+### Backend — Render
+1. Connect GitHub repo in Render
+2. Add all backend env vars in Render dashboard
 3. Set `ALLOWED_ORIGINS` to include your Vercel URL
-4. Register Stripe webhook: `https://your-backend.up.railway.app/billing/webhook`
+4. Register Stripe webhook: `https://your-backend.up.Render.app/billing/webhook`
    - Events: `checkout.session.completed`, `customer.subscription.deleted`, `invoice.payment_failed`
 
 ---

@@ -58,14 +58,14 @@ class Settings(BaseSettings):
     # ── STRIPE ─────────────────────────────────────────────
     STRIPE_SECRET_KEY: str = ""
     STRIPE_WEBHOOK_SECRET: str = ""
-    FRONTEND_URL: str = "http://localhost:3000"
+    FRONTEND_URL: str = "https://capstone-finadvisor-ai.vercel.app"
 
     # ── RATE LIMITING ──────────────────────────────────────
     RATE_LIMIT_PER_MINUTE: int = 30
     RATE_LIMIT_PER_HOUR: int = 300
 
     # ── CORS ───────────────────────────────────────────────
-    ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000"
+    ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000,https://capstone-finadvisor-ai.vercel.app"
 
     # ── EMBEDDINGS ─────────────────────────────────────────
     EMBEDDING_MODEL: str = "text-embedding-3-small"
