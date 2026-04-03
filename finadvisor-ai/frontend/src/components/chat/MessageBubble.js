@@ -2,49 +2,32 @@
 import { useMemo, useState } from 'react'
 
 // ── Pre-process raw LLM output before any regex work ─────────
-// Some LLMs split a markdown image link across two lines:
-//   ![alt text]
-//   (data:image/png;base64,...)
-// This joins them back onto one line so all downstream regexes work correctly.
 function normaliseRawContent(text) {
   if (!text) return text
-  // Join ] \n ( into ]( — handles any amount of whitespace between them
   return text.replace(/\]\s*\n\s*\(/g, '](')
 }
 
 // ── Normalise a captured base64 group ────────────────────────
-// The backend sometimes embeds "CHART_BASE64:" as a prefix inside a data URI,
-// producing: data:image/png;base64,CHART_BASE64:iVBOR...
-// Strip that prefix so the string is valid base64.
 function cleanB64(raw) {
   const s = raw.replace(/\s/g, '')
   return s.startsWith('CHART_BASE64:') ? s.slice('CHART_BASE64:'.length) : s
 }
 
 // ── Strip ALL special / binary tokens from display text ──────
-// IMPORTANT: this runs unconditionally — it is the last-resort safety net that
-// guarantees no raw base64 or data URIs ever reach renderMarkdown, regardless of
-// whether extractCharts / extractFiles managed to detect a particular format.
 function stripSpecialTokens(text) {
   return text
-    // Explicit backend prefixes (greedy — consume the whole block)
     .replace(/CHART_BASE64:[A-Za-z0-9+/=\r\n\s]+/g, '')
     .replace(/FILE_BASE64_PDF:[A-Za-z0-9+/=\r\n\s]+/g, '')
     .replace(/FILE_BASE64_XLSX:[A-Za-z0-9+/=\r\n\s]+/g, '')
-    // Markdown image with data URI  ![...](data:image/...base64,...) — any length, any format
     .replace(/!\[[^\]]*\]\(data:image\/[\s\S]*?\)/g, '')
-    // Bare/parenthesised data URIs — use [\s\S] so multi-line base64 is fully consumed
     .replace(/\(?data:image\/[^\s)]*(?:\s[^\s)]*)*\)?/g, '')
-    // Remote image URL annotations
     .replace(/URL:\s*https?:\/\/[^\s\n]+/g, '')
     .replace(/!\[[^\]]*\]\(https?:\/\/[^\s)]+\)/g, '')
-    // Collapse runs of blank lines left behind
     .replace(/\n{3,}/g, '\n\n')
     .trim()
 }
 
 // ── Markdown renderer ─────────────────────────────────────────
-// Receives already-stripped text — no binary payloads should reach here.
 function renderMarkdown(text) {
   if (!text) return ''
   let html = text
@@ -55,7 +38,6 @@ function renderMarkdown(text) {
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
     .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-    // Wrap consecutive list items in <ul> so HTML nesting is valid
     .replace(/((?:^[•\-] .+$\n?)+)/gm, (block) => {
       const items = block.replace(/^[•\-] (.+)$/gm, '<li>$1</li>')
       return `<ul>${items}</ul>`
@@ -66,13 +48,11 @@ function renderMarkdown(text) {
 }
 
 // ── Extract ALL base64 images ─────────────────────────────────
-// Must be called on normalised text (after normaliseRawContent).
-// Handles every format the backend may produce:
-//   1. CHART_BASE64:<b64>
-//   2. ![alt](data:image/png;base64,<b64>)
-//   3. ![alt](data:image/png;base64,CHART_BASE64:<b64>)   ← hybrid
-//   4. (data:image/png;base64,<b64>)
-//   5. data:image/png;base64,<b64>                         ← bare
+// FIX: replaced the lookahead terminator with a simpler approach —
+// capture everything after the prefix, strip whitespace, and validate.
+// The old regex used (?=\s*(?:CHART_BASE64:|FILE_BASE64_|$)) which failed
+// when the payload was at end-of-string because $ matched too early inside
+// a greedy quantifier, truncating the base64 and making atob() throw.
 function extractCharts(text) {
   if (!text) return []
   const charts = []
@@ -80,19 +60,27 @@ function extractCharts(text) {
 
   const add = (raw) => {
     const b64 = cleanB64(raw)
-    if (!b64 || b64.length < 20) return           // ignore obviously truncated captures
+    if (!b64 || b64.length < 100) return  // ignore truncated captures
+    // Quick validity check — base64 chars only
+    if (!/^[A-Za-z0-9+/]+=*$/.test(b64)) return
     const key = b64.slice(0, 40)
     if (!seen.has(key)) { seen.add(key); charts.push(b64) }
   }
 
   let m
 
-  // Format 1: explicit CHART_BASE64: prefix
-  // Lookahead terminator captures the full multi-line payload without truncation
-  const re1 = /CHART_BASE64:([A-Za-z0-9+/=\s]+?)(?=\s*(?:CHART_BASE64:|FILE_BASE64_|$))/g
-  while ((m = re1.exec(text)) !== null) add(m[1])
+  // Format 1: CHART_BASE64:<payload>
+  // FIX: use a simpler split-on-next-prefix approach instead of lookahead
+  const parts1 = text.split('CHART_BASE64:')
+  for (let i = 1; i < parts1.length; i++) {
+    // Stop at the next known prefix or end of string
+    const raw = parts1[i]
+      .split(/FILE_BASE64_PDF:|FILE_BASE64_XLSX:|CHART_BASE64:/)[0]
+      .replace(/\s/g, '')
+    add(raw)
+  }
 
-  // Format 2 + 3: markdown image with data URI (normal or hybrid prefix inside the base64 part)
+  // Format 2 + 3: markdown image with data URI
   const re2 = /!\[[^\]]*\]\(data:image\/(?:png|jpeg|webp|gif);base64,((?:CHART_BASE64:)?[A-Za-z0-9+/=\s]+?)\)/g
   while ((m = re2.exec(text)) !== null) add(m[1])
 
@@ -100,7 +88,7 @@ function extractCharts(text) {
   const re3 = /\(data:image\/(?:png|jpeg|webp|gif);base64,((?:CHART_BASE64:)?[A-Za-z0-9+/=\s]+?)\)/g
   while ((m = re3.exec(text)) !== null) add(m[1])
 
-  // Format 5: completely bare data URI on its own line
+  // Format 5: completely bare data URI
   const re4 = /(?:^|\s)data:image\/(?:png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)/gm
   while ((m = re4.exec(text)) !== null) add(m[1])
 
@@ -108,14 +96,33 @@ function extractCharts(text) {
 }
 
 // ── Extract file downloads ────────────────────────────────────
+// FIX: same split-based approach to fix the end-of-string truncation bug.
 function extractFiles(text) {
   if (!text) return []
   const files = []
-  const pdfRe  = /FILE_BASE64_PDF:([A-Za-z0-9+/=\s]+?)(?=\s*(?:CHART_BASE64:|FILE_BASE64_|$))/g
-  const xlsxRe = /FILE_BASE64_XLSX:([A-Za-z0-9+/=\s]+?)(?=\s*(?:CHART_BASE64:|FILE_BASE64_|$))/g
-  let m
-  while ((m = pdfRe.exec(text))  !== null) files.push({ type: 'pdf',  b64: m[1].replace(/\s/g, '') })
-  while ((m = xlsxRe.exec(text)) !== null) files.push({ type: 'xlsx', b64: m[1].replace(/\s/g, '') })
+
+  // Split on PDF prefix
+  const pdfParts = text.split('FILE_BASE64_PDF:')
+  for (let i = 1; i < pdfParts.length; i++) {
+    const raw = pdfParts[i]
+      .split(/CHART_BASE64:|FILE_BASE64_XLSX:|FILE_BASE64_PDF:/)[0]
+      .replace(/\s/g, '')
+    if (raw.length > 100 && /^[A-Za-z0-9+/]+=*$/.test(raw)) {
+      files.push({ type: 'pdf', b64: raw })
+    }
+  }
+
+  // Split on XLSX prefix
+  const xlsxParts = text.split('FILE_BASE64_XLSX:')
+  for (let i = 1; i < xlsxParts.length; i++) {
+    const raw = xlsxParts[i]
+      .split(/CHART_BASE64:|FILE_BASE64_PDF:|FILE_BASE64_XLSX:/)[0]
+      .replace(/\s/g, '')
+    if (raw.length > 100 && /^[A-Za-z0-9+/]+=*$/.test(raw)) {
+      files.push({ type: 'xlsx', b64: raw })
+    }
+  }
+
   return files
 }
 
@@ -256,6 +263,16 @@ function RemoteImageCard({ url }) {
   )
 }
 
+// ── Binary loading placeholder (shown while chart/file streams in) ──
+function BinaryLoadingCard() {
+  return (
+    <div style={{ marginTop: '12px', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--bg-elevated)', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-dim)', fontSize: '12px', fontFamily: 'DM Mono, monospace' }}>
+      <span style={{ fontSize: '18px' }}>⏳</span>
+      Generating chart or file — please wait...
+    </div>
+  )
+}
+
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 export default function MessageBubble({ message, isStreaming = false, onRegenerate = null }) {
@@ -279,25 +296,25 @@ export default function MessageBubble({ message, isStreaming = false, onRegenera
     setSubmitting(false)
   }
 
-  // Step 1: normalise the raw content once so all downstream work operates on clean text.
-  // This joins split markdown image links (] \n ( -> ]() before any regex runs.
+  // Step 1: normalise the raw content once
   const normContent = useMemo(() => isUser ? content : normaliseRawContent(content), [content, isUser])
 
-  // Step 2: extract structured payloads — only on fully committed messages, never mid-stream
-  // (partial base64 chunks would trigger onError and permanently mark the card as failed).
+  // Step 2: detect binary loading state (streaming + binary prefix present)
+  // In this case we show a placeholder instead of raw base64
+  const isBinaryLoading = isStreaming && normContent === '__BINARY_LOADING__'
+
+  // Step 3: extract structured payloads — only on fully committed messages, never mid-stream
   const charts        = useMemo(() => (isUser || isStreaming) ? [] : extractCharts(normContent),      [normContent, isUser, isStreaming])
   const fileDownloads = useMemo(() => (isUser || isStreaming) ? [] : extractFiles(normContent),        [normContent, isUser, isStreaming])
   const remoteImages  = useMemo(() => (isUser || isStreaming) ? [] : extractRemoteImages(normContent), [normContent, isUser, isStreaming])
 
-  // Step 3: ALWAYS strip binary tokens before rendering markdown — unconditional safety net.
-  // Previously this only ran when hasSpecial=true, so any format that extractCharts missed
-  // (e.g. split markdown links, unknown hybrid formats) would leak raw base64 into the UI.
+  // Step 4: strip binary tokens before rendering markdown
   const cleanContent = useMemo(
-    () => isUser ? normContent : stripSpecialTokens(normContent),
+    () => isUser ? normContent : (normContent === '__BINARY_LOADING__' ? '' : stripSpecialTokens(normContent)),
     [normContent, isUser]
   )
 
-  // Step 4: render clean markdown — no binary payloads should reach here.
+  // Step 5: render clean markdown
   const html = useMemo(() => renderMarkdown(cleanContent), [cleanContent])
 
   return (
@@ -311,7 +328,11 @@ export default function MessageBubble({ message, isStreaming = false, onRegenera
             <p style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{content}</p>
           ) : (
             <>
-              <div className={`prose-chat${isStreaming ? ' typing-cursor' : ''}`} dangerouslySetInnerHTML={{ __html: html }} />
+              {isBinaryLoading ? (
+                <BinaryLoadingCard />
+              ) : (
+                <div className={`prose-chat${isStreaming ? ' typing-cursor' : ''}`} dangerouslySetInnerHTML={{ __html: html }} />
+              )}
               {charts.map((b64, i)      => <ChartCard        key={`chart-${i}`} b64={b64} />)}
               {fileDownloads.map((f, i) => <FileDownloadCard key={`file-${i}`}  type={f.type} b64={f.b64} />)}
               {remoteImages.map((url,i) => <RemoteImageCard  key={`img-${i}`}   url={url} />)}

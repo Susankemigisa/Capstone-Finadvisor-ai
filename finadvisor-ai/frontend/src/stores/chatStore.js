@@ -105,8 +105,9 @@ export const useChatStore = create((set, get) => ({
       const decoder = new TextDecoder()
       let buffer = ''
 
-      // CS-3 + CS-4 + CS-5 FIX: single unified line processor
       const processLine = (line) => {
+        // Skip SSE keep-alive comments (lines starting with ':')
+        if (line.startsWith(':')) return
         if (!line.startsWith('data: ')) return
         try {
           const event = JSON.parse(line.slice(6))
@@ -114,6 +115,13 @@ export const useChatStore = create((set, get) => ({
           if (event.type === 'token') {
             fullContent += event.content
             set({ streamingContent: fullContent })
+
+          } else if (event.type === 'binary') {
+            // Binary payload from backend (CHART_BASE64:, FILE_BASE64_PDF:, FILE_BASE64_XLSX:)
+            // Accumulate into fullContent but show a placeholder during streaming —
+            // never display raw base64 as text in the chat bubble.
+            fullContent += event.content
+            set({ streamingContent: '__BINARY_LOADING__' })
 
           } else if (event.type === 'done') {
             // CS-3 FIX: images/files are not streamed token-by-token — content arrives on the
