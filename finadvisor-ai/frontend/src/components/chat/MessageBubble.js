@@ -48,20 +48,18 @@ function renderMarkdown(text) {
 }
 
 // ── Extract ALL base64 images ─────────────────────────────────
-// FIX: replaced the lookahead terminator with a simpler approach —
-// capture everything after the prefix, strip whitespace, and validate.
-// The old regex used (?=\s*(?:CHART_BASE64:|FILE_BASE64_|$)) which failed
-// when the payload was at end-of-string because $ matched too early inside
-// a greedy quantifier, truncating the base64 and making atob() throw.
+// Backend guarantees binary payloads are always at END of message content
+// (reordered in chat.py before save_message). This means we can safely
+// use a greedy match — no prose text will follow the base64 string.
 function extractCharts(text) {
   if (!text) return []
   const charts = []
   const seen = new Set()
 
   const add = (raw) => {
-    const b64 = cleanB64(raw)
-    if (!b64 || b64.length < 100) return  // ignore truncated captures
-    // Quick validity check — base64 chars only
+    const b64 = cleanB64(raw.replace(/\s/g, ''))
+    if (!b64 || b64.length < 100) return
+    // Validate: pure base64 chars + optional = padding
     if (!/^[A-Za-z0-9+/]+=*$/.test(b64)) return
     const key = b64.slice(0, 40)
     if (!seen.has(key)) { seen.add(key); charts.push(b64) }
@@ -69,16 +67,9 @@ function extractCharts(text) {
 
   let m
 
-  // Format 1: CHART_BASE64:<payload>
-  // FIX: use a simpler split-on-next-prefix approach instead of lookahead
-  const parts1 = text.split('CHART_BASE64:')
-  for (let i = 1; i < parts1.length; i++) {
-    // Stop at the next known prefix or end of string
-    const raw = parts1[i]
-      .split(/FILE_BASE64_PDF:|FILE_BASE64_XLSX:|CHART_BASE64:/)[0]
-      .replace(/\s/g, '')
-    add(raw)
-  }
+  // Format 1: CHART_BASE64:<payload> — greedy, always at end of string
+  const re1 = /CHART_BASE64:([A-Za-z0-9+/=\s]+)/g
+  while ((m = re1.exec(text)) !== null) add(m[1])
 
   // Format 2 + 3: markdown image with data URI
   const re2 = /!\[[^\]]*\]\(data:image\/(?:png|jpeg|webp|gif);base64,((?:CHART_BASE64:)?[A-Za-z0-9+/=\s]+?)\)/g
@@ -96,31 +87,22 @@ function extractCharts(text) {
 }
 
 // ── Extract file downloads ────────────────────────────────────
-// FIX: same split-based approach to fix the end-of-string truncation bug.
+// Binary payloads are always at end of string (reordered by backend).
 function extractFiles(text) {
   if (!text) return []
   const files = []
+  let m
 
-  // Split on PDF prefix
-  const pdfParts = text.split('FILE_BASE64_PDF:')
-  for (let i = 1; i < pdfParts.length; i++) {
-    const raw = pdfParts[i]
-      .split(/CHART_BASE64:|FILE_BASE64_XLSX:|FILE_BASE64_PDF:/)[0]
-      .replace(/\s/g, '')
-    if (raw.length > 100 && /^[A-Za-z0-9+/]+=*$/.test(raw)) {
-      files.push({ type: 'pdf', b64: raw })
-    }
+  const pdfRe  = /FILE_BASE64_PDF:([A-Za-z0-9+/=\s]+)/g
+  const xlsxRe = /FILE_BASE64_XLSX:([A-Za-z0-9+/=\s]+)/g
+
+  while ((m = pdfRe.exec(text))  !== null) {
+    const b64 = m[1].replace(/\s/g, '')
+    if (b64.length > 100 && /^[A-Za-z0-9+/]+=*$/.test(b64)) files.push({ type: 'pdf',  b64 })
   }
-
-  // Split on XLSX prefix
-  const xlsxParts = text.split('FILE_BASE64_XLSX:')
-  for (let i = 1; i < xlsxParts.length; i++) {
-    const raw = xlsxParts[i]
-      .split(/CHART_BASE64:|FILE_BASE64_PDF:|FILE_BASE64_XLSX:/)[0]
-      .replace(/\s/g, '')
-    if (raw.length > 100 && /^[A-Za-z0-9+/]+=*$/.test(raw)) {
-      files.push({ type: 'xlsx', b64: raw })
-    }
+  while ((m = xlsxRe.exec(text)) !== null) {
+    const b64 = m[1].replace(/\s/g, '')
+    if (b64.length > 100 && /^[A-Za-z0-9+/]+=*$/.test(b64)) files.push({ type: 'xlsx', b64 })
   }
 
   return files

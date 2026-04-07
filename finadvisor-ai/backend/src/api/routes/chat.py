@@ -372,10 +372,6 @@ async def _stream_response(
                     except Exception:
                         pass
                 elif any(chunk.startswith(p) for p in ("CHART_BASE64:", "FILE_BASE64_PDF:", "FILE_BASE64_XLSX:")):
-                    # Binary payload (chart/image/PDF/Excel) — send as a dedicated
-                    # event type so the frontend knows NOT to display it as text.
-                    # The full base64 payload is sent in one event after tool execution,
-                    # so there is no risk of fragmentation across multiple SSE frames.
                     full_response += chunk
                     yield sse({"type": "binary", "content": chunk})
                 else:
@@ -420,6 +416,23 @@ async def _stream_response(
         )
     except Exception:
         pass
+
+    # Reorder: move all binary payloads to end of full_response.
+    # CHART_BASE64/FILE_BASE64 arrive mid-stream between two planner turns.
+    # If stored inline (prose + binary + prose), MessageBubble's extractor
+    # captures trailing prose chars as part of the base64, corrupting it.
+    # Moving binary to the end guarantees clean extraction.
+    _binary_prefixes = ("CHART_BASE64:", "FILE_BASE64_PDF:", "FILE_BASE64_XLSX:")
+    _prose_lines = []
+    _binary_lines = []
+    for _line in full_response.split("\n"):
+        if any(_line.startswith(_p) for _p in _binary_prefixes):
+            _binary_lines.append(_line)
+        else:
+            _prose_lines.append(_line)
+    full_response = "\n".join(_prose_lines).strip()
+    if _binary_lines:
+        full_response += "\n" + "\n".join(_binary_lines)
 
     yield sse({"type": "done", "session_id": session_id, "full_content": full_response})
 
