@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuthStore } from '@/stores/authStore'
@@ -35,6 +35,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [oauthLoading, setOauthLoading] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
+  useEffect(() => {
+  const handleVisibility = () => {
+    if (document.visibilityState === 'visible') {
+      setOauthLoading(null)
+    }
+  }
+  document.addEventListener('visibilitychange', handleVisibility)
+  return () => document.removeEventListener('visibilitychange', handleVisibility)
+}, [])
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault()
