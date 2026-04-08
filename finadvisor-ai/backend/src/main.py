@@ -20,6 +20,7 @@ from fastapi.responses import JSONResponse
 from src.config.settings import settings
 from src.utils.logger import get_logger
 from src.utils.sanitizer import sanitize_error
+from src.api.routes.webhooks import router as webhooks_router
 
 # Middleware imports
 from src.api.middleware import (
@@ -142,7 +143,7 @@ app.include_router(goals.router,         prefix="/goals",         tags=["Financi
 app.include_router(budget.router,        prefix="/budget",        tags=["Budget"])
 app.include_router(tax.router,           prefix="/tax",           tags=["Tax Records"])
 app.include_router(exports.router,       prefix="/export",        tags=["Exports"])
-
+app.include_router(webhooks_router, prefix="", tags=["Webhooks & Savings"])
 
 # ── System endpoints ──────────────────────────────────────────
 @app.get("/health", tags=["System"])

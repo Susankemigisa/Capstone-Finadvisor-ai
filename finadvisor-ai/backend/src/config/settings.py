@@ -60,6 +60,26 @@ class Settings(BaseSettings):
     STRIPE_WEBHOOK_SECRET: str = ""
     FRONTEND_URL: str = "https://capstone-finadvisor-ai.vercel.app"
 
+        # ── BANKING & MOBILE MONEY ─────────────────────────────────
+    # Mono (African bank connections — mono.co)
+    MONO_SECRET_KEY: str = ""           # From Mono dashboard → Settings → API Keys
+    MONO_WEBHOOK_SECRET: str = ""       # From Mono dashboard → Webhooks → Secret
+ 
+    # MTN Mobile Money Uganda (momodeveloper.mtn.com)
+    MOMO_SUBSCRIPTION_KEY: str = ""     # From MTN MoMo developer portal
+    MOMO_CALLBACK_KEY: str = ""         # Secret key you set in MTN MoMo portal for callback verification
+    MOMO_TARGET_ENVIRONMENT: str = "sandbox"  # 'sandbox' or 'production'
+ 
+    # Airtel Money Uganda
+    AIRTEL_CLIENT_ID: str = ""          # From Airtel Money developer portal
+    AIRTEL_CLIENT_SECRET: str = ""
+ 
+    # Flutterwave (card payments + transfers across Africa — flutterwave.com)
+    FLUTTERWAVE_PUBLIC_KEY: str = ""    # From Flutterwave dashboard
+    FLUTTERWAVE_SECRET_KEY: str = ""
+    FLUTTERWAVE_WEBHOOK_SECRET: str = "" # From Flutterwave dashboard → Webhooks → Secret hash
+ 
+
     # ── RATE LIMITING ──────────────────────────────────────
     RATE_LIMIT_PER_MINUTE: int = 30
     RATE_LIMIT_PER_HOUR: int = 300

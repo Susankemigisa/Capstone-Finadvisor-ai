@@ -1,16 +1,26 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 
 export default function BillingSuccess() {
   const router = useRouter()
   const { init } = useAuthStore()
+  const [countdown, setCountdown] = useState(3)
 
   useEffect(() => {
-    // Re-fetch user to get updated tier
     init().then(() => {
-      setTimeout(() => router.replace('/chat'), 3000)
+      const timer = setInterval(() => {
+        setCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer)
+            router.replace('/chat')
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+      return () => clearInterval(timer)
     })
   }, [])
 
@@ -23,7 +33,14 @@ export default function BillingSuccess() {
           Welcome to Pro!
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>Your account has been upgraded.</p>
-        <p style={{ color: 'var(--text-dim)', fontSize: '12px' }}>Redirecting you to chat in a moment...</p>
+        <p style={{ color: 'var(--text-dim)', fontSize: '12px', marginBottom: '24px' }}>
+          Redirecting in {countdown}…
+        </p>
+        <button
+          onClick={() => router.replace('/chat')}
+          style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '10px 28px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'DM Mono, monospace' }}>
+          Go to Chat →
+        </button>
       </div>
     </div>
   )
