@@ -62,12 +62,21 @@ export default function BillingPage() {
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
-        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '11px' }}>{t('common.loading')}</div>
+        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '11px' }}>Loading...</div>
       </div>
     </div>
   )
 
   const isPro = billingStatus?.is_pro || user?.tier === 'pro'
+
+  // Shared card style
+  const cardBase = {
+    borderRadius: '14px',
+    padding: '24px',
+    display: 'flex',
+    flexDirection: 'column',
+    background: 'var(--bg-surface)',
+  }
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
@@ -85,10 +94,9 @@ export default function BillingPage() {
         </div>
 
         <div style={{ padding: '32px 28px' }}>
-          <div style={{ maxWidth: '820px', margin: '0 auto' }}>
+          <div style={{ maxWidth: '860px', margin: '0 auto' }}>
 
             {isPro ? (
-              /* ── Already Pro ── */
               <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--gold-dim)', borderRadius: '16px', padding: '48px', textAlign: 'center' }}>
                 <div style={{ fontSize: '52px', marginBottom: '16px' }}>◆</div>
                 <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '14px', letterSpacing: '0.1em', marginBottom: '8px' }}>PRO MEMBER</div>
@@ -96,28 +104,24 @@ export default function BillingPage() {
               </div>
             ) : (
               <>
-                {/* ── Free vs Pro header ── */}
-                <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.6 }}>
-                    Start free. Upgrade when you need more power.
-                  </p>
-                </div>
+                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '36px' }}>
+                  Start free. Upgrade when you need more power.
+                </p>
 
-                {/* ── Plan cards ── */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '40px', alignItems: 'start' }}>
+                {/* paddingTop gives the absolute-positioned badge pills space above each card */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '36px', paddingTop: '14px' }}>
 
-                  {/* Free */}
-                  <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px' }}>
-                    <div style={{ marginBottom: '20px' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '0.08em', fontFamily: 'DM Mono, monospace', marginBottom: '12px' }}>FREE</div>
-                      <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)' }}>$0</div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '4px' }}>Forever free</div>
-                    </div>
-                    <div style={{ marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '9px' }}>
+                  {/* ── Free ── */}
+                  <div style={{ ...cardBase, border: '1px solid var(--border)' }}>
+                    {/* invisible spacer so price row aligns with Pro cards */}
+                    <div style={{ height: '14px' }} />
+                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '14px' }}>FREE</div>
+                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '34px', fontWeight: 700, lineHeight: 1 }}>$0</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px', marginBottom: '22px' }}>Forever free</div>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
                       {FREE_FEATURES.map(f => (
-                        <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                          <span style={{ color: 'var(--text-dim)', marginTop: '1px', flexShrink: 0 }}>○</span>
-                          <span>{f}</span>
+                        <div key={f} style={{ display: 'flex', gap: '8px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                          <span style={{ color: 'var(--text-dim)', flexShrink: 0 }}>○</span><span>{f}</span>
                         </div>
                       ))}
                     </div>
@@ -126,70 +130,65 @@ export default function BillingPage() {
                     </button>
                   </div>
 
-                  {/* Pro Monthly */}
-                  <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px', position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: '-11px', left: '20px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-secondary)', fontSize: '10px', fontWeight: 600, padding: '2px 10px', borderRadius: '20px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.06em' }}>
+                  {/* ── Pro Monthly ── */}
+                  <div style={{ ...cardBase, border: '1px solid var(--border)', position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: '-13px', left: '16px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-secondary)', fontSize: '10px', fontWeight: 600, padding: '3px 10px', borderRadius: '20px', fontFamily: 'DM Mono, monospace', whiteSpace: 'nowrap' }}>
                       🔹 PRO — MONTHLY
                     </div>
-                    <div style={{ marginBottom: '20px', marginTop: '8px' }}>
-                      <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                        $19<span style={{ fontSize: '14px', fontWeight: 400, color: 'var(--text-secondary)' }}>/mo</span>
-                      </div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '4px' }}>Billed monthly</div>
+                    <div style={{ height: '14px' }} />
+                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '14px', opacity: 0 }}>PRO</div>
+                    <div style={{ lineHeight: 1 }}>
+                      <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '34px', fontWeight: 700 }}>$19</span>
+                      <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>/mo</span>
                     </div>
-                    <div style={{ marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '9px' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px', marginBottom: '22px' }}>Billed monthly</div>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
                       {FEATURES.map(f => (
-                        <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                          <span style={{ color: 'var(--gold)', marginTop: '1px', flexShrink: 0 }}>◆</span>
-                          <span>{f}</span>
+                        <div key={f} style={{ display: 'flex', gap: '8px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                          <span style={{ color: 'var(--gold)', flexShrink: 0 }}>◆</span><span>{f}</span>
                         </div>
                       ))}
                     </div>
                     <button
-                      onClick={() => handleUpgrade('pro_monthly')}
-                      disabled={!!loading}
+                      onClick={() => handleUpgrade('pro_monthly')} disabled={!!loading}
                       style={{ width: '100%', background: 'transparent', border: '1px solid var(--gold)', color: 'var(--gold)', borderRadius: '8px', padding: '10px', fontSize: '13px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading === 'pro_monthly' ? 0.7 : 1, transition: 'all 0.15s', fontFamily: 'DM Mono, monospace' }}
-                      onMouseEnter={e => { if (!loading) { e.currentTarget.style.background = 'var(--gold)'; e.currentTarget.style.color = '#0a0c10' }}}
+                      onMouseEnter={e => { if (!loading) { e.currentTarget.style.background = 'var(--gold)'; e.currentTarget.style.color = '#0a0c10' } }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--gold)' }}
                     >
                       {loading === 'pro_monthly' ? 'Redirecting…' : 'Upgrade Monthly →'}
                     </button>
                   </div>
 
-                  {/* Pro Yearly — Best Value */}
-                  <div style={{ background: 'var(--bg-surface)', border: '2px solid var(--gold)', borderRadius: '14px', padding: '24px', position: 'relative', boxShadow: '0 0 24px rgba(201,168,76,0.08)' }}>
-                    <div style={{ position: 'absolute', top: '-11px', left: '50%', transform: 'translateX(-50%)', background: 'var(--gold)', color: '#0a0c10', fontSize: '10px', fontWeight: 700, padding: '2px 12px', borderRadius: '20px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>
+                  {/* ── Pro Yearly ── */}
+                  <div style={{ ...cardBase, border: '2px solid var(--gold)', position: 'relative', boxShadow: '0 0 28px rgba(201,168,76,0.1)' }}>
+                    <div style={{ position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)', background: 'var(--gold)', color: '#0a0c10', fontSize: '10px', fontWeight: 700, padding: '3px 12px', borderRadius: '20px', fontFamily: 'DM Mono, monospace', whiteSpace: 'nowrap' }}>
                       ⭐ BEST VALUE — SAVE 30%
                     </div>
-                    <div style={{ marginBottom: '4px', marginTop: '8px' }}>
-                      <div style={{ fontSize: '10px', fontWeight: 600, color: 'var(--gold)', letterSpacing: '0.08em', fontFamily: 'DM Mono, monospace', marginBottom: '8px' }}>🔹 PRO — YEARLY</div>
-                      <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '32px', fontWeight: 700, color: 'var(--gold)' }}>
-                        $159<span style={{ fontSize: '14px', fontWeight: 400, color: 'var(--text-secondary)' }}>/year</span>
-                      </div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                        $13/month · billed annually
-                      </div>
-                      <div style={{ display: 'inline-block', marginTop: '8px', background: 'rgba(201,168,76,0.12)', border: '1px solid var(--gold-dim)', borderRadius: '6px', padding: '2px 8px', fontSize: '11px', color: 'var(--gold)', fontFamily: 'DM Mono, monospace' }}>
-                        Save $69 vs monthly
-                      </div>
+                    <div style={{ height: '14px' }} />
+                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'var(--gold)', letterSpacing: '0.1em', marginBottom: '14px' }}>🔹 PRO — YEARLY</div>
+                    <div style={{ lineHeight: 1 }}>
+                      <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '34px', fontWeight: 700, color: 'var(--gold)' }}>$159</span>
+                      <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>/year</span>
                     </div>
-                    <div style={{ margin: '16px 0', height: '1px', background: 'var(--gold-dim)', opacity: 0.4 }} />
-                    <div style={{ marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '9px' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '6px' }}>$13/month · billed annually</div>
+                    <div style={{ display: 'inline-block', marginTop: '8px', marginBottom: '22px', background: 'rgba(201,168,76,0.12)', border: '1px solid var(--gold-dim)', borderRadius: '6px', padding: '2px 8px', fontSize: '11px', color: 'var(--gold)', fontFamily: 'DM Mono, monospace' }}>
+                      Save $69 vs monthly
+                    </div>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
                       {FEATURES.map(f => (
-                        <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                          <span style={{ color: 'var(--gold)', marginTop: '1px', flexShrink: 0 }}>◆</span>
-                          <span>{f}</span>
+                        <div key={f} style={{ display: 'flex', gap: '8px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                          <span style={{ color: 'var(--gold)', flexShrink: 0 }}>◆</span><span>{f}</span>
                         </div>
                       ))}
                     </div>
                     <button
-                      onClick={() => handleUpgrade('pro_yearly')}
-                      disabled={!!loading}
+                      onClick={() => handleUpgrade('pro_yearly')} disabled={!!loading}
                       style={{ width: '100%', background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '11px', fontSize: '13px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading === 'pro_yearly' ? 0.7 : 1, transition: 'all 0.15s', fontFamily: 'DM Mono, monospace' }}
                     >
                       {loading === 'pro_yearly' ? 'Redirecting…' : 'Upgrade Yearly → Best Deal'}
                     </button>
                   </div>
+
                 </div>
 
                 {/* Trust badges */}
