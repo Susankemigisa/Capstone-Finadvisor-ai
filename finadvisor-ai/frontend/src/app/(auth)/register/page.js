@@ -40,8 +40,15 @@ export default function RegisterPage() {
     e.preventDefault()
     setError(''); setLoading(true)
     try {
-      await register(form.email, form.password, form.full_name)
-      router.push('/chat')
+      const data = await register(form.email, form.password, form.full_name)
+      // NEW USERS always go to onboarding — never directly to chat
+      // onboarding_complete is false by default on new accounts
+      const user = data?.user || useAuthStore.getState().user
+      if (user?.onboarding_complete) {
+        router.push('/chat')
+      } else {
+        router.push('/onboarding')
+      }
     } catch (err) {
       setError(err.message)
     } finally {
@@ -127,11 +134,11 @@ export default function RegisterPage() {
               {form.password && (
                 <div style={{ marginTop: '8px' }}>
                   <div style={{ display: 'flex', gap: '4px', marginBottom: '6px' }}>
-                    {checks.map((ok, i) => <div key={i} style={{ height: '3px', flex: 1, borderRadius: '2px', background: ok ? 'var(--green, #34d399)' : 'var(--border-bright)', transition: 'background 0.2s' }} />)}
+                    {checks.map((ok, i) => <div key={i} style={{ height: '3px', flex: 1, borderRadius: '2px', background: ok ? '#34d399' : 'var(--border-bright)', transition: 'background 0.2s' }} />)}
                   </div>
                   <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     {checks.map((ok, i) => (
-                      <span key={i} style={{ fontSize: '11px', color: ok ? 'var(--green, #34d399)' : 'var(--text-dim)' }}>
+                      <span key={i} style={{ fontSize: '11px', color: ok ? '#34d399' : 'var(--text-dim)' }}>
                         {ok ? '✓' : '○'} {strengthLabels[i]}
                       </span>
                     ))}
@@ -139,7 +146,8 @@ export default function RegisterPage() {
                 </div>
               )}
             </div>
-            <button onClick={handleSubmit} disabled={loading || !strength} style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '12px', fontSize: '13px', fontWeight: 700, cursor: (loading || !strength) ? 'not-allowed' : 'pointer', opacity: (loading || !strength) ? 0.6 : 1, transition: 'opacity 0.15s', marginTop: '4px' }}>
+            <button onClick={handleSubmit} disabled={loading || !strength}
+              style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '12px', fontSize: '13px', fontWeight: 700, cursor: (loading || !strength) ? 'not-allowed' : 'pointer', opacity: (loading || !strength) ? 0.6 : 1, transition: 'opacity 0.15s', marginTop: '4px' }}>
               {loading ? t('auth.creatingAccount') : t('auth.createAccountArrow')}
             </button>
           </div>

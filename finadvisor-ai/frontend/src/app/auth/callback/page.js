@@ -20,7 +20,6 @@ export default function OAuthCallbackPage() {
         const errorMsg = params.get('error_description') || query.get('error_description') || params.get('error') || query.get('error')
 
         if (errorMsg) {
-          // User cancelled — redirect back to login quietly
           if (errorMsg.includes('access_denied') || errorMsg.includes('cancelled') || errorMsg.includes('canceled')) {
             router.replace('/login')
             return
@@ -29,26 +28,30 @@ export default function OAuthCallbackPage() {
         }
         if (!accessToken) throw new Error('No access token in callback URL')
 
-        // Skip Supabase verification — send token directly to our backend
-        // Our backend verifies it with Supabase internally
         setStatus('Setting up your account...')
 
-        // Extract basic info from the JWT payload without verifying signature
-        // (our backend does the real verification)
         let email = ''
         let fullName = ''
         try {
           const payload = JSON.parse(atob(accessToken.split('.')[1]))
           email = payload.email || ''
           fullName = payload.user_metadata?.full_name || payload.user_metadata?.name || ''
-        } catch {
-          // payload parsing failed — backend will get it from Supabase
-        }
+        } catch {}
 
-        await loginWithOAuthToken(accessToken, email, fullName)
+        const data = await loginWithOAuthToken(accessToken, email, fullName)
 
         setStatus('Welcome! Redirecting...')
-        setTimeout(() => router.replace('/chat'), 400)
+
+        // Send new OAuth users (onboarding_complete = false/null) to onboarding
+        // Returning users go straight to chat
+        const user = data?.user || useAuthStore.getState().user
+        setTimeout(() => {
+          if (user?.onboarding_complete) {
+            router.replace('/chat')
+          } else {
+            router.replace('/onboarding')
+          }
+        }, 400)
 
       } catch (e) {
         console.error('OAuth callback error:', e)

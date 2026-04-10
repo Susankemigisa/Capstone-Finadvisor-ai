@@ -10,22 +10,10 @@ import MessageBubble from '@/components/chat/MessageBubble'
 import ChatInput from '@/components/chat/ChatInput'
 import HelpGuide from '@/components/chat/HelpGuide'
 
-// ── Greeting logic ────────────────────────────────────────────────────────────
 function getGreeting(t) {
-  const now  = new Date()
-  const hour = now.getHours()
-  const day  = now.getDay()
-
-  const DAY_KEYS = [
-    'chat.greetSunday',
-    'chat.greetMonday',
-    'chat.greetTuesday',
-    'chat.greetWednesday',
-    'chat.greetThursday',
-    'chat.greetFriday',
-    'chat.greetSaturday',
-  ]
-
+  const hour = new Date().getHours()
+  const day  = new Date().getDay()
+  const DAY_KEYS = ['chat.greetSunday','chat.greetMonday','chat.greetTuesday','chat.greetWednesday','chat.greetThursday','chat.greetFriday','chat.greetSaturday']
   if (hour >= 5  && hour < 10) return t(DAY_KEYS[day])
   if (hour >= 0  && hour < 5)  return t('chat.greetMidnight')
   if (hour >= 10 && hour < 12) return t('chat.greetMidMorning')
@@ -35,7 +23,49 @@ function getGreeting(t) {
   if (hour >= 18 && hour < 21) return t('chat.greetEvening')
   return t('chat.greetNight')
 }
-// ─────────────────────────────────────────────────────────────────────────────
+
+// Suggested follow-up questions based on what the AI just said
+function getSuggestions(lastContent) {
+  if (!lastContent) return []
+  const content = lastContent.toLowerCase()
+  if (content.includes('stock') || content.includes('price') || content.includes('aapl') || content.includes('msft'))
+    return ['Show me a chart of that', 'What\'s the news on this stock?', 'Add this to my watchlist']
+  if (content.includes('portfolio'))
+    return ['Show my portfolio chart', 'What\'s my biggest holding?', 'Suggest how to rebalance']
+  if (content.includes('budget') || content.includes('expense') || content.includes('spent'))
+    return ['Show my spending chart', 'How can I reduce expenses?', 'What\'s my savings rate?']
+  if (content.includes('bitcoin') || content.includes('crypto') || content.includes('btc'))
+    return ['Show a price chart', 'What\'s the latest crypto news?', 'Compare BTC vs ETH']
+  if (content.includes('saving') || content.includes('goal'))
+    return ['Create a savings chart', 'Export this as PDF', 'Set up an auto-save rule']
+  if (content.includes('chart') || content.includes('graph') || content.includes('visual'))
+    return ['Export this as PDF', 'Show as a different chart type', 'Add more data to this']
+  if (content.includes('retirement') || content.includes('invest'))
+    return ['Create a projection chart', 'What\'s the risk level?', 'Export this as a PDF report']
+  return ['Export this as PDF', 'Create a chart of this', 'Tell me more']
+}
+
+function SuggestedQuestions({ content, onSend, disabled }) {
+  const [dismissed, setDismissed] = useState(false)
+  const suggestions = getSuggestions(content)
+  if (!suggestions.length || dismissed) return null
+  return (
+    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', padding: '0 0 12px 38px' }}>
+      {suggestions.map(s => (
+        <button key={s} onClick={() => { onSend(s); setDismissed(true) }} disabled={disabled}
+          style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '20px', padding: '6px 14px', fontSize: '12px', color: 'var(--text-secondary)', cursor: disabled ? 'not-allowed' : 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' }}
+          onMouseEnter={e => { if (!disabled) { e.currentTarget.style.borderColor = 'var(--gold-dim)'; e.currentTarget.style.color = 'var(--text-primary)' }}}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}>
+          {s}
+        </button>
+      ))}
+      <button onClick={() => setDismissed(true)}
+        style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', fontSize: '11px', padding: '6px 4px' }}>
+        ✕
+      </button>
+    </div>
+  )
+}
 
 export default function ChatPage() {
   const router = useRouter()
@@ -47,18 +77,25 @@ export default function ChatPage() {
   const { init: initTheme } = useThemeStore()
   const { init: initLang } = useLangStore()
   const bottomRef = useRef(null)
+  const isBusy = streaming || !!(error && error.startsWith('rate_limit:'))
 
   useEffect(() => {
     initTheme()
     initLang()
     init().then(() => {
       const { user } = useAuthStore.getState()
-      if (!user) router.replace('/login')
-      else {
-        loadSessions()
-        const pending = localStorage.getItem('pending_prompt')
-        if (pending) { localStorage.removeItem('pending_prompt'); setTimeout(() => sendMessage(pending), 500) }
+      if (!user) {
+        router.replace('/login')
+        return
       }
+      // Redirect to onboarding if not completed
+      if (!user.onboarding_complete) {
+        router.replace('/onboarding')
+        return
+      }
+      loadSessions()
+      const pending = localStorage.getItem('pending_prompt')
+      if (pending) { localStorage.removeItem('pending_prompt'); setTimeout(() => sendMessage(pending), 500) }
     })
   }, [])
 
@@ -66,7 +103,6 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, streamingContent])
 
-  // Countdown timer for rate limit
   useEffect(() => {
     if (error && error.startsWith('rate_limit:')) {
       const mins = parseInt(error.split(':')[1])
@@ -75,10 +111,7 @@ export default function ChatPage() {
       const timer = setInterval(() => {
         seconds -= 1
         setCountdown(seconds <= 0 ? null : seconds)
-        if (seconds <= 0) {
-          clearInterval(timer)
-          useChatStore.setState({ error: null })
-        }
+        if (seconds <= 0) { clearInterval(timer); useChatStore.setState({ error: null }) }
       }, 1000)
       const initTimer = setTimeout(() => setCountdown(initialSeconds), 0)
       return () => { clearInterval(timer); clearTimeout(initTimer) }
@@ -87,9 +120,7 @@ export default function ChatPage() {
 
   const handleRegenerate = () => {
     const userMessages = messages.filter(m => m.role === 'user')
-    if (userMessages.length > 0) {
-      sendMessage(userMessages[userMessages.length - 1].content)
-    }
+    if (userMessages.length > 0) sendMessage(userMessages[userMessages.length - 1].content)
   }
 
   if (loading || !user) return (
@@ -101,21 +132,20 @@ export default function ChatPage() {
   const greeting = getGreeting(t)
   const displayName = user?.preferred_name || user?.full_name?.split(' ')[0] || 'there'
   const promptList = t('chat.prompts')
-  // CP-1: derive a single boolean so we can pass it consistently to both HelpGuide and ChatInput
-  const isBusy = streaming || !!(error && error.startsWith('rate_limit:'))
+
+  // Find last AI message for suggestions
+  const lastAI = [...messages].reverse().find(m => m.role === 'assistant')
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar mobileOpen={mobileMenuOpen} onMobileClose={() => setMobileMenuOpen(false)} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'var(--bg-main)' }}>
 
-        {/* Header */}
         <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-surface)' }}>
           <span style={{ color: 'var(--gold)' }}>◈</span>
           <span style={{ fontSize: '14px', fontWeight: 500 }}>{t('nav.chat')}</span>
         </div>
 
-        {/* Messages */}
         <div style={{ flex: 1, overflow: 'auto', padding: '20px' }}>
           {messages.length === 0 && !streaming && (
             <div style={{ maxWidth: '560px', margin: '40px auto', textAlign: 'center' }} className="fade-in">
@@ -139,11 +169,20 @@ export default function ChatPage() {
           {messages.map((msg, i) => {
             const isLastAI = msg.role === 'assistant' && i === messages.length - 1
             return (
-              <MessageBubble
-                key={msg.id || i}
-                message={msg}
-                onRegenerate={isLastAI && !streaming ? handleRegenerate : null}
-              />
+              <div key={msg.id || i}>
+                <MessageBubble
+                  message={msg}
+                  onRegenerate={isLastAI && !streaming ? handleRegenerate : null}
+                />
+                {/* Show suggested follow-up questions after the last AI message */}
+                {isLastAI && !streaming && (
+                  <SuggestedQuestions
+                    content={msg.content}
+                    onSend={sendMessage}
+                    disabled={isBusy}
+                  />
+                )}
+              </div>
             )
           })}
 
@@ -178,11 +217,9 @@ export default function ChatPage() {
                 <span style={{ fontWeight: 600, color: 'var(--gold)', fontSize: '13px' }}>Message limit reached</span>
               </div>
               <div style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                Free plan includes <strong style={{ color: 'var(--text-primary)' }}>{windowLimit} messages every {windowHours} hours</strong>. Your limit refreshes in:
+                Free plan includes <strong style={{ color: 'var(--text-primary)' }}>{windowLimit} messages every {windowHours} hours</strong>. Refreshes in:
               </div>
-              <div style={{ fontSize: '28px', fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontWeight: 700, margin: '8px 0', letterSpacing: '0.05em' }}>
-                {timeStr}
-              </div>
+              <div style={{ fontSize: '28px', fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontWeight: 700, margin: '8px 0', letterSpacing: '0.05em' }}>{timeStr}</div>
               <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
                 Want unlimited messages? <a href="/billing" style={{ color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>Upgrade to Pro →</a>
               </div>
@@ -190,14 +227,8 @@ export default function ChatPage() {
           )
         })()}
 
-        {/* Input area */}
-        {/* CP-1 FIX: pass isBusy as `disabled` so HelpGuide can block example clicks during streaming */}
         <HelpGuide onExample={(example) => sendMessage(example)} disabled={isBusy} />
-        <ChatInput
-          onSend={sendMessage}
-          disabled={isBusy}
-          placeholder={t('chat.placeholder')}
-        />
+        <ChatInput onSend={sendMessage} disabled={isBusy} placeholder={t('chat.placeholder')} />
       </div>
     </div>
   )
