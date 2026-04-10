@@ -47,7 +47,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
   useEffect(() => { if (isMobile && onMobileClose) onMobileClose() }, [pathname])
 
   useEffect(() => {
-    if (pathname !== "/chat") { const timer = setTimeout(() => setSearchQuery(""), 0); return () => clearTimeout(timer); }
+    if (pathname !== '/chat') { const timer = setTimeout(() => setSearchQuery(''), 0); return () => clearTimeout(timer) }
   }, [pathname])
 
   const filteredSessions = useMemo(() => {
@@ -61,40 +61,45 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
     return sessions.slice(0, 12)
   }, [filteredSessions, sessions, searchQuery])
 
-  // CHANGE 1: Removed /plugins from nav. Renamed group labels to plain English.
-  // MAIN → no label (it's the top section, no heading needed)
-  // TOOLS → More
   const NAV_GROUPS = [
     {
       label: '',
       items: [
         { href: '/chat',      icon: '◈', label: t('nav.chat') },
         { href: '/portfolio', icon: '◎', label: t('nav.portfolio') },
-        { href: '/analytics', icon: '◉', label: t('nav.analytics') },
+        { href: '/insights',  icon: '◉', label: 'Insights' },
       ]
     },
     {
       label: 'Finance',
       items: [
-        { href: '/watchlist', icon: '👁',  label: t('nav.watchlist') },
-        { href: '/goals',     icon: '🎯', label: t('nav.goals') },
-        { href: '/budget',    icon: '💰', label: t('nav.budget') },
-        { href: '/tax',       icon: '🧾', label: t('nav.tax') },
+        { href: '/watchlist',   icon: '👁',  label: t('nav.watchlist') },
+        { href: '/goals',       icon: '🎯', label: t('nav.goals') },
+        { href: '/budget',      icon: '💰', label: t('nav.budget') },
+        { href: '/tax',         icon: '🧾', label: t('nav.tax') },
+      ]
+    },
+    {
+      label: 'Savings',
+      items: [
+        { href: '/savings',     icon: '🏦', label: 'Pockets' },
+        { href: '/rules',       icon: '⚡', label: 'Auto-Save Rules' },
+        { href: '/connections', icon: '🔗', label: 'Bank & MoMo' },
       ]
     },
     {
       label: 'More',
       items: [
-        { href: '/alerts',    icon: '🔔', label: t('nav.alerts') },
-        { href: '/export',    icon: '⬇',  label: t('nav.export') },
-        { href: '/history',   icon: '🕘', label: t('nav.history') || 'Chat History' },
+        { href: '/alerts',  icon: '🔔', label: t('nav.alerts') },
+        { href: '/export',  icon: '⬇',  label: t('nav.export') },
+        { href: '/history', icon: '🕘', label: t('nav.history') || 'Chat History' },
       ]
     },
     {
       label: 'Account',
       items: [
-        { href: '/settings',  icon: '⚙',  label: t('nav.settings') },
-        { href: '/billing',   icon: '◆',  label: user?.tier === 'pro' ? 'Pro ✓' : t('nav.upgrade') },
+        { href: '/settings', icon: '⚙',  label: t('nav.settings') },
+        { href: '/billing',  icon: '◆',  label: user?.tier === 'pro' ? 'Pro ✓' : t('nav.upgrade') },
       ]
     }
   ]
@@ -127,7 +132,6 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       <div style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
         {NAV_GROUPS.map((group, gi) => (
           <div key={gi} style={{ marginBottom: '4px' }}>
-            {/* Only render group label if it has text */}
             {group.label && (!collapsed || isMobile) && (
               <div style={{ fontSize: '9px', color: 'var(--text-dim)', letterSpacing: '0.1em', padding: '8px 10px 4px', textTransform: 'uppercase' }}>
                 {group.label}
