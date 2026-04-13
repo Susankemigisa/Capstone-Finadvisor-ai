@@ -56,6 +56,7 @@ class UpdateProfileRequest(BaseModel):
     preferred_language: str = None
     temperature: float = None
     top_p: float = None
+    onboarding_complete: bool = None
 
 
 class ForgotPasswordRequest(BaseModel):
@@ -102,6 +103,7 @@ def _safe_user(user: dict) -> dict:
         "top_p": user.get("top_p", 1.0),
         "preferred_currency": user.get("preferred_currency", "USD"),
         "preferred_language": user.get("preferred_language", "en"),
+        "onboarding_complete": user.get("onboarding_complete", False),
         "created_at": str(user.get("created_at", "")),
     }
 

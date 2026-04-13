@@ -99,8 +99,11 @@ export default function OnboardingPage() {
   }
 
   const handleDone = async () => {
-    // Mark onboarding complete
-    await req('/auth/me', { method: 'PATCH', body: JSON.stringify({ onboarding_complete: true }) })
+    // Mark onboarding complete using the auth store so the in-memory user
+    // object is updated immediately — without this the chat page still sees
+    // onboarding_complete=false and bounces the user back here on every visit
+    const { updateProfile } = useAuthStore.getState()
+    await updateProfile({ onboarding_complete: true })
     router.push('/chat')
   }
 
