@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
 import Sidebar from '@/components/layout/Sidebar'
+import PageShell from '@/components/layout/PageShell'
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -123,9 +124,8 @@ export default function ConnectionsPage() {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-      <Sidebar />
-      <div style={{ flex: 1, overflow: 'auto', background: 'var(--bg-main)' }}>
+    <PageShell title="Bank & Mobile Money">
+      <>
         <div style={{ padding: '20px 28px 0', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
@@ -240,7 +240,7 @@ export default function ConnectionsPage() {
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </>
+    </PageShell>
   )
 }

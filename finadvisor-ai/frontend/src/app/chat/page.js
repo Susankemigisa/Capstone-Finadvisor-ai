@@ -6,6 +6,7 @@ import { useChatStore } from '@/stores/chatStore'
 import { useThemeStore } from '@/stores/themeStore'
 import { useLangStore, useTranslate } from '@/stores/langStore'
 import Sidebar from '@/components/layout/Sidebar'
+import PageShell from '@/components/layout/PageShell'
 import MessageBubble from '@/components/chat/MessageBubble'
 import ChatInput from '@/components/chat/ChatInput'
 import HelpGuide from '@/components/chat/HelpGuide'
@@ -141,10 +142,19 @@ export default function ChatPage() {
       <Sidebar mobileOpen={mobileMenuOpen} onMobileClose={() => setMobileMenuOpen(false)} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'var(--bg-main)' }}>
 
-        <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-surface)' }}>
+        <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-surface)' }}>
+          {/* Hamburger — only visible on mobile */}
+          <button onClick={() => setMobileMenuOpen(true)}
+            style={{ background: 'none', border: '1px solid var(--border)', borderRadius: '8px', width: '34px', height: '34px', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer', flexShrink: 0, display: 'none' }}
+            className="mobile-menu-btn">
+            <span style={{ display: 'block', width: '15px', height: '2px', background: 'var(--text-secondary)', borderRadius: '1px' }} />
+            <span style={{ display: 'block', width: '15px', height: '2px', background: 'var(--text-secondary)', borderRadius: '1px' }} />
+            <span style={{ display: 'block', width: '15px', height: '2px', background: 'var(--text-secondary)', borderRadius: '1px' }} />
+          </button>
           <span style={{ color: 'var(--gold)' }}>◈</span>
           <span style={{ fontSize: '14px', fontWeight: 500 }}>{t('nav.chat')}</span>
         </div>
+        <style>{`.mobile-menu-btn { display: none !important; } @media (max-width: 767px) { .mobile-menu-btn { display: flex !important; } }`}</style>
 
         <div style={{ flex: 1, overflow: 'auto', padding: '20px' }}>
           {messages.length === 0 && !streaming && (

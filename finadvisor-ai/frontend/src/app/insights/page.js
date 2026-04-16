@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
 import Sidebar from '@/components/layout/Sidebar'
+import PageShell from '@/components/layout/PageShell'
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -122,8 +123,7 @@ export default function InsightsPage() {
   }, [])
 
   if (loading) return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-      <Sidebar />
+    <PageShell title="Financial Insights">
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
         <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Calculating your financial picture...</div>
       </div>
@@ -180,9 +180,8 @@ export default function InsightsPage() {
   const insightBg = { success: '#052e16', warning: '#1a1200', danger: '#2d0a0a', info: '#0c1a2e' }
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-      <Sidebar />
-      <div style={{ flex: 1, overflow: 'auto', background: 'var(--bg-main)' }}>
+    <PageShell title="Financial Insights">
+      <>
         <div style={{ padding: '20px 28px 0', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ paddingBottom: '16px' }}>
             <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>Financial Insights</h1>
@@ -308,7 +307,7 @@ export default function InsightsPage() {
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </>
+    </PageShell>
   )
 }

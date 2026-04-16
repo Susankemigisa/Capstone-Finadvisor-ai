@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
 import { useLangStore, useTranslate } from '@/stores/langStore'
 import Sidebar from '@/components/layout/Sidebar'
+import PageShell from '@/components/layout/PageShell'
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -225,10 +226,9 @@ export default function GoalsPage() {
   const completed   = goals.filter(g => g.is_completed || (g.target_amount > 0 && g.current_amount >= g.target_amount)).length
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+    <PageShell title="Goals">
       <Confetti active={showConfetti} />
-      <Sidebar />
-      <div style={{ flex: 1, overflow: 'auto', background: 'var(--bg-main)' }}>
+      <>
         <div style={{ padding: '20px 28px 0', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
@@ -318,7 +318,7 @@ export default function GoalsPage() {
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </>
+    </PageShell>
   )
 }

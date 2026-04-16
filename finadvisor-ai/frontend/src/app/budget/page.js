@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
 import { useLangStore, useTranslate } from '@/stores/langStore'
 import Sidebar from '@/components/layout/Sidebar'
+import PageShell from '@/components/layout/PageShell'
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -147,9 +148,8 @@ export default function BudgetPage() {
   const savingsRate = summary.income > 0 ? ((summary.income - summary.expenses) / summary.income * 100) : 0
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-      <Sidebar />
-      <div style={{ flex: 1, overflow: 'auto', background: 'var(--bg-main)' }}>
+    <PageShell title="Budget">
+      <>
         <div style={{ padding: '20px 28px 0', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
@@ -316,7 +316,7 @@ export default function BudgetPage() {
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </>
+    </PageShell>
   )
 }
