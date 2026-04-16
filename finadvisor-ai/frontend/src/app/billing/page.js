@@ -60,8 +60,8 @@ export default function BillingPage() {
     const clean = p.replace(/\s/g, '')
     if (!clean) return 'Phone number is required'
     if (!/^(0|\+256|256)?[1-9]\d{8}$/.test(clean)) return 'Enter a valid Ugandan phone number'
-    if (selectedProvider?.id === 'mtn' && !/^(0|\+256|256)?(77|78|76)/.test(clean)) return 'MTN numbers start with 077, 078, or 076'
-    if (selectedProvider?.id === 'airtel' && !/^(0|\+256|256)?(70|75)/.test(clean)) return 'Airtel numbers start with 070 or 075'
+    if (selectedProvider?.id === 'mtn' && !/^(0|\+256|256)?(77|78|76|79)/.test(clean)) return 'MTN numbers start with 077, 078, or 076'
+    if (selectedProvider?.id === 'airtel' && !/^(0|\+256|256)?(70|75|74)/.test(clean)) return 'Airtel numbers start with 070 or 075'
     return ''
   }
 
