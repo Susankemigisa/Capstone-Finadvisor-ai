@@ -127,7 +127,7 @@ export default function InsightsPage() {
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
         <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Calculating your financial picture...</div>
       </div>
-    </div>
+    </PageShell>
   )
 
   // ── Calculations ──────────────────────────────────────────
