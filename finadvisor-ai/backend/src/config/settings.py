@@ -66,9 +66,12 @@ class Settings(BaseSettings):
     MONO_WEBHOOK_SECRET: str = ""       # From Mono dashboard → Webhooks → Secret
  
     # MTN Mobile Money Uganda (momodeveloper.mtn.com)
-    MOMO_SUBSCRIPTION_KEY: str = ""     # From MTN MoMo developer portal
+    MOMO_API_USER: str = ""             # UUID of your MTN MoMo API user (created via POST /v1_0/apiuser)
+    MOMO_API_KEY: str = ""              # API key for the above user (GET /v1_0/apiuser/{uuid}/apikey)
+    MOMO_SUBSCRIPTION_KEY: str = ""     # From MTN MoMo developer portal (Collections product)
     MOMO_CALLBACK_KEY: str = ""         # Secret key you set in MTN MoMo portal for callback verification
     MOMO_TARGET_ENVIRONMENT: str = "sandbox"  # 'sandbox' or 'production'
+    BACKEND_URL: str = ""               # Your deployed backend URL e.g. https://finadvisor.onrender.com
  
     # Airtel Money Uganda
     AIRTEL_CLIENT_ID: str = ""          # From Airtel Money developer portal

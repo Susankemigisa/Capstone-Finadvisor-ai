@@ -42,6 +42,12 @@ DOCUMENT_INTENT_KEYWORDS = [
 ]
 
 
+# Cache of user_ids that have NO uploaded documents.
+# Avoids hitting Supabase on every single message for users who haven't
+# uploaded anything. Cleared when a document upload is detected.
+_users_with_no_docs: set[str] = set()
+
+
 def rag_node(state: AgentState) -> dict:
     """
     Retrieve relevant document chunks for the current user message.
@@ -49,9 +55,10 @@ def rag_node(state: AgentState) -> dict:
     Algorithm:
         1. Extract the latest human message.
         2. Quick-check whether retrieval is likely useful (keyword scan).
-        3. If yes, run semantic search via the retriever.
-        4. Filter results by relevance score.
-        5. Return updated rag_context in the state delta.
+        3. Check (cached) whether the user has any uploaded documents at all.
+        4. If yes, run semantic search via the retriever.
+        5. Filter results by relevance score.
+        6. Return updated rag_context in the state delta.
 
     Returns {} (no-op) if retrieval is skipped or fails — the planner
     continues without RAG context rather than crashing.
@@ -67,6 +74,18 @@ def rag_node(state: AgentState) -> dict:
     # Skip retrieval if the query almost certainly doesn't need documents
     if not _query_needs_retrieval(query, state):
         logger.debug("rag_skipped_no_intent", user_id=user_id, query=query[:60])
+        return {}
+
+    # Skip if we already know this user has no documents (cached)
+    if user_id in _users_with_no_docs:
+        logger.debug("rag_skipped_no_docs_cached", user_id=user_id)
+        return {}
+
+    # Quick DB check: does this user have any uploaded documents at all?
+    # This is a cheap COUNT query — far cheaper than a full vector search.
+    if not _user_has_documents(user_id):
+        _users_with_no_docs.add(user_id)
+        logger.debug("rag_skipped_no_docs", user_id=user_id)
         return {}
 
     # Attempt retrieval — graceful no-op on any failure
@@ -88,6 +107,23 @@ def rag_node(state: AgentState) -> dict:
     )
 
     return {"rag_context": chunks}
+
+
+def _user_has_documents(user_id: str) -> bool:
+    """Return True if the user has at least one uploaded document chunk."""
+    try:
+        from src.database.client import get_supabase
+        db = get_supabase()
+        result = db.table("document_chunks") \
+            .select("id", count="exact") \
+            .eq("user_id", user_id) \
+            .limit(1) \
+            .execute()
+        return (result.count or 0) > 0
+    except Exception as e:
+        # If the table doesn't exist or query fails, don't block — allow RAG attempt
+        logger.debug("rag_doc_check_failed", user_id=user_id, error=str(e))
+        return True
 
 
 def _retrieve(query: str, user_id: str) -> list[dict]:

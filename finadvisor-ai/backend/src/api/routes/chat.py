@@ -205,7 +205,14 @@ async def send_message(
                 user_id=user_id,
                 model=ctx["model_id"],
             )
-        update_session_title(session_id, _auto_title(body.message))
+        # Run title generation in background — doesn't block the user's first response
+        async def _bg_title(sid: str, msg: str):
+            try:
+                title = await asyncio.get_event_loop().run_in_executor(None, _auto_title, msg)
+                update_session_title(sid, title)
+            except Exception:
+                pass
+        asyncio.create_task(_bg_title(session_id, body.message))
 
     from src.tools.portfolio_tools import set_user_context as set_portfolio_ctx
     from src.tools.budget_tools    import set_user_context as set_budget_ctx
