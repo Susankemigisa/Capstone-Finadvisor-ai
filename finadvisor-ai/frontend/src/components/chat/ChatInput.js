@@ -24,7 +24,11 @@ function PaperclipIcon() {
 }
 
 export default function ChatInput({ onSend, disabled, placeholder = 'Ask about stocks, crypto, budgeting...' }) {
-  const [value, setValue] = useState('')
+  // Restore draft from localStorage so a refresh doesn't wipe what the user was typing
+  const [value, setValue] = useState(() => {
+    if (typeof window === 'undefined') return ''
+    return localStorage.getItem('finadvisor-chat-draft') || ''
+  })
   const [recording, setRecording] = useState(false)
   const [voiceSupported] = useState(() => typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window))
   const [attachments, setAttachments] = useState([])
@@ -54,6 +58,7 @@ export default function ChatInput({ onSend, disabled, placeholder = 'Ask about s
     onSend(finalMessage, attachments)
     setValue('')
     setAttachments([])
+    if (typeof window !== 'undefined') localStorage.removeItem('finadvisor-chat-draft')
   }, [value, attachments, disabled, onSend])
 
   const toggleVoice = useCallback(() => {
@@ -88,6 +93,7 @@ export default function ChatInput({ onSend, disabled, placeholder = 'Ask about s
           if (transcript.trim()) {
             onSend(transcript.trim())
             setValue('')
+            if (typeof window !== 'undefined') localStorage.removeItem('finadvisor-chat-draft')
           }
         }, 300)
       }
@@ -158,7 +164,13 @@ export default function ChatInput({ onSend, disabled, placeholder = 'Ask about s
         <input ref={fileInputRef} type="file" multiple accept="image/*,.pdf,.csv,.txt,.xlsx,.docx"
           style={{ display: 'none' }} onChange={e => handleFiles(e.target.files)} />
 
-        <textarea ref={textareaRef} value={value} onChange={e => setValue(e.target.value)}
+        <textarea ref={textareaRef} value={value} onChange={e => {
+            setValue(e.target.value)
+            if (typeof window !== 'undefined') {
+              if (e.target.value) localStorage.setItem('finadvisor-chat-draft', e.target.value)
+              else localStorage.removeItem('finadvisor-chat-draft')
+            }
+          }}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
           placeholder={recording ? 'Listening...' : placeholder} rows={1}
           style={{ flex: 1, background: 'none', border: 'none', outline: 'none', resize: 'none', color: 'var(--text-primary)', fontSize: '14px', fontFamily: 'DM Sans, sans-serif', lineHeight: 1.6, maxHeight: '160px', overflow: 'auto' }} />
