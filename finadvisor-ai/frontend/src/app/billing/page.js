@@ -300,17 +300,31 @@ export default function BillingPage() {
               <div style={{ width: '48px', height: '48px', border: '3px solid var(--gold)', borderTopColor: 'transparent', borderRadius: '50%', margin: '0 auto 24px', animation: 'spin 0.8s linear infinite' }} />
               <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
               <div style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
-                Waiting for your approval
+                Processing payment…
               </div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: 1.7 }}>
-                Check your phone — you should see a <strong style={{ color: 'var(--text-primary)' }}>{selectedProvider?.name}</strong> payment request for <strong style={{ color: 'var(--gold)' }}>UGX {selectedPlan ? fmt(selectedPlan.amount_ugx) : ''}</strong>.
-                <br />Enter your PIN to approve.
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.7 }}>
+                {selectedProvider?.id === 'mtn' ? (
+                  <>
+                    Your <strong style={{ color: 'var(--text-primary)' }}>MTN MoMo</strong> payment of{' '}
+                    <strong style={{ color: 'var(--gold)' }}>UGX {selectedPlan ? fmt(selectedPlan.amount_ugx) : ''}</strong> is being processed.
+                    <br />If a PIN prompt appears on your phone, enter your MoMo PIN to approve.
+                  </>
+                ) : (
+                  <>
+                    Check your phone for an <strong style={{ color: 'var(--text-primary)' }}>Airtel Money</strong> payment request for{' '}
+                    <strong style={{ color: 'var(--gold)' }}>UGX {selectedPlan ? fmt(selectedPlan.amount_ugx) : ''}</strong>.
+                    <br />Enter your PIN to approve.
+                  </>
+                )}
               </div>
-              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'var(--text-dim)' }}>
-                Checking payment status... ({Math.ceil((40 - pollCount) * 3)}s remaining)
+              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'var(--text-dim)', marginBottom: '8px' }}>
+                Checking status… ({Math.ceil((40 - pollCount) * 3)}s remaining)
+              </div>
+              <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginBottom: '20px' }}>
+                Reference: <span style={{ fontFamily: 'DM Mono, monospace' }}>{referenceId?.slice(0, 8)}…</span>
               </div>
               <button onClick={() => { clearInterval(pollRef.current); setStep('plans') }}
-                style={{ marginTop: '20px', background: 'none', border: 'none', color: 'var(--text-dim)', fontSize: '12px', cursor: 'pointer' }}>
+                style={{ background: 'none', border: 'none', color: 'var(--text-dim)', fontSize: '12px', cursor: 'pointer' }}>
                 Cancel and go back
               </button>
             </div>
