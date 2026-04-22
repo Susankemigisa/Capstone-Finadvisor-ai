@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
 import Sidebar from '@/components/layout/Sidebar'
 import PageShell from '@/components/layout/PageShell'
+import { useLangStore, useTranslate } from '@/stores/langStore'
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -64,6 +65,8 @@ function AccountCard({ account, onDisconnect }) {
 
 export default function ConnectionsPage() {
   const router = useRouter()
+  const t = useTranslate()
+  const { init: initLang } = useLangStore()
   const { init } = useAuthStore()
   const { init: initTheme } = useThemeStore()
   const [accounts, setAccounts] = useState([])
@@ -84,12 +87,13 @@ export default function ConnectionsPage() {
 
   useEffect(() => {
     initTheme()
+    initLang()
     init().then(() => {
       const { user } = useAuthStore.getState()
       if (!user) router.replace('/login')
       else load()
     })
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleConnect = async () => {
     if (!selected) { setError('Select an account type'); return }
@@ -124,12 +128,12 @@ export default function ConnectionsPage() {
   }
 
   return (
-    <PageShell title="Bank & Mobile Money">
+    <PageShell title={t('connections.title')}>
       <>
         <div style={{ padding: '20px 28px 0', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
-              <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>Bank & Mobile Money</h1>
+              <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('connections.title')}</h1>
               <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>Connect your accounts — when money arrives, your savings rules run automatically</p>
             </div>
             <button onClick={() => { setShowForm(!showForm); setSelected(null); setError('') }}
@@ -149,7 +153,7 @@ export default function ConnectionsPage() {
           {/* How it works */}
           {accounts.length === 0 && !showForm && (
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '28px', marginBottom: '24px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '16px' }}>How automatic savings works</div>
+              <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '16px' }}>{t('connections.howItWorks')}</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {[
                   { step: '1', text: 'Connect your MTN MoMo, Airtel Money, or bank account below' },
@@ -169,7 +173,7 @@ export default function ConnectionsPage() {
           {/* Connect form */}
           {showForm && (
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--gold-dim)', borderRadius: '14px', padding: '24px', marginBottom: '24px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', marginBottom: '16px' }}>SELECT ACCOUNT TYPE</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', marginBottom: '16px' }}>{t('connections.selectType')}</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '10px', marginBottom: '20px' }}>
                 {PROVIDERS.map((p, i) => (
                   <button key={i} onClick={() => { setSelected(p); setForm({ ...form, account_name: p.name }) }}
@@ -184,7 +188,7 @@ export default function ConnectionsPage() {
               {selected && (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                   <div style={{ gridColumn: '1 / -1' }}>
-                    <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>ACCOUNT NICKNAME *</label>
+                    <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('connections.nickname')} *</label>
                     <input className="input" placeholder={`e.g. My ${selected.name}`} value={form.account_name}
                       onChange={e => setForm({ ...form, account_name: e.target.value })} />
                   </div>
@@ -196,7 +200,7 @@ export default function ConnectionsPage() {
                       onChange={e => setForm({ ...form, account_number: e.target.value, provider_account_id: e.target.value })} />
                   </div>
                   <div>
-                    <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>CURRENCY</label>
+                    <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('connections.currency')}</label>
                     <select value={form.currency} onChange={e => setForm({ ...form, currency: e.target.value })}
                       style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none' }}>
                       {['UGX','USD','KES','GBP','EUR'].map(c => <option key={c}>{c}</option>)}
@@ -212,7 +216,7 @@ export default function ConnectionsPage() {
               {selected && (
                 <button onClick={handleConnect} disabled={saving}
                   style={{ marginTop: '16px', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
-                  {saving ? 'Connecting...' : `Connect ${selected.name}`}
+                  {saving ? t('connections.connecting') : `Connect ${selected.name}`}
                 </button>
               )}
             </div>

@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
 import Sidebar from '@/components/layout/Sidebar'
 import PageShell from '@/components/layout/PageShell'
+import { useLangStore, useTranslate } from '@/stores/langStore'
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -85,6 +86,8 @@ function RuleCard({ rule, onToggle, onDelete }) {
 
 export default function RulesPage() {
   const router = useRouter()
+  const t = useTranslate()
+  const { init: initLang } = useLangStore()
   const { init } = useAuthStore()
   const { init: initTheme } = useThemeStore()
   const [rules, setRules] = useState([])
@@ -107,12 +110,13 @@ export default function RulesPage() {
 
   useEffect(() => {
     initTheme()
+    initLang()
     init().then(() => {
       const { user } = useAuthStore.getState()
       if (!user) router.replace('/login')
       else load()
     })
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCreate = async () => {
     if (!form.name) { setError('Rule name is required'); return }
@@ -154,12 +158,12 @@ export default function RulesPage() {
   const totalAutoSaved = rules.reduce((s, r) => s + (r.total_saved || 0), 0)
 
   return (
-    <PageShell title="Savings Rules">
+    <PageShell title={t('rules.title')}>
       <>
         <div style={{ padding: '20px 28px 0', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
-              <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>Savings Rules</h1>
+              <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('rules.title')}</h1>
               <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>Automatic rules that save money the moment it arrives in your account</p>
             </div>
             <button onClick={() => { setShowForm(!showForm); setError('') }}
@@ -196,15 +200,15 @@ export default function RulesPage() {
           {/* New rule form */}
           {showForm && (
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--gold-dim)', borderRadius: '14px', padding: '24px', marginBottom: '24px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', marginBottom: '18px' }}>NEW SAVINGS RULE</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', marginBottom: '18px' }}>{t('rules.newRule')}</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>RULE NAME *</label>
-                  <input className="input" placeholder='e.g. Save 20% of everything' value={form.name}
+                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('rules.ruleName')} *</label>
+                  <input className="input" placeholder="e.g. Save 20% of everything" value={form.name}
                     onChange={e => setForm({ ...form, name: e.target.value })} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>SAVE INTO POCKET *</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('rules.saveIntoPocket')} *</label>
                   <select value={form.pocket_id} onChange={e => setForm({ ...form, pocket_id: e.target.value })}
                     style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none' }}>
                     <option value="">Select a pocket...</option>
@@ -212,7 +216,7 @@ export default function RulesPage() {
                   </select>
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>RULE TYPE</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('rules.ruleType')}</label>
                   <select value={form.rule_type} onChange={e => setForm({ ...form, rule_type: e.target.value })}
                     style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none' }}>
                     <option value="percentage">Percentage of income</option>
@@ -221,7 +225,7 @@ export default function RulesPage() {
                 </div>
                 <div>
                   <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
-                    {form.rule_type === 'percentage' ? 'PERCENTAGE (%)' : 'FIXED AMOUNT (UGX)'}
+                    {form.rule_type === 'percentage' ? t('rules.percentageLabel') : 'FIXED AMOUNT (UGX)'}
                   </label>
                   <input className="input" type="number" placeholder={form.rule_type === 'percentage' ? '20' : '100000'} value={form.amount_value}
                     onChange={e => setForm({ ...form, amount_value: e.target.value })} />
@@ -230,15 +234,15 @@ export default function RulesPage() {
                   <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
                     KEYWORD FILTER <span style={{ color: 'var(--text-dim)' }}>(optional)</span>
                   </label>
-                  <input className="input" placeholder='Leave empty to match ALL income' value={form.trigger_keyword}
+                  <input className="input" placeholder="Leave empty to match ALL income" value={form.trigger_keyword}
                     onChange={e => setForm({ ...form, trigger_keyword: e.target.value })} />
-                  <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '4px' }}>Set e.g. "salary" to only save from salary payments</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '4px' }}>Set e.g. &quot;salary&quot; to only save from salary payments</div>
                 </div>
                 <div>
                   <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
                     MINIMUM AMOUNT <span style={{ color: 'var(--text-dim)' }}>(optional)</span>
                   </label>
-                  <input className="input" type="number" placeholder='e.g. 50000 (skips small credits)' value={form.trigger_amount_min}
+                  <input className="input" type="number" placeholder="e.g. 50000 (skips small credits)" value={form.trigger_amount_min}
                     onChange={e => setForm({ ...form, trigger_amount_min: e.target.value })} />
                 </div>
                 {accounts.length > 0 && (
@@ -257,7 +261,7 @@ export default function RulesPage() {
                 {/* Preview */}
                 {form.amount_value && form.pocket_id && (
                   <div style={{ gridColumn: '1 / -1', background: 'var(--bg-elevated)', borderRadius: '8px', padding: '12px', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                    <strong style={{ color: 'var(--gold)' }}>Preview:</strong> When money arrives
+                    <strong style={{ color: 'var(--gold)' }}>{t('rules.preview')}</strong> When money arrives
                     {form.trigger_keyword ? ` with "${form.trigger_keyword}" in the description` : ' (any income)'}
                     {form.trigger_amount_min ? ` above ${fmt(parseFloat(form.trigger_amount_min))}` : ''},
                     save {form.rule_type === 'percentage' ? `${form.amount_value}%` : fmt(parseFloat(form.amount_value))} into{' '}
@@ -269,7 +273,7 @@ export default function RulesPage() {
               {error && <div style={{ color: '#f87171', fontSize: '13px', marginTop: '10px' }}>{error}</div>}
               <button onClick={handleCreate} disabled={saving || pockets.length === 0}
                 style={{ marginTop: '16px', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
-                {saving ? 'Creating...' : 'Create Rule'}
+                {saving ? t('rules.creating') : t('rules.createRule')}
               </button>
             </div>
           )}
@@ -280,9 +284,9 @@ export default function RulesPage() {
           ) : rules.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '70px 20px' }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>⚡</div>
-              <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>No savings rules yet</div>
+              <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>{t('rules.noRules')}</div>
               <div style={{ fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '380px', margin: '0 auto 24px' }}>
-                Create a rule like "Save 20% of everything" and your savings will happen automatically every time money hits your account.
+                Create a rule like &quot;Save 20% of everything&quot; and your savings will happen automatically every time money hits your account.
               </div>
               {pockets.length > 0 ? (
                 <button onClick={() => setShowForm(true)}

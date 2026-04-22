@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
 import Sidebar from '@/components/layout/Sidebar'
 import PageShell from '@/components/layout/PageShell'
+import { useLangStore, useTranslate } from '@/stores/langStore'
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -27,7 +28,7 @@ function fmt(n, currency = 'UGX') {
 
 function HealthScoreRing({ score }) {
   const color = score >= 75 ? '#34d399' : score >= 50 ? '#c9a84c' : score >= 25 ? '#fb923c' : '#f87171'
-  const label = score >= 75 ? 'Excellent' : score >= 50 ? 'Good' : score >= 25 ? 'Fair' : 'Needs Work'
+  const label = score >= 75 ? t('insights.excellent') : score >= 50 ? t('insights.good') : score >= 25 ? t('insights.fair') : t('insights.needsWork')
   const size = 140, r = 54, circ = 2 * Math.PI * r
   const fill = (score / 100) * circ * 0.75 // 3/4 arc
   return (
@@ -96,6 +97,8 @@ function calcHealthScore({ savingsRate, goalProgress, hasEmergencyFund, debtRati
 
 export default function InsightsPage() {
   const router = useRouter()
+  const t = useTranslate()
+  const { init: initLang } = useLangStore()
   const { init } = useAuthStore()
   const { init: initTheme } = useThemeStore()
   const [data, setData] = useState(null)
@@ -115,6 +118,7 @@ export default function InsightsPage() {
 
   useEffect(() => {
     initTheme()
+    initLang()
     init().then(() => {
       const { user } = useAuthStore.getState()
       if (!user) router.replace('/login')
@@ -123,7 +127,7 @@ export default function InsightsPage() {
   }, [])
 
   if (loading) return (
-    <PageShell title="Financial Insights">
+    <PageShell title={t('insights.title')}>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
         <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Calculating your financial picture...</div>
       </div>
@@ -180,11 +184,11 @@ export default function InsightsPage() {
   const insightBg = { success: '#052e16', warning: '#1a1200', danger: '#2d0a0a', info: '#0c1a2e' }
 
   return (
-    <PageShell title="Financial Insights">
+    <PageShell title={t('insights.title')}>
       <>
         <div style={{ padding: '20px 28px 0', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ paddingBottom: '16px' }}>
-            <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>Financial Insights</h1>
+            <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('insights.title')}</h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>Your complete financial picture — net worth, health score, and spending patterns</p>
           </div>
         </div>
@@ -194,14 +198,14 @@ export default function InsightsPage() {
 
             {/* Net Worth */}
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px', gridColumn: '1 / 2' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '12px' }}>NET WORTH</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '12px' }}>{t('insights.netWorth')}</div>
               <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '32px', fontWeight: 700, color: netWorth >= 0 ? 'var(--gold)' : '#f87171', marginBottom: '16px' }}>
                 {fmt(netWorth)}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
-                  { label: 'Portfolio', value: portfolioValue, color: '#4a9eff' },
-                  { label: 'Savings pockets', value: savingsTotal, color: '#34d399' },
+                  { label: t('insights.portfolio'), value: portfolioValue, color: '#4a9eff' },
+                  { label: t('insights.savingsPockets'), value: savingsTotal, color: '#34d399' },
                 ].map(({ label, value, color }) => (
                   <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
                     <span style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -216,7 +220,7 @@ export default function InsightsPage() {
 
             {/* Health Score */}
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px', textAlign: 'center' }}>FINANCIAL HEALTH SCORE</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px', textAlign: 'center' }}>{t('insights.healthScore')}</div>
               <HealthScoreRing score={healthScore} />
               <div style={{ marginTop: '16px', fontSize: '11px', color: 'var(--text-dim)', textAlign: 'center', lineHeight: 1.5 }}>
                 Based on savings rate, goal progress, emergency fund & budget tracking
@@ -225,13 +229,13 @@ export default function InsightsPage() {
 
             {/* This month */}
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '12px' }}>THIS MONTH</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '12px' }}>{t('insights.thisMonth')}</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {[
-                  { label: 'Income', value: income, color: '#34d399' },
-                  { label: 'Expenses', value: expenses, color: '#f87171' },
-                  { label: 'Net', value: income - expenses, color: income >= expenses ? '#34d399' : '#f87171' },
-                  { label: 'Savings rate', value: `${Math.max(savingsRate, 0).toFixed(1)}%`, color: savingsRate >= 20 ? '#34d399' : savingsRate >= 10 ? '#c9a84c' : '#f87171', raw: true },
+                  { label: t('insights.income'), value: income, color: '#34d399' },
+                  { label: t('insights.expenses'), value: expenses, color: '#f87171' },
+                  { label: t('insights.net'), value: income - expenses, color: income >= expenses ? '#34d399' : '#f87171' },
+                  { label: t('insights.savingsRate'), value: `${Math.max(savingsRate, 0).toFixed(1)}%`, color: savingsRate >= 20 ? '#34d399' : savingsRate >= 10 ? '#c9a84c' : '#f87171', raw: true },
                 ].map(({ label, value, color, raw }) => (
                   <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>{label}</span>
@@ -247,7 +251,7 @@ export default function InsightsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}>
             {/* Spending breakdown */}
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px' }}>SPENDING BY CATEGORY</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px' }}>{t('insights.spendingByCategory')}</div>
               {sortedCats.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-dim)', fontSize: '13px' }}>
                   <div style={{ fontSize: '32px', marginBottom: '8px' }}>📊</div>
@@ -260,7 +264,7 @@ export default function InsightsPage() {
 
             {/* AI Insights */}
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px' }}>AI INSIGHTS</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px' }}>{t('insights.aiInsights')}</div>
               {insights.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-dim)', fontSize: '13px' }}>
                   Add more data (budget entries, goals, savings) to get personalised insights
@@ -283,7 +287,7 @@ export default function InsightsPage() {
           {/* Goals progress */}
           {goals.length > 0 && (
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px' }}>GOALS PROGRESS</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px' }}>{t('insights.goalsProgress')}</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px' }}>
                 {goals.map((g, i) => {
                   const pct = g.target_amount > 0 ? Math.min((g.current_amount / g.target_amount) * 100, 100) : 0

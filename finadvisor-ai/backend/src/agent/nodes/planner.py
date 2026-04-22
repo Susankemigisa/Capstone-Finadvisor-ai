@@ -21,9 +21,14 @@ LANGUAGE_NAMES = {
 }
 
 
+# Cache compiled templates — reading + compiling Jinja on every message adds ~50ms
+_PROMPT_CACHE: dict[Path, Template] = {}
+
 def _load_prompt(path: Path) -> Template:
-    data = json.loads(path.read_text(encoding="utf-8"))
-    return Template(data["template"])
+    if path not in _PROMPT_CACHE:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        _PROMPT_CACHE[path] = Template(data["template"])
+    return _PROMPT_CACHE[path]
 
 
 def _build_system_prompt(state: AgentState) -> str:
@@ -63,16 +68,22 @@ def planner_node(state: AgentState) -> dict:
         top_p = float(state.get("top_p", 1.0))
         # Retry logic — try up to 3 times on transient failures
         import time as _time
-        llm = None
+        # Cache model instances — LangChain model init is expensive (~100-300ms first call)
+        _model_cache_key = (model_id, temperature, top_p)
+        if not hasattr(planner_node, '_model_cache'):
+            planner_node._model_cache = {}
+        llm = planner_node._model_cache.get(_model_cache_key)
         last_err = None
-        for attempt in range(3):
-            try:
-                llm = get_model(model_id, temperature=temperature, top_p=top_p)
-                break
-            except Exception as e:
-                last_err = e
-                if attempt < 2:
-                    _time.sleep(1.5 ** attempt)
+        if llm is None:
+            for attempt in range(3):
+                try:
+                    llm = get_model(model_id, temperature=temperature, top_p=top_p)
+                    planner_node._model_cache[_model_cache_key] = llm
+                    break
+                except Exception as e:
+                    last_err = e
+                    if attempt < 2:
+                        _time.sleep(1.5 ** attempt)
         if llm is None:
             raise last_err
     except Exception as e:

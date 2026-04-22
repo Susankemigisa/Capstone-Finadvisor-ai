@@ -51,7 +51,7 @@ export default function BillingPage() {
       setPlans(plansData.plans || {})
     })
     return () => clearInterval(pollRef.current)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectedPlan = interval === 'monthly' ? plans['pro_monthly'] : plans['pro_yearly']
   const planKey = interval === 'monthly' ? 'pro_monthly' : 'pro_yearly'
@@ -280,7 +280,7 @@ export default function BillingPage() {
               <div style={{ background: 'var(--bg-elevated)', borderRadius: '10px', padding: '14px', marginBottom: '20px', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
                 <strong style={{ color: 'var(--text-primary)' }}>How it works:</strong>
                 <br />1. Click Pay — we send a prompt to your phone
-                <br />2. You'll see "FinAdvisor Pro" on your {selectedProvider?.name || 'MoMo'} screen
+                <br />2. You&apos;ll see &quot;FinAdvisor Pro&quot; on your {selectedProvider?.name || 'MoMo'} screen
                 <br />3. Enter your MoMo PIN to approve
                 <br />4. Your account upgrades instantly ✓
               </div>
@@ -334,7 +334,7 @@ export default function BillingPage() {
           {step === 'success' && (
             <div style={{ background: 'var(--bg-surface)', border: '2px solid #34d399', borderRadius: '16px', padding: '48px', textAlign: 'center' }}>
               <div style={{ fontSize: '56px', marginBottom: '16px' }}>🎉</div>
-              <div style={{ fontSize: '22px', fontWeight: 700, color: '#34d399', marginBottom: '8px' }}>You're now on Pro!</div>
+              <div style={{ fontSize: '22px', fontWeight: 700, color: '#34d399', marginBottom: '8px' }}>You&apos;re now on Pro!</div>
               <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '28px' }}>
                 Payment confirmed. All Pro features are now unlocked.
               </div>
