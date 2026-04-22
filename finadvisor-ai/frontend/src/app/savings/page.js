@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useFormDraft } from '@/hooks/useFormDraft'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
@@ -143,7 +144,7 @@ export default function SavingsPage() {
   const [summary, setSummary] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ name: '', description: '', target_amount: '', currency: 'UGX', icon: '💰', color: '#c9a84c', target_date: '' })
+  const [form, setForm, clearFormDraft] = useFormDraft('savings-pocket', { name: '', description: '', target_amount: '', currency: 'UGX', icon: '💰', color: '#c9a84c', target_date: '' })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -173,7 +174,7 @@ export default function SavingsPage() {
     })
     if (data.pocket) {
       setPockets(prev => [...prev, data.pocket])
-      setForm({ name: '', description: '', target_amount: '', currency: 'UGX', icon: '💰', color: '#c9a84c', target_date: '' })
+      clearFormDraft()
       setShowForm(false)
     } else setError(data.detail || 'Failed to create pocket')
     setSaving(false)

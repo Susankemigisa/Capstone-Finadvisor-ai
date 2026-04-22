@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useFormDraft } from '@/hooks/useFormDraft'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
@@ -79,7 +80,7 @@ export default function TaxPage() {
   const [preview, setPreview] = useState(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
-  const [form, setForm] = useState({
+  const [form, setForm, clearFormDraft] = useFormDraft('tax-entry', {
     tax_year: new Date().getFullYear(),
     filing_status: 'single',
     annual_income: '',

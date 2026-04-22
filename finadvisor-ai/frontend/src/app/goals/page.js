@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { useFormDraft } from '@/hooks/useFormDraft'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
@@ -166,7 +167,7 @@ export default function GoalsPage() {
   const [goals, setGoals] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ goal_name: '', goal_type: 'savings', target_amount: '', target_date: '', notes: '' })
+  const [form, setForm, clearFormDraft] = useFormDraft('goals-entry', { goal_name: '', goal_type: 'savings', target_amount: '', target_date: '', notes: '' })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [showConfetti, setShowConfetti] = useState(false)
@@ -196,7 +197,7 @@ export default function GoalsPage() {
     })
     if (data.success) {
       setGoals(prev => [...prev, data.goal])
-      setForm({ goal_name: '', goal_type: 'savings', target_amount: '', target_date: '', notes: '' })
+      clearFormDraft()
       setShowForm(false)
     } else setError(data.detail || 'Failed to create')
     setSaving(false)

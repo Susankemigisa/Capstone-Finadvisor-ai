@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
+import { useFormDraft } from '@/hooks/useFormDraft'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 import { useLangStore, useTranslate } from '@/stores/langStore'
@@ -61,7 +62,7 @@ function StatCard({ label, value, sub, color, icon }) {
 
 function AddPositionModal({ onClose, onAdd }) {
   const t = useTranslate()
-  const [form, setForm] = useState({ ticker: '', shares: '', avg_buy_price: '', asset_type: 'stock' })
+  const [form, setForm, clearFormDraft] = useFormDraft('portfolio-add', { ticker: '', shares: '', avg_buy_price: '', asset_type: 'stock' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const submit = async () => {

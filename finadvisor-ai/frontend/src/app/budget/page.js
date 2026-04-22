@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useFormDraft, useUIDraft } from '@/hooks/useFormDraft'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
@@ -79,9 +80,9 @@ export default function BudgetPage() {
   const [summary, setSummary] = useState({ income: 0, expenses: 0, net: 0 })
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [filter, setFilter] = useState('all')
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
-  const [form, setForm] = useState({ category: 'Salary', entry_type: 'income', amount: '', description: '', entry_date: new Date().toISOString().split('T')[0], subcategory: '' })
+  const [filter, setFilter] = useUIDraft('budget-filter', 'all')
+  const [selectedMonth, setSelectedMonth] = useUIDraft('budget-month', new Date().toISOString().slice(0, 7))
+  const [form, setForm, clearFormDraft] = useFormDraft('budget-entry', { category: 'Salary', entry_type: 'income', amount: '', description: '', entry_date: new Date().toISOString().split('T')[0], subcategory: '' })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -113,7 +114,7 @@ export default function BudgetPage() {
         expenses: form.entry_type === 'expense' ? prev.expenses + parseFloat(form.amount) : prev.expenses,
         net: form.entry_type === 'income' ? prev.net + parseFloat(form.amount) : prev.net - parseFloat(form.amount),
       }))
-      setForm({ ...form, amount: '', description: '' })
+      clearFormDraft()
       setShowForm(false)
     } else setError(data.detail || 'Failed to add')
     setSaving(false)
