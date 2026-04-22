@@ -121,9 +121,16 @@ async def _mtn_request_to_pay(amount: int, phone: str, ext_id: str, callback_url
     # full payment flow can be verified end-to-end before going live.
     payer_msisdn = "46733123450" if is_sandbox else clean
 
+    # MTN sandbox only supports EUR (not UGX) and requires a small test amount.
+    # In production, real UGX amounts are used.
+    sandbox_currency = "EUR"
+    sandbox_amount   = "5"   # sandbox rejects large amounts
+    currency = sandbox_currency if is_sandbox else "UGX"
+    pay_amount = sandbox_amount if is_sandbox else str(amount)
+
     # Build headers — omit X-Callback-Url in sandbox because MTN's sandbox
     # server tries to reach the URL immediately and returns 500 if it gets
-    # a connection error (which always happens for localhost / private URLs).
+    # a connection error (which always happens for Render/Vercel URLs).
     headers = {
         "Authorization": f"Bearer {token}",
         "X-Reference-Id": ref,
@@ -139,8 +146,8 @@ async def _mtn_request_to_pay(amount: int, phone: str, ext_id: str, callback_url
             f"{base}/collection/v1_0/requesttopay",
             headers=headers,
             json={
-                "amount": str(amount),
-                "currency": "UGX",
+                "amount": pay_amount,
+                "currency": currency,
                 "externalId": ext_id,
                 "payer": {"partyIdType": "MSISDN", "partyId": payer_msisdn},
                 "payerMessage": "FinAdvisor Pro Subscription",
