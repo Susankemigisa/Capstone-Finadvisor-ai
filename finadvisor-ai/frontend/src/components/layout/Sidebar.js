@@ -67,11 +67,11 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       items: [
         { href: '/chat',      icon: '◈', label: t('nav.chat') },
         { href: '/portfolio', icon: '◎', label: t('nav.portfolio') },
-        { href: '/insights',  icon: '◉', label: 'Insights' },
+        { href: '/insights',  icon: '◉', label: t('nav.insights') },
       ]
     },
     {
-      label: 'Finance',
+      label: t('nav.groupFinance'),
       items: [
         { href: '/watchlist',   icon: '👁',  label: t('nav.watchlist') },
         { href: '/goals',       icon: '🎯', label: t('nav.goals') },
@@ -80,7 +80,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       ]
     },
     {
-      label: 'Savings',
+      label: t('nav.groupSavings'),
       items: [
         { href: '/savings',     icon: '🏦', label: t('nav.savings') },
         { href: '/rules',       icon: '⚡', label: t('nav.rules') },
@@ -88,15 +88,15 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       ]
     },
     {
-      label: 'More',
+      label: t('nav.groupMore'),
       items: [
         { href: '/alerts',  icon: '🔔', label: t('nav.alerts') },
         { href: '/export',  icon: '⬇',  label: t('nav.export') },
-        { href: '/history', icon: '🕘', label: t('nav.history') || 'Chat History' },
+        { href: '/history', icon: '🕘', label: t('nav.history') },
       ]
     },
     {
-      label: 'Account',
+      label: t('nav.groupAccount'),
       items: [
         { href: '/settings', icon: '⚙',  label: t('nav.settings') },
         { href: '/billing',  icon: '◆',  label: user?.tier === 'pro' ? 'Pro ✓' : t('nav.upgrade') },

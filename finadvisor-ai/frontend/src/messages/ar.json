@@ -22,7 +22,12 @@
     "showAll": "عرض الكل",
     "savings": "الجيوب",
     "rules": "قواعد التوفير التلقائي",
-    "connections": "البنك و MoMo"
+    "connections": "البنك و MoMo",
+    "insights": "رؤى",
+    "groupFinance": "مالية",
+    "groupSavings": "ادخار",
+    "groupMore": "المزيد",
+    "groupAccount": "حساب"
   },
   "chat": {
     "goodMorning": "صباح الخير",

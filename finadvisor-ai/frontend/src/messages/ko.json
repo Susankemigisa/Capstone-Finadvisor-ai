@@ -22,7 +22,12 @@
     "showAll": "모두 표시",
     "savings": "저축 주머니",
     "rules": "자동 저축 규칙",
-    "connections": "은행 & MoMo"
+    "connections": "은행 & MoMo",
+    "insights": "인사이트",
+    "groupFinance": "재무",
+    "groupSavings": "저축",
+    "groupMore": "더보기",
+    "groupAccount": "계정"
   },
   "chat": {
     "goodMorning": "좋은 아침이에요",

@@ -22,7 +22,12 @@
     "showAll": "Tout afficher",
     "savings": "Pochettes",
     "rules": "Règles d'Épargne Auto",
-    "connections": "Banque & MoMo"
+    "connections": "Banque & MoMo",
+    "insights": "Aperçus",
+    "groupFinance": "Finance",
+    "groupSavings": "Épargne",
+    "groupMore": "Plus",
+    "groupAccount": "Compte"
   },
   "auth": {
     "signIn": "Se connecter",

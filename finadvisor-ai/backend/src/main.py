@@ -127,6 +127,7 @@ async def log_requests(request: Request, call_next):
 from src.api.routes import (
     auth, chat, portfolio, documents, market, analytics,
     billing, notifications, alerts, watchlist, goals, budget, tax, exports,
+    savings, rules, connections, insights,
 )
 
 app.include_router(auth.router,          prefix="/auth",          tags=["Authentication"])
@@ -143,7 +144,11 @@ app.include_router(goals.router,         prefix="/goals",         tags=["Financi
 app.include_router(budget.router,        prefix="/budget",        tags=["Budget"])
 app.include_router(tax.router,           prefix="/tax",           tags=["Tax Records"])
 app.include_router(exports.router,       prefix="/export",        tags=["Exports"])
-app.include_router(webhooks_router, prefix="", tags=["Webhooks & Savings"])
+app.include_router(savings.router,       prefix="/savings",       tags=["Savings Pockets"])
+app.include_router(rules.router,         prefix="/savings",       tags=["Savings Rules"])
+app.include_router(connections.router,   prefix="/savings",       tags=["Connected Accounts"])
+app.include_router(insights.router,      prefix="/insights",      tags=["Insights"])
+app.include_router(webhooks_router,      prefix="",               tags=["Webhooks"])
 
 # ── System endpoints ──────────────────────────────────────────
 @app.get("/health", tags=["System"])

@@ -22,7 +22,12 @@
     "showAll": "Mostrar tudo",
     "savings": "Bolsos",
     "rules": "Regras de Poupança Auto",
-    "connections": "Banco & MoMo"
+    "connections": "Banco & MoMo",
+    "insights": "Perspetivas",
+    "groupFinance": "Finanças",
+    "groupSavings": "Poupança",
+    "groupMore": "Mais",
+    "groupAccount": "Conta"
   },
   "chat": {
     "goodMorning": "Bom dia",

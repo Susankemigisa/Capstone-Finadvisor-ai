@@ -22,7 +22,12 @@
     "showAll": "Onyesha yote",
     "savings": "Akiba",
     "rules": "Sheria za Kuokoa",
-    "connections": "Benki & MoMo"
+    "connections": "Benki & MoMo",
+    "insights": "Maarifa",
+    "groupFinance": "Fedha",
+    "groupSavings": "Akiba",
+    "groupMore": "Zaidi",
+    "groupAccount": "Akaunti"
   },
   "auth": {
     "signIn": "Ingia",

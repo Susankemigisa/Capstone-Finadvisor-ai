@@ -22,7 +22,12 @@
     "showAll": "すべて表示",
     "savings": "貯蓄ポケット",
     "rules": "自動貯蓄ルール",
-    "connections": "銀行 & MoMo"
+    "connections": "銀行 & MoMo",
+    "insights": "インサイト",
+    "groupFinance": "金融",
+    "groupSavings": "貯蓄",
+    "groupMore": "その他",
+    "groupAccount": "アカウント"
   },
   "chat": {
     "goodMorning": "おはようございます",

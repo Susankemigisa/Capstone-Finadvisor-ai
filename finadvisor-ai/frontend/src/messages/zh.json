@@ -22,7 +22,12 @@
     "showAll": "显示全部",
     "savings": "储蓄口袋",
     "rules": "自动储蓄规则",
-    "connections": "银行 & MoMo"
+    "connections": "银行 & MoMo",
+    "insights": "洞察",
+    "groupFinance": "财务",
+    "groupSavings": "储蓄",
+    "groupMore": "更多",
+    "groupAccount": "账户"
   },
   "chat": {
     "goodMorning": "早上好",

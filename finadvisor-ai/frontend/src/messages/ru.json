@@ -22,7 +22,12 @@
     "showAll": "Показать все",
     "savings": "Кошельки",
     "rules": "Автоправила накоплений",
-    "connections": "Банк & MoMo"
+    "connections": "Банк & MoMo",
+    "insights": "Аналитика",
+    "groupFinance": "Финансы",
+    "groupSavings": "Накопления",
+    "groupMore": "Ещё",
+    "groupAccount": "Аккаунт"
   },
   "chat": {
     "goodMorning": "Доброе утро",

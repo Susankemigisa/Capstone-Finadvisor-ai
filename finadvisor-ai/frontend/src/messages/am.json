@@ -22,7 +22,12 @@
     "showAll": "ሁሉንም አሳይ",
     "savings": "ቁጠባ ኪሶች",
     "rules": "የቁጠባ ደንቦች",
-    "connections": "ባንክ & MoMo"
+    "connections": "ባንክ & MoMo",
+    "insights": "ግንዛቤዎች",
+    "groupFinance": "ፋይናንስ",
+    "groupSavings": "ቁጠባ",
+    "groupMore": "ተጨማሪ",
+    "groupAccount": "መለያ"
   },
   "chat": {
     "goodMorning": "እንደምን አደሩ",

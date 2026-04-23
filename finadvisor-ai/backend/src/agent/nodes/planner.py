@@ -18,6 +18,7 @@ LANGUAGE_NAMES = {
     "de": "German", "ar": "Arabic", "sw": "Swahili", "yo": "Yoruba",
     "ha": "Hausa", "ig": "Igbo", "am": "Amharic", "zh": "Chinese",
     "hi": "Hindi", "ja": "Japanese", "ko": "Korean", "ru": "Russian",
+    "lg": "Luganda",
 }
 
 

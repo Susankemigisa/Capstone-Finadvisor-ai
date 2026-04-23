@@ -22,7 +22,12 @@
     "showAll": "Nuna duka",
     "savings": "Jakunkunan Ajiya",
     "rules": "Ƙa'idodin Ajiye",
-    "connections": "Banki & MoMo"
+    "connections": "Banki & MoMo",
+    "insights": "Fahimta",
+    "groupFinance": "Kudi",
+    "groupSavings": "Ajiya",
+    "groupMore": "Kari",
+    "groupAccount": "Akawunti"
   },
   "chat": {
     "goodMorning": "Ina kwana",

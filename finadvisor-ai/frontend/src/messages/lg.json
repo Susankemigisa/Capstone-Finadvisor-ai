@@ -22,7 +22,12 @@
     "showAll": "Laga byonna",
     "savings": "Akapulo",
     "rules": "Amateeka g'Okuteeka",
-    "connections": "Bbanka & MoMo"
+    "connections": "Bbanka & MoMo",
+    "insights": "Okuteebwa",
+    "groupFinance": "Ensimbi",
+    "groupSavings": "Okuteeka",
+    "groupMore": "Ebirala",
+    "groupAccount": "Akaunti"
   },
   "auth": {
     "signIn": "Yingira",

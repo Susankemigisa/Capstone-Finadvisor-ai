@@ -275,6 +275,22 @@ async def send_message(
         result.get("cost_usd", 0.0),
     )
 
+    # ── Background: extract long-term memories from this exchange ──────────
+    # Runs after the response is already returned to the user — zero latency impact.
+    # Only fires every 5th message to keep LLM costs low.
+    async def _bg_memory(sid: str, uid: str, model: str):
+        try:
+            msgs = get_session_messages(sid)
+            # Only extract if session has enough content and on every 5th message
+            if len(msgs) >= 4 and len(msgs) % 5 == 0:
+                from src.memory.long_term import extract_and_save_memories
+                history = [{"role": m["role"], "content": m["content"]} for m in msgs]
+                await extract_and_save_memories(uid, history, model_id=model)
+        except Exception:
+            pass  # Memory extraction is non-critical — never block the user
+
+    asyncio.create_task(_bg_memory(session_id, user_id, ctx["model_id"]))
+
     return {
         "session_id": session_id,
         "response":   result["response"],
@@ -442,6 +458,19 @@ async def _stream_response(
         full_response += "\n" + "\n".join(_binary_lines)
 
     yield sse({"type": "done", "session_id": session_id, "full_content": full_response})
+
+    # ── Background: extract long-term memories from completed stream ───────
+    async def _bg_memory_stream(sid: str, uid: str, model: str):
+        try:
+            msgs = get_session_messages(sid)
+            if len(msgs) >= 4 and len(msgs) % 5 == 0:
+                from src.memory.long_term import extract_and_save_memories
+                history = [{"role": m["role"], "content": m["content"]} for m in msgs]
+                await extract_and_save_memories(uid, history, model_id=model)
+        except Exception:
+            pass
+
+    asyncio.create_task(_bg_memory_stream(session_id, user_id, ctx["model_id"]))
 
 
 class FeedbackRequest(BaseModel):

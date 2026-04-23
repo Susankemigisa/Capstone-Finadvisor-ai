@@ -22,7 +22,12 @@
     "showAll": "सभी दिखाएं",
     "savings": "बचत पॉकेट",
     "rules": "ऑटो-बचत नियम",
-    "connections": "बैंक & MoMo"
+    "connections": "बैंक & MoMo",
+    "insights": "अंतर्दृष्टि",
+    "groupFinance": "वित्त",
+    "groupSavings": "बचत",
+    "groupMore": "अधिक",
+    "groupAccount": "खाता"
   },
   "chat": {
     "goodMorning": "सुप्रभात",

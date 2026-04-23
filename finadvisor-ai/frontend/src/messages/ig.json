@@ -22,7 +22,12 @@
     "showAll": "Gosipụta niile",
     "savings": "Akpa Ntọchi",
     "rules": "Iwu Nchekwa Ego",
-    "connections": "Ụlọ Akụ & MoMo"
+    "connections": "Ụlọ Akụ & MoMo",
+    "insights": "Nghọta",
+    "groupFinance": "Ego",
+    "groupSavings": "Ntọchi",
+    "groupMore": "Ọzọ",
+    "groupAccount": "Akaunti"
   },
   "chat": {
     "goodMorning": "Ụtụtụ ọma",
