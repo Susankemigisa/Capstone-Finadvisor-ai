@@ -17,6 +17,7 @@ import hi from '../messages/hi.json'
 import ja from '../messages/ja.json'
 import ko from '../messages/ko.json'
 import ru from '../messages/ru.json'
+import lg from '../messages/lg.json'
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -35,9 +36,10 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'ja', label: '日本語 (Japanese)' },
   { code: 'ko', label: '한국어 (Korean)' },
   { code: 'ru', label: 'Русский (Russian)' },
+  { code: 'lg', label: 'Luganda' },
 ]
 
-const TRANSLATIONS = { en, fr, es, pt, de, sw, yo, ha, ig, am, ar, zh, hi, ja, ko, ru }
+const TRANSLATIONS = { en, fr, es, pt, de, sw, yo, ha, ig, am, ar, zh, hi, ja, ko, ru, lg }
 
 function flatten(obj, prefix = '') {
   return Object.entries(obj).reduce((acc, [key, val]) => {

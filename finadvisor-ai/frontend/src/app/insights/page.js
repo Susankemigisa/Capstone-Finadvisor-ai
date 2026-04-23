@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 import { useThemeStore } from '@/stores/themeStore'
-import Sidebar from '@/components/layout/Sidebar'
 import PageShell from '@/components/layout/PageShell'
 import { useLangStore, useTranslate } from '@/stores/langStore'
 
@@ -26,11 +25,11 @@ function fmt(n, currency = 'UGX') {
   return new Intl.NumberFormat('en-UG', { style: 'currency', currency, maximumFractionDigits: 0 }).format(n)
 }
 
-function HealthScoreRing({ score }) {
+function HealthScoreRing({ score, t }) {
   const color = score >= 75 ? '#34d399' : score >= 50 ? '#c9a84c' : score >= 25 ? '#fb923c' : '#f87171'
   const label = score >= 75 ? t('insights.excellent') : score >= 50 ? t('insights.good') : score >= 25 ? t('insights.fair') : t('insights.needsWork')
   const size = 140, r = 54, circ = 2 * Math.PI * r
-  const fill = (score / 100) * circ * 0.75 // 3/4 arc
+  const fill = (score / 100) * circ * 0.75
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
       <div style={{ position: 'relative', width: size, height: size }}>
@@ -72,23 +71,18 @@ const CAT_COLORS = ['#c9a84c','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c',
 
 function calcHealthScore({ savingsRate, goalProgress, hasEmergencyFund, debtRatio, budgetEntries }) {
   let score = 0
-  // Savings rate (0-30 pts): 20%+ = full marks
   if (savingsRate >= 20) score += 30
   else if (savingsRate >= 10) score += 20
   else if (savingsRate >= 5) score += 10
   else if (savingsRate > 0) score += 5
-  // Goal progress (0-25 pts)
   if (goalProgress >= 75) score += 25
   else if (goalProgress >= 50) score += 18
   else if (goalProgress >= 25) score += 10
   else if (goalProgress > 0) score += 5
-  // Emergency fund (0-20 pts)
   if (hasEmergencyFund) score += 20
-  // Budget tracking (0-15 pts)
   if (budgetEntries >= 10) score += 15
   else if (budgetEntries >= 5) score += 10
   else if (budgetEntries >= 1) score += 5
-  // Low debt ratio (0-10 pts)
   if (debtRatio === 0) score += 10
   else if (debtRatio < 0.2) score += 7
   else if (debtRatio < 0.4) score += 3
@@ -124,17 +118,16 @@ export default function InsightsPage() {
       if (!user) router.replace('/login')
       else load()
     })
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) return (
     <PageShell title={t('insights.title')}>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
-        <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Calculating your financial picture...</div>
+        <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>{t('insights.calculatingPicture')}</div>
       </div>
     </PageShell>
   )
 
-  // ── Calculations ──────────────────────────────────────────
   const portfolioValue = data?.portfolio?.summary?.total_value || 0
   const savingsTotal = (data?.pockets?.pockets || []).reduce((s, p) => s + (p.current_amount || 0), 0)
   const income = data?.budget?.summary?.income || 0
@@ -158,7 +151,6 @@ export default function InsightsPage() {
     budgetEntries: entries.length,
   })
 
-  // Spending by category
   const expenseEntries = entries.filter(e => e.entry_type === 'expense')
   const byCategory = {}
   expenseEntries.forEach(e => {
@@ -167,18 +159,26 @@ export default function InsightsPage() {
   })
   const sortedCats = Object.entries(byCategory).sort((a, b) => b[1] - a[1]).slice(0, 8)
 
-  // Insights
+  // Build translated insight messages
   const insights = []
-  if (savingsRate < 10 && income > 0) insights.push({ type: 'warning', text: `Your savings rate is ${savingsRate.toFixed(1)}%. Financial advisors recommend saving at least 20% of income.` })
-  if (savingsRate >= 20) insights.push({ type: 'success', text: `Great job! You're saving ${savingsRate.toFixed(1)}% of your income — above the recommended 20%.` })
-  if (!hasEmergencyFund) insights.push({ type: 'warning', text: 'You don\'t have an emergency fund pocket yet. Create one targeting 3–6 months of expenses.' })
-  if (hasEmergencyFund) insights.push({ type: 'success', text: 'You have an emergency fund — one of the most important financial safety nets.' })
-  if (expenses > income && income > 0) insights.push({ type: 'danger', text: `You're spending ${fmt(expenses - income)} more than you earn this month. Review your expenses.` })
+  if (savingsRate < 10 && income > 0)
+    insights.push({ type: 'warning', text: t('insights.insightLowSavings').replace('{rate}', savingsRate.toFixed(1)) })
+  if (savingsRate >= 20)
+    insights.push({ type: 'success', text: t('insights.insightGoodSavings').replace('{rate}', savingsRate.toFixed(1)) })
+  if (!hasEmergencyFund)
+    insights.push({ type: 'warning', text: t('insights.insightNoEmergency') })
+  if (hasEmergencyFund)
+    insights.push({ type: 'success', text: t('insights.insightHasEmergency') })
+  if (expenses > income && income > 0)
+    insights.push({ type: 'danger', text: t('insights.insightOverspending').replace('{amount}', fmt(expenses - income)) })
   const topCat = sortedCats[0]
-  if (topCat && expenses > 0) insights.push({ type: 'info', text: `Your biggest expense category is ${topCat[0]} at ${((topCat[1]/expenses)*100).toFixed(0)}% of total spending.` })
-  if (goals.length === 0) insights.push({ type: 'info', text: 'Set financial goals to give your savings purpose and track progress.' })
+  if (topCat && expenses > 0)
+    insights.push({ type: 'info', text: t('insights.insightTopCategory').replace('{category}', topCat[0]).replace('{pct}', ((topCat[1]/expenses)*100).toFixed(0)) })
+  if (goals.length === 0)
+    insights.push({ type: 'info', text: t('insights.insightNoGoals') })
   const nearGoals = goals.filter(g => g.target_amount > 0 && (g.current_amount / g.target_amount) >= 0.8 && g.current_amount < g.target_amount)
-  if (nearGoals.length > 0) insights.push({ type: 'success', text: `You're close! "${nearGoals[0].goal_name}" is ${((nearGoals[0].current_amount/nearGoals[0].target_amount)*100).toFixed(0)}% complete.` })
+  if (nearGoals.length > 0)
+    insights.push({ type: 'success', text: t('insights.insightNearGoal').replace('{goal}', nearGoals[0].goal_name).replace('{pct}', ((nearGoals[0].current_amount/nearGoals[0].target_amount)*100).toFixed(0)) })
 
   const insightColors = { success: '#34d399', warning: '#c9a84c', danger: '#f87171', info: '#4a9eff' }
   const insightBg = { success: '#052e16', warning: '#1a1200', danger: '#2d0a0a', info: '#0c1a2e' }
@@ -189,7 +189,7 @@ export default function InsightsPage() {
         <div style={{ padding: '20px 28px 0', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ paddingBottom: '16px' }}>
             <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('insights.title')}</h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>Your complete financial picture — net worth, health score, and spending patterns</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>{t('insights.subtitle')}</p>
           </div>
         </div>
 
@@ -221,9 +221,9 @@ export default function InsightsPage() {
             {/* Health Score */}
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px', textAlign: 'center' }}>{t('insights.healthScore')}</div>
-              <HealthScoreRing score={healthScore} />
+              <HealthScoreRing score={healthScore} t={t} />
               <div style={{ marginTop: '16px', fontSize: '11px', color: 'var(--text-dim)', textAlign: 'center', lineHeight: 1.5 }}>
-                Based on savings rate, goal progress, emergency fund & budget tracking
+                {t('insights.healthBasis')}
               </div>
             </div>
 
@@ -255,7 +255,7 @@ export default function InsightsPage() {
               {sortedCats.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-dim)', fontSize: '13px' }}>
                   <div style={{ fontSize: '32px', marginBottom: '8px' }}>📊</div>
-                  Log some expenses to see your spending breakdown
+                  {t('insights.logExpensesHint')}
                 </div>
               ) : sortedCats.map(([cat, amount], i) => (
                 <SpendingBar key={cat} category={cat} amount={amount} total={expenses} color={CAT_COLORS[i % CAT_COLORS.length]} />
@@ -267,7 +267,7 @@ export default function InsightsPage() {
               <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '16px' }}>{t('insights.aiInsights')}</div>
               {insights.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-dim)', fontSize: '13px' }}>
-                  Add more data (budget entries, goals, savings) to get personalised insights
+                  {t('insights.addMoreData')}
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
