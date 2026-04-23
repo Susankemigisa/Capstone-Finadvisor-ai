@@ -124,32 +124,44 @@ async def log_requests(request: Request, call_next):
     return response
 
 # ── Routes ────────────────────────────────────────────────────
-from src.api.routes import (
-    auth, chat, portfolio, documents, market, analytics,
-    billing, notifications, alerts, watchlist, goals, budget, tax, exports,
-    savings, rules, connections, insights,
-)
+from src.api.routes.auth         import router as auth_router
+from src.api.routes.chat         import router as chat_router
+from src.api.routes.portfolio    import router as portfolio_router
+from src.api.routes.documents    import router as documents_router
+from src.api.routes.market       import router as market_router
+from src.api.routes.analytics    import router as analytics_router
+from src.api.routes.billing      import router as billing_router
+from src.api.routes.notifications import router as notifications_router
+from src.api.routes.alerts       import router as alerts_router
+from src.api.routes.watchlist    import router as watchlist_router
+from src.api.routes.goals        import router as goals_router
+from src.api.routes.budget       import router as budget_router
+from src.api.routes.tax          import router as tax_router
+from src.api.routes.exports      import router as exports_router
+from src.api.routes.savings      import router as savings_router
+from src.api.routes.rules        import router as rules_router
+from src.api.routes.connections  import router as connections_router
+from src.api.routes.insights     import router as insights_router
 
-app.include_router(auth.router,          prefix="/auth",          tags=["Authentication"])
-app.include_router(chat.router,          prefix="/chat",          tags=["Chat"])
-app.include_router(portfolio.router,     prefix="/portfolio",     tags=["Portfolio"])
-app.include_router(documents.router,                              tags=["Documents"])
-app.include_router(market.router,        prefix="/market",        tags=["Market Data"])
-app.include_router(analytics.router,     prefix="/analytics",     tags=["Analytics"])
-app.include_router(billing.router,       prefix="/billing",       tags=["Billing"])
-app.include_router(notifications.router, prefix="/notifications",  tags=["Notifications"])
-app.include_router(alerts.router,                                 tags=["Price Alerts"])
-app.include_router(watchlist.router,     prefix="/watchlist",     tags=["Watchlist"])
-app.include_router(goals.router,         prefix="/goals",         tags=["Financial Goals"])
-app.include_router(budget.router,        prefix="/budget",        tags=["Budget"])
-app.include_router(tax.router,           prefix="/tax",           tags=["Tax Records"])
-app.include_router(exports.router,       prefix="/export",        tags=["Exports"])
-app.include_router(savings.router,       prefix="/savings",       tags=["Savings Pockets"])
-app.include_router(rules.router,         prefix="/savings",       tags=["Savings Rules"])
-app.include_router(connections.router,   prefix="/savings",       tags=["Connected Accounts"])
-app.include_router(insights.router,      prefix="/insights",      tags=["Insights"])
+app.include_router(auth_router,          prefix="/auth",          tags=["Authentication"])
+app.include_router(chat_router,          prefix="/chat",          tags=["Chat"])
+app.include_router(portfolio_router,     prefix="/portfolio",     tags=["Portfolio"])
+app.include_router(documents_router,                              tags=["Documents"])
+app.include_router(market_router,        prefix="/market",        tags=["Market Data"])
+app.include_router(analytics_router,     prefix="/analytics",     tags=["Analytics"])
+app.include_router(billing_router,       prefix="/billing",       tags=["Billing"])
+app.include_router(notifications_router, prefix="/notifications", tags=["Notifications"])
+app.include_router(alerts_router,                                 tags=["Price Alerts"])
+app.include_router(watchlist_router,     prefix="/watchlist",     tags=["Watchlist"])
+app.include_router(goals_router,         prefix="/goals",         tags=["Financial Goals"])
+app.include_router(budget_router,        prefix="/budget",        tags=["Budget"])
+app.include_router(tax_router,           prefix="/tax",           tags=["Tax Records"])
+app.include_router(exports_router,       prefix="/export",        tags=["Exports"])
+app.include_router(savings_router,       prefix="/savings",       tags=["Savings Pockets"])
+app.include_router(rules_router,         prefix="/savings",       tags=["Savings Rules"])
+app.include_router(connections_router,   prefix="/savings",       tags=["Connected Accounts"])
+app.include_router(insights_router,      prefix="/insights",      tags=["Insights"])
 app.include_router(webhooks_router,      prefix="",               tags=["Webhooks"])
-
 # ── System endpoints ──────────────────────────────────────────
 @app.get("/health", tags=["System"])
 async def health_check():
