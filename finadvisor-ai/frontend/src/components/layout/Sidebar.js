@@ -82,9 +82,9 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
     {
       label: 'Savings',
       items: [
-        { href: '/savings',     icon: '🏦', label: 'Pockets' },
-        { href: '/rules',       icon: '⚡', label: 'Auto-Save Rules' },
-        { href: '/connections', icon: '🔗', label: 'Bank & MoMo' },
+        { href: '/savings',     icon: '🏦', label: t('nav.savings') },
+        { href: '/rules',       icon: '⚡', label: t('nav.rules') },
+        { href: '/connections', icon: '🔗', label: t('nav.connections') },
       ]
     },
     {
