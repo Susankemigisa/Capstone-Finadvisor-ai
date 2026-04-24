@@ -4,7 +4,7 @@
 
 ### Your intelligent AI companion for financial insights and investment guidance
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?style=flat-square&logo=fastapi)
 ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?style=flat-square&logo=python)
 ![LangChain](https://img.shields.io/badge/LangChain-0.1%2B-1C3C3C?style=flat-square)
@@ -12,7 +12,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat-square&logo=supabase)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)
-![Languages](https://img.shields.io/badge/Languages-20-blue?style=flat-square)
+![Languages](https://img.shields.io/badge/Languages-17-blue?style=flat-square)
 
 [Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Demo](https://finadvisor-ai-app-two.vercel.app) • [Contributing](CONTRIBUTING.md)
 
@@ -63,11 +63,11 @@ The project implements **Case 2 (AI Agent for Task Automation)** as its primary 
 
 ## 🌟 Overview
 
-FinAdvisor AI is a full-stack AI-powered financial advisor application. It combines real-time market data, multi-model AI chat, portfolio tracking, budgeting, tax records, watchlists, financial goals, and price alerts — all in one platform with 20-language support.
+FinAdvisor AI is a full-stack AI-powered financial advisor application. It combines real-time market data, multi-model AI chat, portfolio tracking, budgeting, tax records, watchlists, financial goals, savings automation, bank and mobile money connections, a financial insights dashboard, and price alerts — all in one platform with 17-language support built specifically for African and global users.
 
 **Live Demo:** https://finadvisor-ai-app-two.vercel.app
-**API:** https://finadvisor-ai-production-c72b.up.Render.app
-**API Docs:** https://finadvisor-ai-production-c72b.up.Render.app/docs *(requires DEBUG=true)*
+**API:** https://finadvisor-ai-production-c72b.up.render.app
+**API Docs:** https://finadvisor-ai-production-c72b.up.render.app/docs *(requires DEBUG=true)*
 
 > ⚠️ FinAdvisor AI is for informational purposes only and is not a licensed financial advisor. Always consult a qualified professional for major financial decisions.
 
@@ -79,47 +79,58 @@ FinAdvisor AI is a full-stack AI-powered financial advisor application. It combi
 - Multi-model support: GPT-4o, Claude 3.5 Sonnet, Gemini 1.5 Pro, Llama 3.3 70B (Groq)
 - Streaming responses with real-time token output via Server-Sent Events
 - **Strictly scoped** — refuses non-financial questions by design
-- Persistent chat sessions with full conversation history
-- Suggested prompts for quick starts
-- Smart time-and-day-aware greetings in 20 languages
+- Persistent chat sessions with full conversation history and search
+- Context-aware follow-up question chips generated after each AI response
+- Smart time-and-day-aware greetings in 17 languages (including special greetings for New Year, Easter, Christmas)
 - Voice input and file upload (RAG document context)
 - Preferred name — the AI addresses you how you want
 - **Human-in-the-Loop (HITL)** — the agent pauses for user confirmation before executing sensitive actions
+- Pending prompt: messages stored before login are auto-sent after authentication
 
 ### 📈 Financial Tools (32 total across 10 categories)
 
 | Category | Tools |
-|----------|-------|
+|---|---|
 | **Market** | Real-time stock prices, historical data, ticker search, market overview |
 | **Crypto** | Live crypto prices (CoinGecko), historical crypto data |
 | **Portfolio** | Add/remove positions, P&L tracking, allocation %, diversification score, rebalancing advisor, risk score, top performer |
 | **Calculator** | ROI, compound interest, dollar-cost averaging |
 | **Budget** | Log income/expenses, monthly budget summary |
 | **Tax** | Capital gains estimator, tax bracket lookup |
-| **Planning** | Retirement calculator, emergency fund calculator, debt payoff (snowball/avalanche) |
+| **Planning** | Emergency fund calculator, debt payoff (snowball/avalanche) |
 | **News** | Market-wide news, per-stock news |
 | **Documents** | Semantic search across uploaded personal financial documents (RAG) |
 | **Images** | AI chart generation, financial infographic generation (DALL-E 3) |
 
+### 🏦 Savings & Automation *(new in v1.3)*
+
+| Feature | Description |
+|---|---|
+| **Savings Pockets** | Virtual earmarked buckets with progress rings, deposit/withdraw transactions, per-pocket history, icon and colour picker, optional target amount and target date |
+| **Savings Rules** | Auto-save rules triggered on every incoming transaction — percentage of income or fixed amount; optional keyword filters and minimum amount thresholds; full trigger activity log |
+| **Bank & MoMo Connections** | Connect MTN MoMo, Airtel Money, Stanbic Bank, DFCU Bank, Centenary Bank, Equity Bank Uganda, Flutterwave card, or manual entry; masked account numbers and last-synced timestamp displayed |
+| **Financial Insights** | Net worth dashboard (portfolio + savings pockets combined), financial health score (0–100), spending-by-category breakdown, AI narrative insights, goals progress overview |
+
 ### 🧠 Platform Features
 
 | Feature | Description |
-|---------|-------------|
+|---|---|
 | **Portfolio** | Track positions with live P&L via yfinance |
 | **Watchlist** | Monitor any ticker (stocks, crypto, ETFs) with live price refresh |
 | **Goals** | Set financial goals with target amounts, deadlines, and progress tracking |
-| **Budget** | Log income and expenses by category |
-| **Tax Records** | Track annual income, capital gains, and estimated tax owed |
-| **Analytics** | Usage stats, message counts, AI model breakdown |
-| **Export** | Download any section as CSV or JSON |
+| **Budget** | Log income and expenses by category; monthly net savings summary |
+| **Tax Records** | Track annual income, capital gains, filing status, and estimated tax owed |
+| **Analytics** | AI usage stats, message counts, token usage, model breakdown, daily charts |
+| **Export** | Download any section as CSV or JSON; export-all bundles everything in one JSON file |
 | **Price Alerts** | Threshold-based alerts, auto-checked every 5 minutes via APScheduler |
 
 ### 🌍 Platform
-- 20-language UI and AI responses (including Amharic, Hausa, Igbo, Luganda, Swahili, Yoruba)
-- Light / Dark theme with instant toggle
+- 17-language UI and AI responses (including Amharic, Hausa, Igbo, Luganda, Swahili, Yoruba)
+- Light / Dark theme with instant toggle — no save required
 - Google and GitHub OAuth login
-- Email + password auth with forgot/reset password flow
-- Free and Pro tiers via Stripe subscriptions
+- Email + password auth with forgot/reset password flow using 6-digit email code
+- Onboarding wizard: preferred name + home currency (UGX, KES, USD, GBP, EUR, NGN, GHS, ZAR)
+- Free and Pro tiers — payments via MTN MoMo and Airtel Money (no card required)
 - Push and email notifications via SendGrid
 - LangSmith tracing integration for agent observability
 - Fully responsive — mobile, tablet, and desktop
@@ -128,16 +139,35 @@ FinAdvisor AI is a full-stack AI-powered financial advisor application. It combi
 
 ## 🛠 Tech Stack
 
+### Frontend
+
 | Layer | Technology |
-|-------|-----------|
-| Frontend | Next.js 14 (App Router), React 18, Zustand |
-| Backend | FastAPI (Python 3.12), Uvicorn |
-| Agent Framework | LangChain + LangGraph (StateGraph) |
+|---|---|
+| Framework | Next.js 16.1.6 (App Router) |
+| UI runtime | React 19 |
+| Styling | Tailwind CSS v4 + custom CSS variables design system |
+| Components | shadcn/ui + Radix UI primitives |
+| State | Zustand 5 |
+| Data fetching | TanStack Query v5 |
+| Forms | React Hook Form + Zod v4 |
+| Charts | Recharts 3 |
+| Animations | Framer Motion 12 |
+| i18n | Custom flat-key Zustand store — 17 languages, JSON bundles, English fallback |
+| Auth client | Supabase JS v2 (OAuth) + custom JWT flow |
+| Markdown | react-markdown + remark-gfm |
+| HTTP | Axios + native fetch (SSE streaming) |
+
+### Backend
+
+| Layer | Technology |
+|---|---|
+| Framework | FastAPI (Python 3.12), Uvicorn |
+| Agent | LangChain + LangGraph (StateGraph) |
 | LLM Providers | OpenAI, Anthropic, Google Gemini, Groq |
 | RAG | LangChain document loaders, OpenAI embeddings, pgvector / ChromaDB |
 | Market Data | yfinance, CoinGecko API |
 | Database | Supabase (PostgreSQL + pgvector) |
-| Payments | Stripe (subscriptions + webhooks) |
+| Payments | MTN MoMo, Airtel Money (no card required) |
 | Email | SendGrid / SMTP fallback |
 | Image Generation | OpenAI DALL-E 3 |
 | Observability | LangSmith |
@@ -181,7 +211,7 @@ START
 - **RAG runs first on every turn** — before the LLM is called, the RAG node checks whether the question is relevant to any uploaded document and injects matching chunks into context. This is a near-zero-cost no-op when no documents are present.
 - **ReAct planning loop** — the planner LLM decides whether to respond directly or call tools. After tools execute, the planner is called again with results to formulate the final answer.
 - **HITL interrupt** — using LangGraph's `interrupt_before` mechanism, the graph pauses before any state-changing tool call. The user sees exactly what the agent plans to do and must explicitly confirm. Rejection is logged and the agent explains what was attempted.
-- **Enabled-tools enforcement** — the tool executor node respects the user's plugin preferences. A disabled tool cannot be executed, even if the LLM requests it — preventing crafted tool call IDs from bypassing user preferences.
+- **Enabled-tools enforcement at two layers** — (1) the planner only receives tool descriptions for enabled tools, so the LLM cannot even request a disabled tool; (2) the tool executor independently filters by `enabled_tools` from state at execution time as a second safeguard.
 - **Short-term memory** — conversation history is persisted within a session via LangGraph's `MemorySaver` checkpointer.
 - **Long-term memory** — key facts about the user (risk tolerance, stated goals, financial situation) are extracted and stored in Supabase across sessions, making the agent progressively more personalised.
 
@@ -218,8 +248,8 @@ FinAdvisor AI uses a **Jinja2-templated system prompt** (`src/agent/nodes/prompt
 ### Dynamic Context Injection
 
 | Variable | Source | Purpose |
-|----------|--------|---------|
-| `user_name` | Supabase users table | Personalised address |
+|---|---|---|
+| `user_name` | Supabase users table | Personalised address using preferred name |
 | `preferred_currency` | User settings | All monetary values in user's currency |
 | `tier` | Subscription status | Adjusts available models and features |
 | `portfolio_summary` | Live portfolio query | Agent knows the user's actual holdings |
@@ -232,7 +262,7 @@ FinAdvisor AI uses a **Jinja2-templated system prompt** (`src/agent/nodes/prompt
 
 **2. Tool descriptions in the prompt** — Every enabled tool is listed with a one-line description, priming the LLM to use tools proactively rather than guessing answers.
 
-**3. Explicit behavioural rules** — A `## Conversation Rules` section handles greetings, finance questions, off-topic questions, and grey-area topics with concrete example responses for each case.
+**3. Explicit behavioural rules** — A `## Conversation Rules` section handles greetings, finance questions, off-topic questions, and grey-area topics with concrete example responses.
 
 **4. Hard prohibitions** — Explicit negatives prevent the default LLM helpfulness from producing fabricated financial data:
 ```
@@ -240,7 +270,7 @@ FinAdvisor AI uses a **Jinja2-templated system prompt** (`src/agent/nodes/prompt
 "Never guarantee investment returns"
 ```
 
-**5. Grey-area lean** — Rather than refusing ambiguous questions, the agent is instructed to lean toward answering when there is any financial angle (GDP, salary negotiation, cost of living), preventing an overly restrictive assistant.
+**5. Grey-area lean** — Rather than refusing ambiguous questions, the agent leans toward answering when there is any financial angle (GDP, salary negotiation, cost of living), preventing an overly restrictive assistant.
 
 **6. Separate RAG prompt** — The RAG node uses a distinct prompt template (`rag_prompt.json`) that instructs the model how to use retrieved document context, including citing the source document and acknowledging when the document does not answer the question.
 
@@ -260,46 +290,66 @@ finadvisor-ai/
 │   │   │   ├── watchlist/        # live ticker monitoring
 │   │   │   ├── goals/            # financial goal tracking
 │   │   │   ├── budget/           # income & expense logging
+│   │   │   ├── savings/          # savings pockets ← new
+│   │   │   ├── rules/            # auto-save rules ← new
+│   │   │   ├── connections/      # bank & MoMo account linking ← new
+│   │   │   ├── insights/         # net worth & financial health dashboard ← new
 │   │   │   ├── tax/              # tax records
 │   │   │   ├── export/           # data export (CSV/JSON)
 │   │   │   ├── alerts/           # price alerts
 │   │   │   ├── plugins/          # AI plugin management
 │   │   │   ├── settings/         # profile, theme, language, AI model
-│   │   │   └── billing/          # Stripe subscription management
-│   │   ├── components/layout/    # Sidebar, MessageBubble, ChatInput
-│   │   ├── stores/               # authStore, chatStore, langStore, themeStore
-│   │   └── messages/             # 20 language JSON files
-│   └── public/messages/          # static fallback language files
+│   │   │   ├── billing/          # MoMo/Airtel subscription management ← rewritten
+│   │   │   ├── history/          # chat session history
+│   │   │   └── onboarding/       # first-login wizard
+│   │   ├── components/
+│   │   │   ├── layout/           # Sidebar, PageShell
+│   │   │   ├── chat/             # MessageBubble, ChatInput, HelpGuide
+│   │   │   └── notifications/    # NotificationSettings
+│   │   ├── stores/
+│   │   │   ├── authStore.js      # user session, JWT refresh
+│   │   │   ├── chatStore.js      # messages, sessions, streaming
+│   │   │   ├── themeStore.js     # dark/light theme
+│   │   │   └── langStore.js      # language + useTranslate() hook
+│   │   ├── lib/
+│   │   │   ├── api.js            # REST client + SSE streaming helper
+│   │   │   ├── supabase.js       # Supabase client (OAuth)
+│   │   │   └── utils.js
+│   │   ├── hooks/
+│   │   │   └── useFormDraft.js
+│   │   └── messages/             # 17 language JSON files
+│   │                             # en fr es pt de sw yo ha ig am ar zh hi ja ko ru lg
+│   └── public/
 │
 └── backend/
     └── src/
-        ├── main.py               # FastAPI app, router registration
+        ├── main.py
         ├── scheduler.py          # APScheduler — price alert background job
-        ├── config/settings.py    # Pydantic settings, env vars
-        ├── database/client.py    # Supabase client (lazy init)
+        ├── config/settings.py
+        ├── database/client.py
         ├── agent/
-        │   ├── graph.py          # LangGraph StateGraph — run_agent / stream_agent
+        │   ├── graph.py          # LangGraph StateGraph
         │   ├── state.py          # AgentState TypedDict
         │   └── nodes/
-        │       ├── planner.py          # ReAct planner node
-        │       ├── tool_executor.py    # Tool execution node (enabled-tools filter)
-        │       ├── rag_node.py         # RAG retrieval node
-        │       ├── human_in_loop.py    # HITL interrupt node
+        │       ├── planner.py
+        │       ├── tool_executor.py
+        │       ├── rag_node.py
+        │       ├── human_in_loop.py
         │       └── prompts/
-        │           ├── system_prompt.json  # Jinja2 system prompt template
-        │           └── rag_prompt.json     # RAG context injection prompt
-        ├── models/model_manager.py     # Unified multi-LLM interface
+        │           ├── system_prompt.json
+        │           └── rag_prompt.json
+        ├── models/model_manager.py
         ├── memory/
-        │   ├── short_term.py           # LangGraph MemorySaver checkpointer
-        │   └── long_term.py            # Supabase-backed cross-session memory
+        │   ├── short_term.py     # LangGraph MemorySaver checkpointer
+        │   └── long_term.py      # Supabase-backed cross-session memory
         ├── rag/
-        │   ├── document_processor.py   # PDF/DOCX/TXT ingestion and chunking
-        │   ├── embeddings.py           # OpenAI embeddings with batch caching
-        │   ├── vector_store.py         # pgvector / ChromaDB abstraction
-        │   ├── retriever.py            # Cosine similarity retrieval with score filter
-        │   └── ab_testing.py           # Retrieval strategy comparison framework
-        ├── tools/                      # 32 plugin tools across 10 categories
-        │   ├── __init__.py             # TOOL_REGISTRY + get_all_tools()
+        │   ├── document_processor.py
+        │   ├── embeddings.py
+        │   ├── vector_store.py
+        │   ├── retriever.py
+        │   └── ab_testing.py
+        ├── tools/                # 32 plugin tools across 10 categories
+        │   ├── __init__.py
         │   ├── market_tools.py
         │   ├── crypto_tools.py
         │   ├── portfolio_tools.py
@@ -309,23 +359,23 @@ finadvisor-ai/
         │   ├── planning_tools.py
         │   ├── news_tools.py
         │   ├── rag_tools.py
-        │   └── image_tools.py          # DALL-E 3 chart/infographic generation
+        │   └── image_tools.py
         ├── mcp/
-        │   ├── server.py               # MCP server for external integrations
+        │   ├── server.py
         │   └── tools_registry.py
-        ├── auth/                       # JWT, bcrypt, dependencies
+        ├── auth/
         ├── api/
-        │   ├── routes/                 # All FastAPI route handlers
-        │   └── middleware/             # Auth, rate limiting, error handling
-        └── utils/                      # Logger, cache, sanitizer
+        │   ├── routes/
+        │   └── middleware/
+        └── utils/
 │
 ├── tests/
-│   ├── conftest.py             # Shared fixtures (fully mocked — no API keys needed)
-│   ├── test_agent.py           # LangGraph agent and node tests
-│   ├── test_auth.py            # JWT and authentication tests
-│   ├── test_rag.py             # RAG pipeline tests
-│   ├── test_tools.py           # Financial calculation tool tests
-│   └── test_image_tools.py     # Image generation tool tests
+│   ├── conftest.py
+│   ├── test_agent.py
+│   ├── test_auth.py
+│   ├── test_rag.py
+│   ├── test_tools.py
+│   └── test_image_tools.py
 │
 ├── CHANGELOG.md
 ├── CODE_OF_CONDUCT.md
@@ -344,34 +394,43 @@ finadvisor-ai/
 ## 🗺 Pages & Routes
 
 ### Auth Pages *(public)*
+
 | Route | Description |
-|-------|-------------|
+|---|---|
 | `/login` | Email/password + Google/GitHub OAuth |
 | `/register` | New account with password strength check |
-| `/forgot-password` | Request password reset email |
-| `/reset-password` | Enter reset token + set new password |
+| `/forgot-password` | Request 6-digit password reset code by email |
+| `/reset-password` | Enter code + set new password |
 
 ### App Pages *(protected — requires login)*
+
 | Route | Description |
-|-------|-------------|
+|---|---|
+| `/onboarding` | First-login wizard — preferred name + home currency |
 | `/chat` | Main AI chat — finance topics only |
 | `/portfolio` | Real-time investment positions and P&L |
-| `/analytics` | Usage stats, message counts, model breakdown |
 | `/watchlist` | Live ticker price monitoring |
 | `/goals` | Financial goal tracking with progress bars |
 | `/budget` | Income and expense logging by category |
-| `/tax` | Annual income, capital gains, tax estimates |
+| `/savings` | Savings pockets — virtual earmarked buckets ← new |
+| `/rules` | Auto-save rules triggered on incoming transactions ← new |
+| `/connections` | Bank & MoMo account linking ← new |
+| `/insights` | Net worth, financial health score, spending breakdown, AI insights ← new |
+| `/tax` | Annual income, capital gains, filing status, estimated tax |
 | `/export` | Download financial data as CSV or JSON |
+| `/analytics` | AI usage stats, token counts, model breakdown |
 | `/alerts` | Price alert creation and monitoring |
 | `/plugins` | Enable/disable 32 AI tool plugins |
-| `/settings` | Profile, theme, language, AI model, notifications |
-| `/billing` | Upgrade to Pro, manage Stripe subscription |
+| `/settings` | Profile, theme, language, AI model, notifications, danger zone |
+| `/billing` | Pro upgrade via MTN MoMo or Airtel Money ← rewritten |
+| `/history` | Full chat session history with search |
 
 ---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ and Python 3.12+
 - A [Supabase](https://supabase.com) project
 - At least one LLM API key (OpenAI recommended — also required for embeddings and image generation)
@@ -382,21 +441,17 @@ finadvisor-ai/
 git clone https://github.com/your-username/finadvisor-ai.git
 cd finadvisor-ai/backend
 
-# Create and activate virtual environment
 python -m venv .venv
 source .venv/bin/activate           # macOS/Linux
 # OR: .\.venv\Scripts\Activate.ps1  # Windows PowerShell
 
-# Install dependencies
 pip install -r requirements.txt
 
-# Configure environment
 cp .env.example .env
 python -c "import secrets; print(secrets.token_hex(32))"  # → paste as SECRET_KEY
 
-# Run Supabase migration (dashboard → SQL Editor → SUPABASE_MIGRATION.sql → Run)
+# Run migration: Supabase dashboard → SQL Editor → paste SUPABASE_MIGRATION.sql → Run
 
-# Start server
 uvicorn src.main:app --reload --port 8000
 ```
 
@@ -410,6 +465,8 @@ npm run dev
 ```
 
 Open http://localhost:3000
+
+The dev server sets `--max-old-space-size=4096` to handle the i18n message bundles during Fast Refresh.
 
 ---
 
@@ -441,11 +498,11 @@ SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
 DATABASE_URL=postgresql://postgres:password@db.your-project.supabase.co:5432/postgres
 
-# Stripe (Pro tier)
-STRIPE_SECRET_KEY=sk_live_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-STRIPE_PRICE_ID_MONTHLY=price_...
-STRIPE_PRICE_ID_YEARLY=price_...
+# Payments — MTN MoMo & Airtel Money
+MOMO_API_KEY=...
+MOMO_SUBSCRIPTION_KEY=...
+AIRTEL_CLIENT_ID=...
+AIRTEL_CLIENT_SECRET=...
 
 # Email
 SENDGRID_API_KEY=SG....
@@ -466,12 +523,16 @@ LANGCHAIN_API_KEY=ls__...
 LANGCHAIN_PROJECT=finadvisor-ai
 ```
 
-> **Note on image generation:** `generate_chart_image` and `generate_financial_infographic` always use OpenAI DALL-E 3, regardless of which chat model is active. `OPENAI_API_KEY` is required for these tools even when using Claude or Gemini as the chat model. Generated image URLs expire after 1 hour.
+> **Note on image generation:** `generate_chart_image` and `generate_financial_infographic` always use OpenAI DALL-E 3 regardless of which chat model is active. `OPENAI_API_KEY` is required even when using Claude or Gemini. Generated image URLs expire after 1 hour.
 
 ### Frontend `.env.local`
 
 ```env
-NEXT_PUBLIC_API_URL=https://your-backend.up.Render.app
+NEXT_PUBLIC_API_URL=https://your-backend.up.render.app
+
+# Required only for Google / GitHub OAuth
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 ```
 
 ---
@@ -485,7 +546,7 @@ create extension if not exists vector;
 -- then paste and run SUPABASE_MIGRATION.sql
 ```
 
-**Tables:** `users`, `chat_sessions`, `chat_messages`, `portfolio_positions`, `watchlist_items`, `financial_goals`, `budget_entries`, `tax_records`, `price_alerts`, `documents`, `document_chunks`
+**Tables:** `users`, `chat_sessions`, `chat_messages`, `portfolio_positions`, `watchlist_items`, `financial_goals`, `budget_entries`, `tax_records`, `price_alerts`, `documents`, `document_chunks`, `savings_pockets`, `savings_transactions`, `savings_rules`, `savings_rule_logs`, `connected_accounts`, `user_memories`
 
 ---
 
@@ -493,15 +554,15 @@ create extension if not exists vector;
 
 ### Frontend — Vercel
 1. Connect GitHub repo in Vercel dashboard
-2. Set `NEXT_PUBLIC_API_URL=https://your-backend.up.Render.app`
-3. Deploy
+2. Set `NEXT_PUBLIC_API_URL=https://your-backend.up.render.app`
+3. Optionally set Supabase vars for OAuth
+4. Deploy
 
 ### Backend — Render
 1. Connect GitHub repo in Render
 2. Add all backend env vars in Render dashboard
 3. Set `ALLOWED_ORIGINS` to include your Vercel URL
-4. Register Stripe webhook: `https://your-backend.up.Render.app/billing/webhook`
-   - Events: `checkout.session.completed`, `customer.subscription.deleted`, `invoice.payment_failed`
+4. Configure MoMo/Airtel webhook URLs in your MTN/Airtel developer portals pointing to your backend
 
 ---
 
@@ -510,33 +571,48 @@ create extension if not exists vector;
 Full interactive docs at `/docs` when `DEBUG=true`.
 
 ```
-POST   /auth/register          Create account
-POST   /auth/login             Login → JWT tokens
-GET    /auth/me                Get current user
-PATCH  /auth/me                Update profile
-POST   /auth/oauth             Google / GitHub OAuth
-POST   /auth/forgot-password   Send reset email
-POST   /auth/reset-password    Reset with token
+POST   /auth/register
+POST   /auth/login
+GET    /auth/me
+PATCH  /auth/me
+POST   /auth/oauth
+POST   /auth/forgot-password
+POST   /auth/reset-password
 
-POST   /chat/stream            Send message (SSE streaming)
-GET    /chat/sessions          List sessions
+POST   /chat/stream            SSE streaming chat
+GET    /chat/sessions
+DELETE /chat/sessions/{id}
 
-GET/POST/PATCH/DELETE  /portfolio/positions/{id}
-GET/POST/PATCH/DELETE  /watchlist/{id}
+GET/POST/DELETE  /portfolio/positions/{id}
+GET/POST/DELETE  /watchlist/{id}
 GET/POST/PATCH/DELETE  /goals/{id}
 GET/POST/PATCH/DELETE  /budget/{id}
 GET/POST/PATCH/DELETE  /tax/{id}
 GET/POST/DELETE        /alerts/{id}
 GET                    /export/{type}?format=csv|json
 GET                    /market/price/{ticker}
+GET                    /analytics
+
+GET/POST/DELETE  /savings/pockets/{id}
+POST             /savings/pockets/{id}/transact
+GET/POST/DELETE  /savings/rules/{id}
+GET/POST/DELETE  /savings/accounts/{id}
+
+GET              /insights
+GET              /billing/status
+GET              /billing/plans
+POST             /billing/initiate
+GET              /billing/poll/{reference_id}
 ```
 
 ---
 
 ## 🌍 Internationalization
 
+All UI strings live in `src/messages/<lang>.json`. The translation system is a custom flat-key Zustand store — no external i18n library at runtime. Keys use dot-notation (`section.key`). Any key missing from the selected language falls back to English automatically. Language is persisted to `localStorage` and applied synchronously on module import — no flash on first render.
+
 | Code | Language | Code | Language |
-|------|----------|------|----------|
+|---|---|---|---|
 | `en` | English | `ar` | العربية |
 | `fr` | Français | `zh` | 中文 |
 | `es` | Español | `hi` | हिन्दी |
@@ -544,27 +620,29 @@ GET                    /market/price/{ticker}
 | `de` | Deutsch | `ko` | 한국어 |
 | `sw` | Kiswahili | `ru` | Русский |
 | `yo` | Yorùbá | `am` | አማርኛ |
-| `ha` | Hausa | `ig` | Igbo |
-| `lg` | Luganda | — | — |
+| `ha` | Hausa | `lg` | Luganda |
+| `ig` | Igbo | | |
+
+All 17 languages now cover every section including the new pages: `insights`, `savings`, `rules`, `connections`, and `billing`.
 
 ---
 
 ## 🤖 AI Models
 
 | Provider | Models | Key Required | Tier |
-|----------|--------|-------------|------|
+|---|---|---|---|
 | OpenAI | GPT-4o, GPT-4o Mini | `OPENAI_API_KEY` | Free (Mini) / Pro (4o) |
 | Anthropic | Claude 3.5 Sonnet | `ANTHROPIC_API_KEY` | Pro |
 | Google | Gemini 1.5 Flash/Pro | `GOOGLE_API_KEY` | Pro |
 | Groq | Llama 3.3 70B, Llama 3.1 8B | `GROQ_API_KEY` | Free (8B) / Pro (70B) |
 
-> The AI is strictly scoped to financial topics only. Non-financial questions are politely declined.
+The AI is strictly scoped to financial topics only. Non-financial questions are politely declined.
 
 ---
 
 ## 🔌 Plugins System
 
-32 tools across 10 categories, individually enable/disable on the `/plugins` page. The enabled tool list is stored per-user in Supabase and enforced at two levels: (1) the planner only receives tool descriptions for enabled tools, so the LLM cannot even request a disabled tool; (2) the tool executor node independently filters by `enabled_tools` from state as a second safeguard.
+32 tools across 10 categories, individually enable/disable on the `/plugins` page. The enabled tool list is stored per-user in Supabase and enforced at two independent layers: (1) the planner only receives tool descriptions for enabled tools; (2) the tool executor independently filters by `enabled_tools` from state at execution time. A user-disabled tool cannot be executed even if the LLM attempts to call it.
 
 ---
 
@@ -573,13 +651,8 @@ GET                    /market/price/{ticker}
 The test suite runs fully offline — no real API keys or network calls are required. All external dependencies (OpenAI, Supabase, yfinance, CoinGecko) are mocked via `unittest.mock`.
 
 ```bash
-# Run all tests
 pytest
-
-# With coverage report
 pytest --cov=src --cov-report=term-missing
-
-# Specific test files
 pytest tests/test_tools.py -v
 pytest tests/test_image_tools.py -v
 pytest tests/test_rag.py -v
@@ -587,7 +660,7 @@ pytest tests/test_agent.py -v
 ```
 
 | File | What it covers |
-|------|---------------|
+|---|---|
 | `test_agent.py` | LangGraph graph compilation, node behaviour, streaming, HITL flow |
 | `test_auth.py` | JWT creation/validation, password hashing, protected route access |
 | `test_rag.py` | Document chunking, embedding batch caching, retrieval score filtering |
@@ -602,17 +675,17 @@ The full suite completes in under 30 seconds.
 
 See [ETHICS.md](ETHICS.md) for the complete breakdown. Summary:
 
-**AI Disclaimer** — The system prompt explicitly instructs the AI to remind users it is not a licensed financial advisor for major decisions. This is an architectural constraint, not a UI label — it is enforced in the system prompt with: *"Disclaimer — remind users you are an AI, not a licensed advisor, for major decisions."*
+**AI Disclaimer** — The system prompt explicitly instructs the AI to remind users it is not a licensed financial advisor for major decisions. This is an architectural constraint, not a UI label — enforced in the system prompt directly.
 
-**Data Privacy** — User financial data is stored in Supabase with Row-Level Security (RLS). Passwords are hashed with bcrypt. JWT tokens are short-lived (30 min) with refresh rotation. Uploaded documents are per-user and never accessible across accounts. API keys are server-side only.
+**Data Privacy** — User financial data is stored in Supabase with Row-Level Security (RLS). Passwords are hashed with bcrypt. JWT tokens are short-lived (30 min) with refresh rotation. Uploaded documents are per-user and never accessible across accounts. MoMo PINs never touch our servers — the PIN prompt appears on the user's device directly.
 
-**Bias Awareness** — LLMs may reflect US-centric and English-language financial biases. The app mitigates this with 20-language support (including 6 African languages), multi-currency display, and a disclosure that tax tools assume US law.
+**Bias Awareness** — LLMs may reflect US-centric financial biases. The app mitigates this with 17-language support (including 6 African languages), multi-currency display, and a disclosure that tax tools assume US law.
 
 **Human-in-the-Loop** — LangGraph's `interrupt_before` pauses the agent before any state-changing action. Users must explicitly confirm before execution.
 
 **Hallucination Prevention** — The system prompt forbids the agent from fabricating financial data. All prices, historical figures, and calculations must come from real-time tool calls.
 
-**Rate Limiting & Security** — SlowAPI rate limits are enforced per authenticated user. Input sanitisation middleware is applied to all endpoints. Stripe webhook signatures are verified before processing.
+**Rate Limiting & Security** — Per-user rate limits enforced server-side via SlowAPI. Input sanitisation middleware on all endpoints. MoMo webhook events validated before processing.
 
 ---
 
@@ -620,15 +693,15 @@ See [ETHICS.md](ETHICS.md) for the complete breakdown. Summary:
 
 | Criterion | How It Is Met |
 |---|---|
-| **Project description (goal, problem, how it works)** | [Capstone Project Summary](#-capstone-project-summary) section above |
-| **Completeness and functionality** | Full-stack app live at the demo link: FastAPI + Next.js + LangGraph agent + 32 tools + RAG + streaming + portfolio/budget/goals/alerts/billing |
-| **User interface quality** | Next.js frontend: dark/light theme, 20-language support, responsive layout, real-time SSE streaming, inline image rendering |
+| **Project description** | [Capstone Project Summary](#-capstone-project-summary) |
+| **Completeness and functionality** | Full-stack app live at demo link: FastAPI + Next.js 16 + LangGraph agent + 32 tools + RAG + streaming + 19 pages including savings automation, connections, insights |
+| **User interface quality** | Next.js frontend: dark/light theme, 17 languages, responsive layout, real-time SSE streaming, inline image rendering |
 | **LangChain usage** | `@tool` decorator, `ToolNode`, `RecursiveCharacterTextSplitter`, document loaders, embedding wrappers |
 | **LangGraph usage** | `StateGraph` with 4 nodes, conditional edges, `MemorySaver` checkpointing, `interrupt_before` HITL, `stream_mode="messages"` |
 | **LLM API usage** | 4 providers (OpenAI, Anthropic, Google, Groq) via unified model manager; LangSmith tracing |
 | **RAG implementation** | Full pipeline: ingestion → chunking → embeddings → pgvector/ChromaDB → cosine retrieval → context injection + A/B testing framework |
 | **Prompt engineering** | Jinja2 system prompt with dynamic user context, tool descriptions, behavioural rules, hard prohibitions, separate RAG prompt template |
-| **Ethical considerations** | [ETHICS.md](ETHICS.md) + inline section: AI disclaimer, RLS data privacy, bias acknowledgement, HITL, hallucination prevention, rate limiting |
+| **Ethical considerations** | [ETHICS.md](ETHICS.md): AI disclaimer, RLS data privacy, bias acknowledgement, HITL, hallucination prevention, rate limiting |
 | **Testing** | 5 pytest files, all mocked, runs offline in < 30 seconds |
 | **Presentation (SCR/SMART)** | [PRESENTATION.md](PRESENTATION.md) |
 
@@ -642,6 +715,7 @@ See [ETHICS.md](ETHICS.md) for the complete breakdown. Summary:
 - **Long-term memory is heuristic** — key fact extraction uses LLM-based heuristics and may miss nuanced preferences
 - **Market data depends on third parties** — yfinance and CoinGecko may rate-limit or experience downtime; the agent reports unavailability rather than guessing
 - **Crypto tickers require `-USD` suffix** — yfinance format requires `BTC-USD`, not `BTC`; the agent handles this automatically in chat
+- **MoMo payments Uganda-focused** — billing is optimised for MTN Uganda and Airtel Uganda networks
 
 ---
 
@@ -651,7 +725,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide. Please follow the [C
 
 1. Fork → branch → change → test → PR
 2. All UI strings must use `t('key')` — never hardcode English
-3. New keys must be added to all 20 language JSON files
+3. New keys must be added to all 17 language JSON files
 4. Always use `user["user_id"]` not `user["id"]`
 
 ---
