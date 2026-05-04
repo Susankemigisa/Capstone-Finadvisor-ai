@@ -107,6 +107,7 @@ async def run_agent(
     temperature:        float = 0.3,
     top_p:              float = 1.0,
     portfolio_summary:  str   = "",
+    goals_summary:      str   = "",
     memories:           list  = None,
     rag_context:        list  = None,
     enabled_tools:      list  = None,
@@ -139,6 +140,7 @@ async def run_agent(
         temperature=temperature, top_p=top_p,
     )
     state["portfolio_summary"] = portfolio_summary
+    state["goals_summary"]     = goals_summary
     state["memories"]          = memories or []
     state["rag_context"]       = rag_context or []
     state["enabled_tools"]     = enabled_tools
@@ -168,6 +170,7 @@ async def stream_agent(
     temperature:        float = 0.3,
     top_p:              float = 1.0,
     portfolio_summary:  str   = "",
+    goals_summary:      str   = "",
     memories:           list  = None,
     rag_context:        list  = None,
     enabled_tools:      list  = None,
@@ -211,6 +214,7 @@ async def stream_agent(
         temperature=temperature, top_p=top_p,
     )
     state["portfolio_summary"] = portfolio_summary
+    state["goals_summary"]     = goals_summary
     state["memories"]          = memories or []
     state["rag_context"]       = rag_context or []
     state["enabled_tools"]     = enabled_tools

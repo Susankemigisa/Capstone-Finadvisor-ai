@@ -266,6 +266,7 @@ async def send_message(
         preferred_language=ctx["preferred_language"],
         tier=ctx["tier"],
         portfolio_summary=ctx["portfolio_summary"],
+        goals_summary=ctx["goals_summary"],
         memories=ctx["memories"],
     )
 
@@ -374,6 +375,7 @@ async def _stream_response(
                 preferred_language=ctx["preferred_language"],
                 tier=ctx["tier"],
                 portfolio_summary=ctx["portfolio_summary"],
+                goals_summary=ctx["goals_summary"],
                 memories=ctx["memories"],
                 temperature=ctx.get("temperature", 0.3),
                 top_p=ctx.get("top_p", 1.0),
