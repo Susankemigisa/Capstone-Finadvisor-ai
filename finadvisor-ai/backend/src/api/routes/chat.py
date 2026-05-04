@@ -19,6 +19,7 @@ from src.database.operations import (
     get_user_by_id,
     get_portfolio,
     get_user_memories,
+    get_financial_goals,
     check_user_message_limit,
     increment_message_count,
     log_usage,
@@ -54,6 +55,24 @@ def _build_portfolio_summary(positions: list) -> str:
     if len(positions) > 5:
         summary += f" and {len(positions) - 5} more"
     return summary
+
+
+def _build_goals_summary(goals: list) -> str:
+    """Format user's financial goals into a concise string for the system prompt."""
+    if not goals:
+        return ""
+    lines = []
+    for g in goals:
+        name    = g.get("goal_name", "Unnamed goal")
+        target  = g.get("target_amount", 0)
+        current = g.get("current_amount", 0)
+        by_date = g.get("target_date", "")
+        pct     = round((current / target * 100), 1) if target else 0
+        line    = f"- {name}: ${current:,.0f} saved of ${target:,.0f} target ({pct}% complete)"
+        if by_date:
+            line += f", deadline {by_date}"
+        lines.append(line)
+    return "\n".join(lines)
 
 
 def _auto_title(message: str) -> str:
@@ -112,6 +131,7 @@ async def _get_user_context(user_id: str, model_id: str = None) -> dict:
         raise HTTPException(status_code=404, detail="User not found.")
     portfolio = get_portfolio(user_id)
     memories  = get_user_memories(user_id)
+    goals     = get_financial_goals(user_id)
     return {
         "user_name":          user.get("preferred_name") or (user.get("full_name", "").split()[0] if user.get("full_name") else ""),
         "preferred_language": user.get("preferred_language", "en"),
@@ -121,6 +141,7 @@ async def _get_user_context(user_id: str, model_id: str = None) -> dict:
         "temperature":        float(user.get("temperature", 0.3)),
         "top_p":              float(user.get("top_p", 1.0)),
         "portfolio_summary":  _build_portfolio_summary(portfolio),
+        "goals_summary":      _build_goals_summary(goals),
         "memories":           [m["content"] for m in memories[:10]],
     }
 

@@ -12,7 +12,7 @@ New fields added in Phase 1:
     hitl_pending:        bool        — True while waiting for human confirmation
 """
 
-from typing import Annotated, Any
+from typing import Annotated, Any, Optional
 from langgraph.graph.message import add_messages
 from typing_extensions import TypedDict
 
@@ -32,13 +32,14 @@ class AgentState(TypedDict):
 
     # ── Financial context ─────────────────────────────────────
     portfolio_summary:  str
+    goals_summary:      str         # user's active financial goals injected at session start
     memories:           list[str]   # long-term memories injected at session start
 
     # ── RAG context ───────────────────────────────────────────
     rag_context:        list[dict]  # chunks retrieved by rag_node
 
     # ── Tool config ───────────────────────────────────────────
-    enabled_tools:      list[str]   # None = all default tools enabled
+    enabled_tools:      Optional[list[str]]   # None = all default tools enabled
 
     # ── Agentic scratchpad ────────────────────────────────────
     scratchpad:         list[dict]  # internal log: tool calls, results, timings
@@ -87,6 +88,7 @@ def default_state(
         "top_p":               top_p,
         "enabled_tools":       None,
         "portfolio_summary":   "",
+        "goals_summary":       "",
         "memories":            [],
         "rag_context":         [],
         "scratchpad":          [],

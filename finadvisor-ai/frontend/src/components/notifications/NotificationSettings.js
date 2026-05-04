@@ -17,6 +17,9 @@ export default function NotificationSettings() {
   useLangStore() // subscribe to store so component re-renders on lang change
   const [prefs, setPrefs] = useState({
     email_market_alerts: true,
+    email_watchlist_alerts: true,
+    email_transactions: true,
+    email_savings_rules: true,
     email_portfolio_summary: true,
     email_weekly_report: true,
     push_enabled: false,
@@ -89,7 +92,10 @@ export default function NotificationSettings() {
             {emailStatus === 'sending' ? (t('settings.sending') || 'Sending...') : emailStatus === 'sent' ? '✓ Sent!' : emailStatus === 'failed' ? '✕ Failed' : (t('settings.sendTest') || 'Send test')}
           </button>
         </div>
-        <Row label={t('settings.marketAlerts') || 'Market alerts'} sub={t('settings.marketAlertsSub') || 'Major market movements'} value={prefs.email_market_alerts} onChange={() => handleToggle('email_market_alerts')} />
+        <Row label={t('settings.marketAlerts') || 'Price alerts'} sub={t('settings.marketAlertsSub') || 'When a price alert triggers'} value={prefs.email_market_alerts} onChange={() => handleToggle('email_market_alerts')} />
+        <Row label={t('settings.watchlistAlerts') || 'Watchlist movements'} sub={t('settings.watchlistAlertsSub') || 'When a watchlist ticker moves ≥ 2%'} value={prefs.email_watchlist_alerts} onChange={() => handleToggle('email_watchlist_alerts')} />
+        <Row label={t('settings.transactionAlerts') || 'Income received'} sub={t('settings.transactionAlertsSub') || 'When bank or MoMo income arrives'} value={prefs.email_transactions} onChange={() => handleToggle('email_transactions')} />
+        <Row label={t('settings.savingsRuleAlerts') || 'Auto-save fired'} sub={t('settings.savingsRuleAlertsSub') || 'When an auto-save rule moves money'} value={prefs.email_savings_rules} onChange={() => handleToggle('email_savings_rules')} />
         <Row label={t('settings.portfolioSummary') || 'Portfolio summary'} sub={t('settings.portfolioSummarySub') || 'Daily P&L updates'} value={prefs.email_portfolio_summary} onChange={() => handleToggle('email_portfolio_summary')} />
         <Row label={t('settings.weeklyReport') || 'Weekly report'} sub={t('settings.weeklyReportSub') || 'Financial digest every Monday'} value={prefs.email_weekly_report} onChange={() => handleToggle('email_weekly_report')} />
       </div>

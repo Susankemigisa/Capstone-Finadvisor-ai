@@ -53,6 +53,7 @@ export const useAuthStore = create((set) => ({
       if (typeof window !== 'undefined') {
         localStorage.removeItem('access_token')
         localStorage.removeItem('refresh_token')
+        localStorage.removeItem('finadvisor-chat')
       }
       set({ user: null, loading: false })
     }
@@ -63,6 +64,8 @@ export const useAuthStore = create((set) => ({
       method: 'POST',
       body: JSON.stringify({ email, password })
     })
+    // Clear any previous user's chat state before setting new session
+    localStorage.removeItem('finadvisor-chat')
     localStorage.setItem('access_token', data.access_token)
     localStorage.setItem('refresh_token', data.refresh_token)
     set({ user: data.user })
@@ -74,6 +77,7 @@ export const useAuthStore = create((set) => ({
       method: 'POST',
       body: JSON.stringify({ email, password, full_name })
     })
+    localStorage.removeItem('finadvisor-chat')
     localStorage.setItem('access_token', data.access_token)
     localStorage.setItem('refresh_token', data.refresh_token)
     set({ user: data.user })
@@ -108,6 +112,8 @@ export const useAuthStore = create((set) => ({
   logout: () => {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
+    // Clear persisted chat state so next user never sees previous user's chats
+    localStorage.removeItem('finadvisor-chat')
     set({ user: null })
   },
 }))

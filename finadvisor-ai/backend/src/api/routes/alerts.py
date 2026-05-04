@@ -48,10 +48,10 @@ async def delete_alert(alert_id: str, current_user: dict = Depends(get_current_u
 
 @router.get("/all")
 async def get_all_alerts(current_user: dict = Depends(get_current_user)):
-    """Get all alerts including triggered ones."""
+    """Get all alerts including triggered and inactive ones."""
     from src.database.operations import _db
     user_id = current_user["user_id"]
-    result = _db().table("price_alerts").select("*").eq("user_id", user_id).eq("is_active", True).order("created_at", desc=True).execute()
+    result = _db().table("price_alerts").select("*").eq("user_id", user_id).order("created_at", desc=True).execute()
     return {"alerts": result.data or []}
 
 

@@ -1,6 +1,7 @@
 import json
 from datetime import date
 from pathlib import Path
+from typing import Any
 from jinja2 import Template
 from langchain_core.messages import SystemMessage
 
@@ -24,6 +25,7 @@ LANGUAGE_NAMES = {
 
 # Cache compiled templates — reading + compiling Jinja on every message adds ~50ms
 _PROMPT_CACHE: dict[Path, Template] = {}
+_MODEL_CACHE: dict[tuple, Any] = {}  # (model_id, temperature, top_p) → LLM instance
 
 def _load_prompt(path: Path) -> Template:
     if path not in _PROMPT_CACHE:
@@ -40,6 +42,7 @@ def _build_system_prompt(state: AgentState) -> str:
         preferred_currency=state.get("preferred_currency", "USD"),
         tier=state.get("tier", "free"),
         portfolio_summary=state.get("portfolio_summary", ""),
+        goals_summary=state.get("goals_summary", ""),
         memories=state.get("memories", []),
         current_date=str(date.today()),
         preferred_language=lang,
@@ -71,15 +74,13 @@ def planner_node(state: AgentState) -> dict:
         import time as _time
         # Cache model instances — LangChain model init is expensive (~100-300ms first call)
         _model_cache_key = (model_id, temperature, top_p)
-        if not hasattr(planner_node, '_model_cache'):
-            planner_node._model_cache = {}
-        llm = planner_node._model_cache.get(_model_cache_key)
+        llm = _MODEL_CACHE.get(_model_cache_key)
         last_err = None
         if llm is None:
             for attempt in range(3):
                 try:
                     llm = get_model(model_id, temperature=temperature, top_p=top_p)
-                    planner_node._model_cache[_model_cache_key] = llm
+                    _MODEL_CACHE[_model_cache_key] = llm
                     break
                 except Exception as e:
                     last_err = e

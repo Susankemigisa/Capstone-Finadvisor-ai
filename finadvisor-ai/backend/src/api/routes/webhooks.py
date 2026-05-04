@@ -19,6 +19,7 @@ Flow for every incoming webhook:
     8. Return 200 immediately (providers retry on non-200)
 """
 
+import asyncio
 import hashlib
 import hmac
 import json
@@ -235,6 +236,42 @@ def _apply_savings_rules(
             )
             triggered += 1
 
+            # Email notification — fire-and-forget (non-blocking)
+            try:
+                from src.api.routes.notifications import send_notification_email
+                pocket_name = rule.get("savings_pockets", {}).get("name", "your savings pocket") if isinstance(rule.get("savings_pockets"), dict) else "your savings pocket"
+                rule_name   = rule.get("name", "Auto-save rule")
+                rule_type   = rule.get("rule_type", "fixed")
+                rule_val    = rule.get("amount_value", 0)
+                rule_display = f"{rule_val}%" if rule_type == "percentage" else f"{currency} {float(rule_val):,.0f}"
+                html = f"""
+                <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; background: #0a0c10; color: #e8e0d0; border-radius: 12px;">
+                    <h2 style="color: #c9a84c; font-size: 18px;">💰 Auto-Save Completed</h2>
+                    <p>Your rule <strong style="color:#c9a84c">"{rule_name}"</strong> just fired.</p>
+                    <div style="background:#1a1c22; border-radius:8px; padding:16px; margin:16px 0;">
+                        <div style="font-size:26px; font-weight:700; color:#c9a84c;">{currency} {save_amount:,.0f}</div>
+                        <div style="color:#888; font-size:13px; margin-top:4px;">Saved to <strong>{pocket_name}</strong> ({rule_display} of income)</div>
+                        <div style="color:#666; font-size:12px; margin-top:8px;">New balance: {currency} {new_balance:,.0f}</div>
+                    </div>
+                    <div style="color:#777; font-size:12px; border-top:1px solid #333; padding-top:12px; margin-top:8px;">
+                        Triggered by: {description}
+                    </div>
+                    <a href="https://finadvisor-ai-app-two.vercel.app/savings"
+                       style="display:inline-block; background:#c9a84c; color:#0a0c10; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:600; margin-top:16px;">
+                        View Savings →
+                    </a>
+                    <p style="color:#555; font-size:11px; margin-top:24px;">FinAdvisor AI · Manage notifications in Settings</p>
+                </div>
+                """
+                asyncio.ensure_future(send_notification_email(
+                    user_id=user_id,
+                    pref_field="email_savings_rules",
+                    subject=f"💰 Auto-saved {currency} {save_amount:,.0f} to {pocket_name}",
+                    html=html,
+                ))
+            except Exception as email_err:
+                logger.error("savings_rule_email_failed", rule_id=rule.get("id"), error=str(email_err))
+
         except Exception as e:
             logger.error("apply_rule_failed", rule_id=rule.get("id"), error=str(e))
 
@@ -394,6 +431,43 @@ async def _process_income_event(
         rules_triggered=rules_triggered,
         user_id=user_id,
     )
+
+    # Email: income received notification
+    try:
+        from src.api.routes.notifications import send_notification_email
+        provider_label = {
+            "mtn_momo": "MTN MoMo",
+            "airtel": "Airtel Money",
+            "mono": "Bank",
+            "flutterwave": "Flutterwave",
+            "manual": "Manual entry",
+        }.get(provider, provider.replace("_", " ").title())
+        rules_note = f" · {rules_triggered} auto-save rule{'s' if rules_triggered != 1 else ''} fired" if rules_triggered else ""
+        html = f"""
+        <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; background: #0a0c10; color: #e8e0d0; border-radius: 12px;">
+            <h2 style="color: #c9a84c; font-size: 18px;">📥 Income Received</h2>
+            <div style="background:#1a1c22; border-radius:8px; padding:16px; margin:16px 0;">
+                <div style="font-size:26px; font-weight:700; color:#c9a84c;">{currency} {amount:,.0f}</div>
+                <div style="color:#888; font-size:13px; margin-top:4px;">via {provider_label}{rules_note}</div>
+            </div>
+            <div style="color:#777; font-size:12px; border-top:1px solid #333; padding-top:12px;">
+                {description}
+            </div>
+            <a href="https://finadvisor-ai-app-two.vercel.app/insights"
+               style="display:inline-block; background:#c9a84c; color:#0a0c10; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:600; margin-top:16px;">
+                View Insights →
+            </a>
+            <p style="color:#555; font-size:11px; margin-top:24px;">FinAdvisor AI · Manage notifications in Settings</p>
+        </div>
+        """
+        asyncio.ensure_future(send_notification_email(
+            user_id=user_id,
+            pref_field="email_transactions",
+            subject=f"📥 {currency} {amount:,.0f} received via {provider_label}",
+            html=html,
+        ))
+    except Exception as email_err:
+        logger.error("income_email_failed", provider=provider, error=str(email_err))
 
 
 # ── MONO WEBHOOK ─────────────────────────────────────────────
