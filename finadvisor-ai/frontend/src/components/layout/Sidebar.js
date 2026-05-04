@@ -140,7 +140,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
             {group.items.map((item) => {
               const active = pathname === item.href
               return (
-                <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
+                <Link key={item.href} href={item.href} prefetch={false} style={{ textDecoration: 'none' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 10px', borderRadius: 'var(--radius)', color: active ? 'var(--text-primary)' : 'var(--text-secondary)', background: active ? 'var(--bg-elevated)' : 'transparent', borderLeft: active ? '2px solid var(--gold)' : '2px solid transparent', marginBottom: '1px', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' }}
                     onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--bg-elevated)' }}
                     onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}>
@@ -184,7 +184,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
               <div>
                 <div style={{ fontSize: '9px', color: 'var(--text-dim)', letterSpacing: '0.08em', padding: '4px 8px', textTransform: 'uppercase', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>{searchQuery ? `${filteredSessions.length} result${filteredSessions.length !== 1 ? 's' : ''}` : t('nav.recent')}</span>
-                  <Link href="/history" style={{ color: 'var(--gold)', fontSize: '9px', textDecoration: 'none', letterSpacing: '0.06em', opacity: 0.8 }}
+                  <Link href="/history" prefetch={false} style={{ color: 'var(--gold)', fontSize: '9px', textDecoration: 'none', letterSpacing: '0.06em', opacity: 0.8 }}
                     onMouseEnter={e => e.currentTarget.style.opacity = '1'}
                     onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}>
                     {t('nav.viewAll') || 'View all'} →
@@ -202,7 +202,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
                   ))
                 )}
                 {!searchQuery && sessions.length > 12 && (
-                  <Link href="/history" style={{ textDecoration: 'none', display: 'block', marginTop: '4px' }}>
+                  <Link href="/history" prefetch={false} style={{ textDecoration: 'none', display: 'block', marginTop: '4px' }}>
                     <div style={{ width: '100%', padding: '6px', background: 'none', border: '1px solid var(--border)', borderRadius: '6px', color: 'var(--gold)', fontSize: '11px', cursor: 'pointer', textAlign: 'center', letterSpacing: '0.04em' }}>
                       {t('nav.showAll') || 'View all'} {sessions.length} →
                     </div>
