@@ -28,9 +28,32 @@ function stripSpecialTokens(text) {
 }
 
 // ── Markdown renderer ─────────────────────────────────────────
+function stripLatex(text) {
+  // Strip block LaTeX: \[ ... \] and $$ ... $$
+  text = text.replace(/\\\[[\s\S]*?\\\]/g, (match) => {
+    // Convert simple fractions: \frac{a}{b} → a / b
+    return match
+      .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '$1 / $2')
+      .replace(/\\text\{([^}]+)\}/g, '$1')
+      .replace(/\\approx/g, '≈')
+      .replace(/\\times/g, '×')
+      .replace(/\\[a-zA-Z]+\{?/g, '')
+      .replace(/[\\{}\[\]]/g, '')
+      .trim()
+  })
+  text = text.replace(/\$\$[\s\S]*?\$\$/g, (match) =>
+    match.replace(/\$\$/g, '').replace(/\\[a-zA-Z]+/g, '').replace(/[{}]/g, '').trim()
+  )
+  // Strip inline LaTeX: \( ... \) and single $ ... $
+  text = text.replace(/\\\([\s\S]*?\\\)/g, (match) =>
+    match.replace(/\\\(|\\\)/g, '').replace(/\\[a-zA-Z]+/g, '').replace(/[{}]/g, '').trim()
+  )
+  return text
+}
+
 function renderMarkdown(text) {
   if (!text) return ''
-  let html = text
+  let html = stripLatex(text)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/```[\w]*\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
     .replace(/`([^`]+)`/g, '<code>$1</code>')

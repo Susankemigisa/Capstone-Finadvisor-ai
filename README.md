@@ -65,7 +65,7 @@ The project implements **Case 2 (AI Agent for Task Automation)** as its primary 
 
 FinAdvisor AI is a full-stack AI-powered financial advisor application. It combines real-time market data, multi-model AI chat, portfolio tracking, budgeting, tax records, watchlists, financial goals, savings automation, bank and mobile money connections, a financial insights dashboard, and price alerts — all in one platform with 17-language support built specifically for African and global users.
 
-**Live Demo:** https://finadvisor-ai-app-two.vercel.app
+**Live Demo:** https://capstone-finadvisor-ai.vercel.app
 **API:** https://finadvisor-ai-production-c72b.up.render.app
 **API Docs:** https://finadvisor-ai-production-c72b.up.render.app/docs *(requires DEBUG=true)*
 
