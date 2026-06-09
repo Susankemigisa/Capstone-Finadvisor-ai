@@ -14,7 +14,7 @@
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)
 ![Languages](https://img.shields.io/badge/Languages-17-blue?style=flat-square)
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Demo](https://finadvisor-ai-app-two.vercel.app) • [Contributing](CONTRIBUTING.md)
+[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Demo](https://capstone-finadvisor-ai.vercel.app) • [Contributing](CONTRIBUTING.md)
 
 ---
 
