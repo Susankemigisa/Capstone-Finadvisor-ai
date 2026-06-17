@@ -92,7 +92,7 @@ export default function RulesPage() {
 
   const load = async () => {
     setLoading(true)
-    const [rData, pData, aData] = await Promise.all([req('/savings/rules'), req('/savings/pockets'), req('/savings/accounts')])
+    const [rData, pData, aData] = await Promise.all([req('/rules/rules'), req('/savings/pockets'), req('/connections/accounts')])
     setRules(rData.rules || [])
     setPockets(pData.pockets || [])
     setAccounts(aData.accounts || [])
@@ -114,7 +114,7 @@ export default function RulesPage() {
     if (!form.pocket_id) { setError(t('rules.selectPocketRequired')); return }
     if (!form.amount_value || parseFloat(form.amount_value) <= 0) { setError(t('rules.validAmountRequired')); return }
     setSaving(true); setError('')
-    const data = await req('/savings/rules', {
+    const data = await req('/rules/rules', {
       method: 'POST',
       body: JSON.stringify({
         name: form.name,
@@ -135,13 +135,13 @@ export default function RulesPage() {
   }
 
   const handleToggle = async (id) => {
-    await req(`/savings/rules/${id}/toggle`, { method: 'PATCH' })
+    await req(`/rules/rules/${id}/toggle`, { method: 'PATCH' })
     load()
   }
 
   const handleDelete = async (id) => {
     if (!confirm(t('rules.deleteRuleConfirm'))) return
-    await req(`/savings/rules/${id}`, { method: 'DELETE' })
+    await req(`/rules/rules/${id}`, { method: 'DELETE' })
     setRules(prev => prev.filter(r => r.id !== id))
   }
 

@@ -90,8 +90,11 @@ function extractCharts(text) {
 
   let m
 
-  // Format 1: CHART_BASE64:<payload> — greedy, always at end of string
-  const re1 = /CHART_BASE64:([A-Za-z0-9+/=\s]+)/g
+  // Format 1: CHART_BASE64:<payload>
+  // FIX: removed \s from character class. The old greedy \s match absorbed
+  // prose tokens emitted after the base64 payload, corrupting the image.
+  // cleanB64() already strips whitespace, so \s here was never needed.
+  const re1 = /CHART_BASE64:([A-Za-z0-9+/=]+)/g
   while ((m = re1.exec(text)) !== null) add(m[1])
 
   // Format 2 + 3: markdown image with data URI

@@ -237,8 +237,10 @@ async def send_message(
 
     from src.tools.portfolio_tools import set_user_context as set_portfolio_ctx
     from src.tools.budget_tools    import set_user_context as set_budget_ctx
+    from src.tools.chart_tools     import set_user_context as set_chart_ctx
     set_portfolio_ctx(user_id)
     set_budget_ctx(user_id)
+    set_chart_ctx(user_id)
 
     save_message(session_id=session_id, role="user", content=body.message)
     increment_message_count(user_id)

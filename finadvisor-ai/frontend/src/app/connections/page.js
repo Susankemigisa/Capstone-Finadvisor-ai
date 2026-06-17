@@ -80,7 +80,7 @@ export default function ConnectionsPage() {
 
   const load = async () => {
     setLoading(true)
-    const data = await req('/savings/accounts')
+    const data = await req('/connections/accounts')
     setAccounts(data.accounts || [])
     setLoading(false)
   }
@@ -99,7 +99,7 @@ export default function ConnectionsPage() {
     if (!selected) { setError('Select an account type'); return }
     if (!form.account_name) { setError('Account name is required'); return }
     setSaving(true); setError('')
-    const data = await req('/savings/accounts', {
+    const data = await req('/connections/accounts', {
       method: 'POST',
       body: JSON.stringify({
         provider: selected.id,
@@ -123,7 +123,7 @@ export default function ConnectionsPage() {
 
   const handleDisconnect = async (id) => {
     if (!confirm('Disconnect this account? Your savings history will be kept.')) return
-    await req(`/savings/accounts/${id}`, { method: 'DELETE' })
+    await req(`/connections/accounts/${id}`, { method: 'DELETE' })
     setAccounts(prev => prev.filter(a => a.id !== id))
   }
 

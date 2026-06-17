@@ -26,6 +26,23 @@ from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+# ── User context (mirrors pattern in portfolio_tools.py / budget_tools.py) ──
+# set_user_context() is called in chat.py before the agent runs, injecting
+# the authenticated user's ID so tools don't rely on the LLM to pass it.
+_current_user_id: str = ""
+
+
+def set_user_context(user_id: str) -> None:
+    """Set the current user ID for chart tools that need to fetch user data."""
+    global _current_user_id
+    _current_user_id = user_id
+
+
+def _get_user_id() -> str:
+    if not _current_user_id:
+        raise ValueError("User context not set. Call set_user_context() before running chart tools.")
+    return _current_user_id
+
 
 def _fig_to_base64(fig) -> str:
     """Convert a matplotlib figure to a base64 PNG string."""
@@ -347,13 +364,11 @@ def generate_pie_chart(
 
 
 @tool
-def generate_portfolio_chart(user_id: str) -> str:
+def generate_portfolio_chart(dummy: str = "") -> str:
     """
     Automatically generate a portfolio allocation pie chart using the user's
     actual live portfolio data. No need to pass labels or values manually —
     this tool fetches the portfolio and builds the chart automatically.
-
-    user_id: The current user's ID (pass from context)
 
     Returns base64-encoded PNG showing portfolio allocation by ticker and asset type.
     """
@@ -363,6 +378,11 @@ def generate_portfolio_chart(user_id: str) -> str:
         import matplotlib.pyplot as plt
         from src.database.operations import get_portfolio
 
+        # FIX: resolve user_id from module-level context (set by chat.py before
+        # the agent runs) rather than trusting the LLM to supply it correctly.
+        # The old signature `user_id: str` meant the LLM would hallucinate or
+        # pass an empty string, causing an empty portfolio error every time.
+        user_id = _get_user_id()
         positions = get_portfolio(user_id)
         if not positions:
             return "❌ Your portfolio is empty. Add some positions first with the 'Add Position' tool."

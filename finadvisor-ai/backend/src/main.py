@@ -158,8 +158,8 @@ app.include_router(budget_router,        prefix="/budget",        tags=["Budget"
 app.include_router(tax_router,           prefix="/tax",           tags=["Tax Records"])
 app.include_router(exports_router,       prefix="/export",        tags=["Exports"])
 app.include_router(savings_router,       prefix="/savings",       tags=["Savings Pockets"])
-app.include_router(rules_router,         prefix="/savings",       tags=["Savings Rules"])
-app.include_router(connections_router,   prefix="/savings",       tags=["Connected Accounts"])
+app.include_router(rules_router,         prefix="/rules",         tags=["Savings Rules"])
+app.include_router(connections_router,   prefix="/connections",   tags=["Connected Accounts"])
 app.include_router(insights_router,      prefix="/insights",      tags=["Insights"])
 app.include_router(webhooks_router,      prefix="",               tags=["Webhooks"])
 # ── System endpoints ──────────────────────────────────────────
