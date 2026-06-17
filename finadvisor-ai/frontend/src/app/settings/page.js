@@ -55,7 +55,7 @@ function Field({ label, hint, children, last }) {
 export default function SettingsPage() {
   const router = useRouter()
   const { user, loading, init, updateProfile, logout } = useAuthStore()
-  const { theme, setTheme, init: initTheme } = useThemeStore()
+  const { init: initTheme } = useThemeStore()
   const t = useTranslate()
   const { lang, setLang, init: initLang } = useLangStore()
 
@@ -149,20 +149,12 @@ export default function SettingsPage() {
               </Field>
             </Section>
 
-            {/* Appearance */}
+            {/* Appearance — theme follows OS/browser preference automatically */}
             <Section title={t('settings.appearance')}>
-              <Field label={t('settings.theme')} hint={t('settings.themeHint')} last>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                  {[
-                    { value: 'dark',  label: t('settings.dark'),  desc: t('settings.darkDesc') },
-                    { value: 'light', label: t('settings.light'), desc: t('settings.lightDesc') }
-                  ].map((th) => (
-                    <button key={th.value} onClick={() => setTheme(th.value)}
-                      style={{ padding: '12px 16px', borderRadius: '8px', border: `2px solid ${theme === th.value ? 'var(--gold)' : 'var(--border)'}`, background: theme === th.value ? 'var(--bg-elevated)' : 'transparent', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s' }}>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: theme === th.value ? 'var(--gold-light)' : 'var(--text-primary)' }}>{th.label}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '3px' }}>{th.desc}</div>
-                    </button>
-                  ))}
+              <Field label={t('settings.theme')} hint="Theme is set automatically based on your browser or OS preference." last>
+                <div style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--bg-elevated)', fontSize: '13px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '16px' }}>🌗</span>
+                  <span>FinAdvisor AI follows your device's light/dark mode setting. Change it in your OS or browser settings.</span>
                 </div>
               </Field>
             </Section>

@@ -31,25 +31,25 @@
 
 /* ── Light theme ── */
 html.light {
-  --bg-base:        #eef0f4;
+  --bg-base:        #f0f2f6;
   --bg-surface:     #ffffff;
-  --bg-elevated:    #f0f2f5;
-  --bg-hover:       #e2e5ea;
-  --bg-sidebar:     #e2e6ed;
-  --bg-main:        #f8f9fb;
-  --border:         #d8dce3;
-  --border-bright:  #c4c9d4;
-  --gold:           #a07820;
-  --gold-light:     #c9a84c;
-  --gold-dim:       #e8d5a0;
-  --text-primary:   #111318;
-  --text-secondary: #5a6070;
-  --text-dim:       #9aa0ad;
-  --green:          #1a8a55;
-  --green-dim:      #d4f0e3;
-  --red:            #c0392b;
-  --red-dim:        #fde8e6;
-  --blue:           #1a6fd4;
+  --bg-elevated:    #e8ebf0;
+  --bg-hover:       #dde1e8;
+  --bg-sidebar:     #e4e7ed;
+  --bg-main:        #f7f8fb;
+  --border:         #c8cdd8;
+  --border-bright:  #b0b7c4;
+  --gold:           #8a6518;
+  --gold-light:     #a07820;
+  --gold-dim:       #d4b86a;
+  --text-primary:   #0d1017;
+  --text-secondary: #374151;
+  --text-dim:       #6b7280;
+  --green:          #15743f;
+  --green-dim:      #bbf0d4;
+  --red:            #b91c1c;
+  --red-dim:        #fecaca;
+  --blue:           #1d4ed8;
   --radius:         6px;
   --radius-lg:      10px;
 }
@@ -57,6 +57,31 @@ html.light {
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { color-scheme: dark; }
 html.light { color-scheme: light; }
+/* CSS-only fallback: if the themeScript hasn't run yet, respect OS preference */
+@media (prefers-color-scheme: light) {
+  html:not(.dark):not(.light) {
+    --bg-base:        #f0f2f6;
+    --bg-surface:     #ffffff;
+    --bg-elevated:    #e8ebf0;
+    --bg-hover:       #dde1e8;
+    --bg-sidebar:     #e4e7ed;
+    --bg-main:        #f7f8fb;
+    --border:         #c8cdd8;
+    --border-bright:  #b0b7c4;
+    --gold:           #8a6518;
+    --gold-light:     #a07820;
+    --gold-dim:       #d4b86a;
+    --text-primary:   #0d1017;
+    --text-secondary: #374151;
+    --text-dim:       #6b7280;
+    --green:          #15743f;
+    --green-dim:      #bbf0d4;
+    --red:            #b91c1c;
+    --red-dim:        #fecaca;
+    --blue:           #1d4ed8;
+    color-scheme: light;
+  }
+}
 body { background-color: var(--bg-base); color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
