@@ -53,6 +53,41 @@ async def lifespan(app: FastAPI):
 
     logger.info("available_models", models=[m["name"] for m in settings.get_available_models()])
 
+    # Start shared async HTTP client (reusable connection pool for all tools)
+    from src.utils.http_client import startup_http_client
+    await startup_http_client()
+
+    # Start shared Playwright browser (headless Chromium for browser automation tools)
+    try:
+        from src.utils.browser import startup_browser
+        await startup_browser()
+    except Exception as e:
+        logger.warning("browser_startup_skipped", reason=str(e))
+
+    # Mount Restate durable workflow services
+    try:
+        from src.workflows import (
+            price_alert_svc,
+            savings_svc,
+            monthly_report_svc,
+            bill_reminder_svc,
+        )
+        from restate.server import make_asgi_app as restate_asgi
+        restate_app = restate_asgi(services=[
+            price_alert_svc,
+            savings_svc,
+            monthly_report_svc,
+            bill_reminder_svc,
+        ])
+        app.mount("/restate", restate_app)
+        logger.info("restate_workflows_mounted", services=[
+            "price-alert", "savings-automation", "monthly-report", "bill-reminder"
+        ])
+    except Exception as e:
+        # Restate SDK not installed or misconfigured — app still works,
+        # APScheduler poller continues to handle global alert checks.
+        logger.warning("restate_mount_skipped", reason=str(e))
+
     # Start background scheduler (price alerts)
     from src.scheduler import start_scheduler
     start_scheduler()
@@ -62,6 +97,18 @@ async def lifespan(app: FastAPI):
     # ── Shutdown ──────────────────────────────────────────────
     from src.scheduler import stop_scheduler
     stop_scheduler()
+
+    # Close shared HTTP client gracefully
+    from src.utils.http_client import shutdown_http_client
+    await shutdown_http_client()
+
+    # Close Playwright browser
+    try:
+        from src.utils.browser import shutdown_browser
+        await shutdown_browser()
+    except Exception:
+        pass
+
     logger.info("shutting_down", app=settings.APP_NAME)
 
 

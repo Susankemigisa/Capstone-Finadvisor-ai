@@ -5,6 +5,7 @@ import httpx
 from langchain_core.tools import tool
 from src.config.settings import settings  # top-level so tests can patch src.tools.image_tools.settings
 from src.utils.logger import get_logger
+from src.utils.http_client import get_http_client
 
 logger = get_logger(__name__)
 
@@ -17,7 +18,7 @@ _NO_KEY_MSG = (
 )
 
 
-def _url_to_base64(url: str) -> str:
+async def _url_to_base64(url: str) -> str:
     """
     Download an image URL and return it as a base64 string.
 
@@ -30,14 +31,18 @@ def _url_to_base64(url: str) -> str:
     By downloading immediately and returning base64 (the same format chart_tools.py
     uses), the image bytes are stored permanently in the DB message content and
     render correctly no matter when the chat is opened.
+
+    HTTPX MIGRATION: switched from sync httpx.get() to the shared AsyncClient
+    so this doesn't block the event loop while the DALL-E image downloads.
     """
-    resp = httpx.get(url, timeout=30, follow_redirects=True)
+    client = get_http_client()
+    resp = await client.get(url, timeout=30)
     resp.raise_for_status()
     return base64.b64encode(resp.content).decode("utf-8")
 
 
 @tool
-def generate_chart_image(
+async def generate_chart_image(
     chart_type: str,
     title: str,
     description: str,
@@ -81,7 +86,7 @@ def generate_chart_image(
 
         # BUG FIX: download immediately so the image is stored as permanent base64
         # instead of a 1-hour expiring Azure blob URL
-        b64 = _url_to_base64(image_url)
+        b64 = await _url_to_base64(image_url)
 
         logger.info("image_generated", chart_type=chart_type, title=title)
         return f"CHART_BASE64:{b64}"
@@ -104,7 +109,7 @@ def generate_chart_image(
 
 
 @tool
-def generate_financial_infographic(
+async def generate_financial_infographic(
     topic: str,
     key_points: str,
     style: str = "modern",
@@ -145,7 +150,7 @@ def generate_financial_infographic(
         image_url = response.data[0].url
 
         # BUG FIX: download immediately so the image is stored as permanent base64
-        b64 = _url_to_base64(image_url)
+        b64 = await _url_to_base64(image_url)
 
         logger.info("infographic_generated", topic=topic)
         return f"CHART_BASE64:{b64}"

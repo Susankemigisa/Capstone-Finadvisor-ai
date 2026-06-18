@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from src.auth.dependencies import get_current_user
 from src.utils.logger import get_logger
+from src.utils.restate_client import start_price_alert, cancel_price_alert
 
 router = APIRouter(prefix="/alerts", tags=["alerts"])
 logger = get_logger(__name__)
@@ -35,13 +36,25 @@ async def create_alert(body: AlertCreate, current_user: dict = Depends(get_curre
         "is_active": True,
         "triggered": False,
     }).execute()
-    return {"alert": result.data[0] if result.data else {}, "status": "created"}
+    alert = result.data[0] if result.data else {}
+
+    # Start a durable Restate workflow for this alert so it survives server restarts.
+    # Gracefully skipped if Restate isn't running (APScheduler poller still covers it).
+    if alert:
+        user_data = _db().table("users").select("id,email,full_name").eq("id", user_id).execute()
+        user = user_data.data[0] if user_data.data else {"id": user_id, "email": "", "full_name": ""}
+        await start_price_alert(alert, user)
+
+    return {"alert": alert, "status": "created"}
 
 
 @router.delete("/{alert_id}")
 async def delete_alert(alert_id: str, current_user: dict = Depends(get_current_user)):
     from src.database.operations import _db
     user_id = current_user["user_id"]
+    # Cancel the Restate workflow before soft-deleting the DB record
+    await cancel_price_alert(alert_id)
+
     _db().table("price_alerts").update({"is_active": False}).eq("id", alert_id).eq("user_id", user_id).execute()
     return {"status": "deleted"}
 

@@ -31,6 +31,7 @@ from pydantic import BaseModel
 
 from src.auth.dependencies import get_current_user
 from src.utils.logger import get_logger
+from src.utils.restate_client import start_savings_rule, cancel_savings_rule
 
 logger = get_logger(__name__)
 router = APIRouter()
@@ -145,6 +146,7 @@ async def create_rule(
         if not r.data:
             raise HTTPException(status_code=500, detail="Failed to save rule")
 
+        rule = r.data[0]
         logger.info(
             "rule_created",
             user_id=user_id,
@@ -152,8 +154,15 @@ async def create_rule(
             rule_type=body.rule_type,
             amount_value=body.amount_value,
         )
+
+        # Start a durable Restate workflow for scheduled/recurring rules.
+        # Gracefully skipped if Restate isn't running.
+        user_data = _db().table("users").select("id,email,full_name").eq("id", user_id).execute()
+        user = user_data.data[0] if user_data.data else {"id": user_id, "email": "", "full_name": ""}
+        await start_savings_rule(rule, user)
+
         return {
-            "rule":    r.data[0],
+            "rule":    rule,
             "message": f"Savings rule '{body.name}' created!",
         }
     except HTTPException:
@@ -228,6 +237,9 @@ async def delete_rule(
             raise HTTPException(status_code=404, detail="Rule not found")
 
         rule_name = check.data[0].get("name", "Rule")
+
+        # Cancel the Restate workflow before deleting
+        await cancel_savings_rule(rule_id)
 
         _db().table("savings_rules").delete() \
             .eq("id", rule_id).eq("user_id", user_id).execute()

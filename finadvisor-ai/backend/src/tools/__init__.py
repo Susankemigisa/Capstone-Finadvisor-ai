@@ -9,7 +9,11 @@ TOOL_REGISTRY = [
     {"id": "search_ticker",        "name": "Ticker Search",        "category": "Market",     "desc": "Find stocks by company name", "default": True},
     {"id": "get_market_overview",  "name": "Market Overview",      "category": "Market",     "desc": "S&P 500, Nasdaq, Dow Jones", "default": True},
     # Crypto
-    {"id": "get_crypto_price",     "name": "Crypto Prices",        "category": "Crypto",     "desc": "Live crypto prices via CoinGecko", "default": True},
+    {"id": "get_crypto_price",         "name": "Crypto Prices",          "category": "Crypto",     "desc": "Live crypto prices via CoinGecko", "default": True},
+    {"id": "get_multiple_crypto_prices","name": "Multi Crypto Prices",    "category": "Crypto",     "desc": "Prices for multiple cryptos in parallel", "default": True},
+    {"id": "scrape_exchange_rate",       "name": "Scrape Exchange Rate",    "category": "Market",     "desc": "Live forex rate via browser when API unavailable", "default": True},
+    {"id": "capture_dashboard_screenshot","name": "Dashboard Screenshot",   "category": "Browser",    "desc": "Screenshot any financial dashboard as an image", "default": False},
+    {"id": "download_bank_statement",    "name": "Download Bank Statement", "category": "Browser",    "desc": "Browser-automate bank portal to download statement PDF", "default": False},
     {"id": "get_crypto_history",   "name": "Crypto History",       "category": "Crypto",     "desc": "Historical crypto data", "default": True},
     # Portfolio
     {"id": "add_position",         "name": "Add Position",         "category": "Portfolio",  "desc": "Add stocks to portfolio", "default": True},
@@ -59,7 +63,17 @@ def get_all_tools(enabled_tool_ids: list[str] = None) -> list[Any]:
     If enabled_tool_ids is None, returns all default tools.
     """
     from src.tools.market_tools import get_stock_price, get_stock_history, search_ticker, get_market_overview
-    from src.tools.crypto_tools import get_crypto_price, get_crypto_history
+    from src.tools.crypto_tools import get_crypto_price, get_crypto_history, get_multiple_crypto_prices
+    try:
+        from src.tools.browser_tools import (
+            download_bank_statement,
+            scrape_exchange_rate,
+            capture_dashboard_screenshot,
+        )
+        _browser_tools_available = True
+    except Exception:
+        # Playwright not installed — browser tools silently unavailable
+        _browser_tools_available = False
     from src.tools.portfolio_tools import add_position, remove_position, get_portfolio, calculate_allocation, diversification_score, rebalancing_suggestions, portfolio_risk_score, top_performer
     from src.tools.calculation_tools import calculate_roi, compound_interest, dollar_cost_average
     from src.tools.budget_tools import add_expense, add_income, get_budget_summary
@@ -77,6 +91,12 @@ def get_all_tools(enabled_tool_ids: list[str] = None) -> list[Any]:
         "search_ticker": search_ticker,
         "get_market_overview": get_market_overview,
         "get_crypto_price": get_crypto_price,
+        "get_multiple_crypto_prices": get_multiple_crypto_prices,
+        **({
+            "scrape_exchange_rate":          scrape_exchange_rate,
+            "capture_dashboard_screenshot":  capture_dashboard_screenshot,
+            "download_bank_statement":       download_bank_statement,
+        } if _browser_tools_available else {}),
         "get_crypto_history": get_crypto_history,
         "add_position": add_position,
         "remove_position": remove_position,
