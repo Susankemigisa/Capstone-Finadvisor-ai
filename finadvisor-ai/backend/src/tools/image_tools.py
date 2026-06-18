@@ -5,7 +5,6 @@ import httpx
 from langchain_core.tools import tool
 from src.config.settings import settings  # top-level so tests can patch src.tools.image_tools.settings
 from src.utils.logger import get_logger
-from src.utils.http_client import get_http_client
 
 logger = get_logger(__name__)
 
@@ -35,6 +34,7 @@ async def _url_to_base64(url: str) -> str:
     HTTPX MIGRATION: switched from sync httpx.get() to the shared AsyncClient
     so this doesn't block the event loop while the DALL-E image downloads.
     """
+    from src.utils.http_client import get_http_client
     client = get_http_client()
     resp = await client.get(url, timeout=30)
     resp.raise_for_status()

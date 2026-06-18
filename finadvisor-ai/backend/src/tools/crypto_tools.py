@@ -24,7 +24,6 @@ Changes made:
 import asyncio
 from langchain_core.tools import tool
 from src.utils.logger import get_logger
-from src.utils.http_client import get_http_client
 
 logger = get_logger(__name__)
 
@@ -51,6 +50,7 @@ async def get_crypto_price(symbol: str) -> str:
     Uses CoinGecko API (no API key required).
     """
     try:
+        from src.utils.http_client import get_http_client
         client   = get_http_client()
         coin_id  = _get_coingecko_id(symbol)
 
@@ -126,6 +126,7 @@ async def get_crypto_history(symbol: str, days: int = 30) -> str:
     days: number of days of history (1, 7, 14, 30, 90, 180, 365)
     """
     try:
+        from src.utils.http_client import get_http_client
         client  = get_http_client()
         coin_id = _get_coingecko_id(symbol)
         url     = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart"

@@ -72,13 +72,16 @@ async def lifespan(app: FastAPI):
             monthly_report_svc,
             bill_reminder_svc,
         )
-        from restate.server import make_asgi_app as restate_asgi
-        restate_app = restate_asgi(services=[
-            price_alert_svc,
-            savings_svc,
-            monthly_report_svc,
-            bill_reminder_svc,
-        ])
+        from restate.server import asgi_app as restate_asgi
+        from restate.endpoint import Endpoint
+
+        endpoint = Endpoint()
+        endpoint.bind(price_alert_svc)
+        endpoint.bind(savings_svc)
+        endpoint.bind(monthly_report_svc)
+        endpoint.bind(bill_reminder_svc)
+
+        restate_app = restate_asgi(endpoint)
         app.mount("/restate", restate_app)
         logger.info("restate_workflows_mounted", services=[
             "price-alert", "savings-automation", "monthly-report", "bill-reminder"
