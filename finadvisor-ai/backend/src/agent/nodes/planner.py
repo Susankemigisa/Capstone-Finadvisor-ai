@@ -89,12 +89,17 @@ def planner_node(state: AgentState) -> dict:
         if llm is None:
             raise last_err
     except Exception as e:
-        logger.error("model_load_failed", model=model_id, error=str(e))
-        return {"error": f"Failed to load model {model_id}. Please try a different model.", "is_done": True}
+        logger.error("model_load_failed", model=model_id, error=str(e), exc_info=True)
+        return {"error": f"Failed to load model '{model_id}': {str(e)}. Please try a different model in Settings.", "is_done": True}
 
     from src.tools import get_all_tools
     enabled_tools = state.get("enabled_tools", None)
-    tools = get_all_tools(enabled_tool_ids=enabled_tools)
+    try:
+        tools = get_all_tools(enabled_tool_ids=enabled_tools)
+        logger.info("tools_loaded", count=len(tools), tool_names=[t.name for t in tools[:5]])
+    except Exception as e:
+        logger.error("tools_load_failed", error=str(e), exc_info=True)
+        return {"error": f"Failed to load tools: {str(e)}", "is_done": True}
     llm_with_tools = llm.bind_tools(tools)
 
     messages = [SystemMessage(content=system_prompt)] + state.get("messages", [])
@@ -102,8 +107,8 @@ def planner_node(state: AgentState) -> dict:
     try:
         response = llm_with_tools.invoke(messages)
     except Exception as e:
-        logger.error("llm_call_failed", model=model_id, error=str(e))
-        return {"error": "The AI model encountered an error. Please try again.", "is_done": True}
+        logger.error("llm_call_failed", model=model_id, error=str(e), exc_info=True)
+        return {"error": f"Model call failed ({model_id}): {str(e)}", "is_done": True}
 
     prompt_tokens = 0
     completion_tokens = 0

@@ -246,6 +246,17 @@ async def stream_agent(
                 ):
                     yield message.content
 
+                # ── Surface planner/tool errors from state ────────────
+                # When the planner or a tool node returns {"error": "...", "is_done": True}
+                # the error lives in the graph state, not in a message chunk.
+                # Without this, the frontend receives no chunks → blank response.
+                if isinstance(chunk, tuple) and isinstance(chunk[0], dict):
+                    state_update = chunk[0]
+                    if state_update.get("error") and state_update.get("is_done"):
+                        err = state_update["error"]
+                        logger.error("agent_state_error", user_id=user_id, error=err)
+                        yield f"\n\n❌ **Error:** {err}"
+
                 # ── Binary tool results ───────────────────────────────
                 # ROOT CAUSE FIX: ToolMessages from chart/image/export tools carry
                 # their entire payload (base64 PNG, PDF, XLSX) as the message content.
@@ -267,8 +278,8 @@ async def stream_agent(
                 return
 
     except Exception as e:
-        logger.error("stream_failed", user_id=user_id, error=str(e))
-        yield "\n\nI encountered an error. Please try again."
+        logger.error("stream_failed", user_id=user_id, error=str(e), exc_info=True)
+        yield f"\n\n❌ **Error:** {str(e)}\n\nPlease try again or switch models in Settings."
 
     if tools_called:
         yield f"__TOOLS_USED__:{json.dumps(tools_called)}"

@@ -62,11 +62,18 @@ def _detect_provider(model_id: str) -> str:
 
 
 def _get_default_model() -> str:
-    """Return first available model based on configured API keys."""
-    if settings.OPENAI_API_KEY:
-        return settings.OPENAI_DEFAULT_MODEL
+    """
+    Return first available model based on configured API keys.
+
+    Priority: Groq first — it has a genuinely free tier (no credit card,
+    no expiry) running Llama 3.3 70B at very fast speeds. OpenAI is tried
+    second since it requires paid credits. Falls back to Google/Anthropic
+    if those are the only keys configured.
+    """
     if settings.GROQ_API_KEY:
         return settings.GROQ_DEFAULT_MODEL
+    if settings.OPENAI_API_KEY:
+        return settings.OPENAI_DEFAULT_MODEL
     if settings.GOOGLE_API_KEY:
         return settings.GOOGLE_DEFAULT_MODEL
     if settings.ANTHROPIC_API_KEY:
