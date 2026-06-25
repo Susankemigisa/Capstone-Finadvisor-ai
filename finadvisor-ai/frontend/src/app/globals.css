@@ -44,25 +44,25 @@
 }
 
 html.light {
-  --bg-base:        #FFFCFC;
-  --bg-surface:     #ffffff;
-  --bg-elevated:    #f4f0f3;
-  --bg-hover:       #ece4e9;
-  --bg-sidebar:     #f8f4f7;
-  --bg-main:        #fdf9fc;
-  --border:         #d0bbc8;
-  --border-bright:  #bc9fb0;
+  --bg-base:        #021526;
+  --bg-surface:     #033E5B;
+  --bg-elevated:    #054d70;
+  --bg-hover:       #065e88;
+  --bg-sidebar:     #02304a;
+  --bg-main:        #02243a;
+  --border:         #0a4d6b;
+  --border-bright:  #1a6a8a;
   --gold:           #632148;
   --gold-light:     #8a2f63;
-  --gold-dim:       #f0dce6;
-  --text-primary:   #040B14;
-  --text-secondary: #033E5B;
-  --text-dim:       #8a7080;
-  --green:          #15743f;
-  --green-dim:      #c8f0dc;
-  --red:            #b91c1c;
-  --red-dim:        #ffd4d4;
-  --blue:           #033E5B;
+  --gold-dim:       #3d1430;
+  --text-primary:   #FFFCFC;
+  --text-secondary: #c8b0be;
+  --text-dim:       #7ab0c0;
+  --green:          #2ecc8a;
+  --green-dim:      #0d3d28;
+  --red:            #e05252;
+  --red-dim:        #3d1818;
+  --blue:           #7ecfef;
   --radius:         6px;
   --radius-lg:      10px;
 }
@@ -151,12 +151,12 @@ html.dark .auth-bg::after { content: ''; position: fixed; bottom: -15%; left: -1
 
 @media (prefers-color-scheme: light) {
   html:not(.dark):not(.light) {
-    --bg-base:        #021e35;
+    --bg-base:        #021526;
     --bg-surface:     #033E5B;
     --bg-elevated:    #054d70;
     --bg-hover:       #065e88;
     --bg-sidebar:     #02304a;
-    --bg-main:        #02293d;
+    --bg-main:        #02243a;
     --border:         #0a4d6b;
     --border-bright:  #1a6a8a;
     --gold:           #632148;
