@@ -223,7 +223,19 @@ async def stream_agent(
     tools_called = []
 
     try:
-        async for chunk in graph.astream(state, config=config, stream_mode="messages"):
+        async for mode, chunk in graph.astream(state, config=config, stream_mode=["messages", "updates"]):
+            # ── Updates mode: catch error state dicts from nodes ──────────
+            # When planner_node returns {"error": ..., "is_done": True} (e.g. bad API key,
+            # model not found), LangGraph emits it as an "updates" chunk, NOT a message.
+            # stream_mode="messages" alone silently swallows these → blank response.
+            if mode == "updates":
+                for _node, _update in chunk.items():
+                    if isinstance(_update, dict) and _update.get("error") and _update.get("is_done"):
+                        err = _update["error"]
+                        logger.error("agent_state_error", user_id=user_id, node=_node, error=err)
+                        yield f"\n\n❌ **Error:** {err}"
+                continue
+
             if isinstance(chunk, tuple):
                 message, metadata = chunk
                 node = metadata.get("langgraph_node", "")
@@ -259,15 +271,6 @@ async def stream_agent(
                     and _is_binary_tool_result(message.content)
                 ):
                     yield message.content  # e.g. "CHART_BASE64:iVBOR..." or "FILE_BASE64_PDF:..."
-
-            # ── Surface planner/tool errors from state ────────────
-            # When the planner or a tool node returns {"error": "...", "is_done": True}
-            # the error lives in a state-update dict, NOT in a message tuple.
-            # stream_mode="messages" emits these as bare dicts (not tuples).
-            elif isinstance(chunk, dict) and chunk.get("error") and chunk.get("is_done"):
-                err = chunk["error"]
-                logger.error("agent_state_error", user_id=user_id, error=err)
-                yield f"\n\n❌ **Error:** {err}"
 
             # Handle HITL interrupt event
             elif isinstance(chunk, dict) and chunk.get("__interrupt__"):

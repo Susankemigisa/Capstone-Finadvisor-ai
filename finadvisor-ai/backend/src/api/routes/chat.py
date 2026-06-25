@@ -8,6 +8,7 @@ from typing import AsyncGenerator
 
 from src.auth.dependencies import get_current_user
 from src.agent.graph import run_agent, stream_agent
+from src.models.model_manager import _get_default_model
 from src.database.operations import (
     create_chat_session,
     get_user_sessions,
@@ -137,7 +138,7 @@ async def _get_user_context(user_id: str, model_id: str = None) -> dict:
         "preferred_language": user.get("preferred_language", "en"),
         "preferred_currency": user.get("preferred_currency", "USD"),
         "tier":               user.get("tier", "free"),
-        "model_id":           model_id or user.get("preferred_model", "gpt-4o-mini"),
+        "model_id":           model_id or user.get("preferred_model") or _get_default_model(),
         "temperature":        float(user.get("temperature", 0.3)),
         "top_p":              float(user.get("top_p", 1.0)),
         "portfolio_summary":  _build_portfolio_summary(portfolio),
