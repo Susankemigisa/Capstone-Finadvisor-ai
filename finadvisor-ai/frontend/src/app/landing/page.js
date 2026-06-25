@@ -50,7 +50,7 @@ export default function LandingPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'var(--bg-base, #FFFCFC)',
+      background: 'var(--bg-base)',
       color: 'var(--text-primary, var(--text-primary))',
       fontFamily: 'var(--font-body, Inter, system-ui, sans-serif)',
       overflowX: 'hidden',
@@ -61,7 +61,7 @@ export default function LandingPage() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '18px 32px', borderBottom: '1px solid rgba(255,255,255,0.06)',
         position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(10,13,20,0.85)', backdropFilter: 'blur(12px)',
+        background: 'rgba(2,21,38,0.92)', backdropFilter: 'blur(12px)',
       }}>
         <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
           ◆ FINADVISOR AI
@@ -96,7 +96,7 @@ export default function LandingPage() {
 
       {/* ── Live ticker strip ── */}
       <div style={{
-        background: 'rgba(99,33,72,0.08)', borderBottom: '1px solid rgba(99,33,72,0.15)',
+        background: 'rgba(3,62,91,0.3)', borderBottom: '1px solid rgba(99,33,72,0.15)',
         padding: '8px 32px', fontSize: '12px', fontFamily: 'DM Mono, monospace',
         color: 'var(--gold-light)', letterSpacing: '0.05em',
         transition: 'opacity 0.4s',

@@ -81,9 +81,9 @@ export default function LoginPage() {
       
       <div style={{ width: '100%', maxWidth: '400px', position: 'relative', zIndex: 1 }} className="fade-in">
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '12px' }}>◆ FINADVISOR AI</div>
+          <div style={{ fontFamily: 'DM Mono, monospace', color: '#FFFCFC', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '12px' }}>◆ FINADVISOR AI</div>
           <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '28px', fontWeight: 400, color: 'var(--text-primary)', fontStyle: 'italic' }}>{t('auth.welcomeBack')}</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginTop: '6px' }}>{t('auth.signInSubtitle')}</p>
+          <p style={{ color: 'rgba(255,252,252,0.85)', fontSize: '13px', marginTop: '6px' }}>{t('auth.signInSubtitle')}</p>
         </div>
         <div className="auth-card">
           {error && <div style={{ background: 'var(--red-dim)', border: '1px solid var(--red)', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', color: 'var(--red)', marginBottom: '20px' }}>{error}</div>}
@@ -110,17 +110,17 @@ export default function LoginPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.emailAddress')}</label>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.emailAddress')}</label>
               <input className="input" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@example.com" required autoComplete="email" />
             </div>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <label style={{ fontSize: '12px', color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>{t('auth.passwordLabel')}</label>
-                <Link href="/forgot-password" style={{ fontSize: '12px', color: 'var(--gold)', textDecoration: 'none', opacity: 0.85 }}>{t('auth.forgotPassword')}</Link>
+                <label style={{ fontSize: '12px', color: 'var(--text-primary)', letterSpacing: '0.05em' }}>{t('auth.passwordLabel')}</label>
+                <Link href="/forgot-password" style={{ fontSize: '12px', color: 'var(--gold-light)', textDecoration: 'none', opacity: 0.85 }}>{t('auth.forgotPassword')}</Link>
               </div>
               <div style={{ position: 'relative' }}>
                 <input className="input" type={showPassword ? 'text' : 'password'} value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} placeholder="••••••••" required autoComplete="current-password" style={{ paddingRight: '44px' }} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '4px', fontSize: '16px', lineHeight: 1 }}>
+                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-primary)', padding: '4px', fontSize: '16px', lineHeight: 1 }}>
                   {showPassword ? '🙈' : '👁'}
                 </button>
               </div>
@@ -129,8 +129,8 @@ export default function LoginPage() {
               {loading ? t('auth.signingIn') : t('auth.signInArrow')}
             </button>
           </div>
-          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-secondary)' }}>
-            {t('auth.noAccount')}{' '}<Link href="/register" style={{ color: 'var(--gold)', textDecoration: 'none' }}>{t('auth.createOne')}</Link>
+          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-primary)' }}>
+            {t('auth.noAccount')}{' '}<Link href="/register" style={{ color: 'var(--gold-light)', textDecoration: 'none' }}>{t('auth.createOne')}</Link>
           </p>
         </div>
       </div>
