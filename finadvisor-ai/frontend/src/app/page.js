@@ -59,7 +59,7 @@ export default function LandingPage() {
       {/* ── Nav ── */}
       <nav style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '18px 32px', borderBottom: '1px solid rgba(255,255,255,0.06)',
+        padding: '18px 32px', borderBottom: '1px solid var(--border)',
         position: 'sticky', top: 0, zIndex: 50,
         background: 'var(--bg-surface)', borderBottom: '1px solid var(--border)',
       }}>
@@ -70,12 +70,12 @@ export default function LandingPage() {
           <button
             onClick={() => router.push('/login')}
             style={{
-              padding: '8px 20px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.15)',
+              padding: '8px 20px', borderRadius: '8px', border: '1px solid var(--border)',
               background: 'transparent', color: 'var(--text-primary)',
               fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.color = 'var(--gold)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,252,252,0.85)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-primary)' }}
           >
             Log in
           </button>
@@ -83,7 +83,7 @@ export default function LandingPage() {
             onClick={() => router.push('/register')}
             style={{
               padding: '8px 20px', borderRadius: '8px', border: 'none',
-              background: 'var(--gold)', color: '#FFFCFC',
+              background: 'var(--gold)', color: 'var(--text-primary)',
               fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'opacity 0.2s',
             }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
@@ -98,7 +98,7 @@ export default function LandingPage() {
       <div style={{
         background: 'var(--bg-elevated)', borderBottom: '1px solid rgba(99,33,72,0.15)',
         padding: '8px 32px', fontSize: '12px', fontFamily: 'DM Mono, monospace',
-        color: 'var(--gold-light)', letterSpacing: '0.05em',
+        color: 'var(--gold)', letterSpacing: '0.05em',
         transition: 'opacity 0.4s',
       }}>
         ◆ {TICKERS[tickerIdx]}
@@ -108,10 +108,10 @@ export default function LandingPage() {
       <section style={{ textAlign: 'center', padding: '96px 24px 80px', maxWidth: '780px', margin: '0 auto' }}>
         <div style={{
           display: 'inline-block', marginBottom: '20px', padding: '5px 14px',
-          borderRadius: '20px', border: '1px solid rgba(177,143,162,0.4)',
-          background: 'rgba(255,252,252,0.06)',
+          borderRadius: '20px', border: '1px solid var(--border-bright)',
+          background: 'var(--bg-elevated)',
           fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em',
-          color: '#FFFCFC',
+          color: 'var(--text-secondary)',
         }}>
           POWERED BY GPT-4o · CLAUDE · GEMINI · LLAMA
         </div>
@@ -119,7 +119,7 @@ export default function LandingPage() {
         <h1 style={{
           fontSize: 'clamp(36px, 7vw, 68px)', fontWeight: 800, lineHeight: 1.1,
           margin: '0 0 24px',
-          color: '#FFFCFC',
+          color: 'var(--text-primary)',
         }}>
           Your AI financial<br />advisor, always on
         </h1>
@@ -136,7 +136,7 @@ export default function LandingPage() {
             onClick={() => router.push('/register')}
             style={{
               padding: '14px 32px', borderRadius: '10px', border: 'none',
-              background: 'var(--gold)', color: '#FFFCFC',
+              background: 'var(--gold)', color: 'var(--text-primary)',
               fontSize: '15px', fontWeight: 700, cursor: 'pointer',
               boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
               transition: 'transform 0.2s, box-shadow 0.2s',
@@ -150,13 +150,13 @@ export default function LandingPage() {
             onClick={() => router.push('/login')}
             style={{
               padding: '14px 32px', borderRadius: '10px',
-              border: '1px solid rgba(255,255,255,0.15)',
+              border: '1px solid var(--border)',
               background: 'var(--bg-elevated)',
               color: 'var(--text-primary, var(--text-primary))',
               fontSize: '15px', cursor: 'pointer', transition: 'border-color 0.2s',
             }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'}
+            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--border-bright)'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
           >
             Log in
           </button>
@@ -166,19 +166,19 @@ export default function LandingPage() {
       {/* ── Fake chat preview ── */}
       <section style={{ maxWidth: '680px', margin: '0 auto 96px', padding: '0 24px' }}>
         <div style={{
-          borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: '16px', border: '1px solid var(--border)',
           background: 'var(--bg-elevated)', overflow: 'hidden',
           boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
         }}>
           {/* window chrome */}
           <div style={{
-            padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)',
+            padding: '12px 16px', borderBottom: '1px solid var(--border)',
             display: 'flex', alignItems: 'center', gap: '8px',
           }}>
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57', display: 'inline-block' }} />
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ffbd2e', display: 'inline-block' }} />
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28ca41', display: 'inline-block' }} />
-            <span style={{ marginLeft: 8, fontSize: 12, color: 'rgba(255,255,255,0.3)', fontFamily: 'DM Mono, monospace' }}>FinAdvisor AI · Chat</span>
+            <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--text-dim)', fontFamily: 'DM Mono, monospace' }}>FinAdvisor AI · Chat</span>
           </div>
           {/* messages */}
           <div style={{ padding: '20px 20px 8px' }}>
@@ -187,11 +187,11 @@ export default function LandingPage() {
             <BubbleUser text="What's the current Bitcoin price?" />
             <BubbleAI text="Bitcoin (BTC) is trading at $67,204.32 ▲ 1.41% in the last 24h 🚀. Market cap is ~$1.32T. Want me to log a position to your portfolio or chart the 30-day price trend?" />
           </div>
-          <div style={{ padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
             <div style={{
-              borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)',
+              borderRadius: '8px', border: '1px solid var(--border)',
               padding: '10px 14px', fontSize: '13px',
-              color: 'rgba(255,255,255,0.25)', background: 'var(--bg-elevated)',
+              color: 'var(--text-dim)', background: 'var(--bg-elevated)',
             }}>
               Ask about stocks, crypto, your budget...
             </div>
@@ -208,12 +208,12 @@ export default function LandingPage() {
           {FEATURES.map(f => (
             <div key={f.title} style={{
               padding: '24px', borderRadius: '12px',
-              border: '1px solid rgba(255,255,255,0.07)',
+              border: '1px solid var(--border)',
               background: 'var(--bg-main)',
               transition: 'border-color 0.2s',
             }}
               onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(99,33,72,0.3)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
             >
               <div style={{ fontSize: '28px', marginBottom: '12px' }}>{f.icon}</div>
               <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px' }}>{f.title}</div>
@@ -226,7 +226,7 @@ export default function LandingPage() {
       {/* ── CTA footer ── */}
       <section style={{
         textAlign: 'center', padding: '80px 24px 96px',
-        borderTop: '1px solid rgba(255,255,255,0.06)',
+        borderTop: '1px solid var(--border)',
       }}>
         <h2 style={{ fontSize: '32px', fontWeight: 800, margin: '0 0 16px' }}>Ready to take control?</h2>
         <p style={{ color: 'var(--text-primary)', fontSize: '15px', margin: '0 0 32px' }}>
@@ -236,7 +236,7 @@ export default function LandingPage() {
           onClick={() => router.push('/register')}
           style={{
             padding: '14px 40px', borderRadius: '10px', border: 'none',
-            background: 'var(--gold)', color: '#FFFCFC',
+            background: 'var(--gold)', color: 'var(--text-primary)',
             fontSize: '15px', fontWeight: 700, cursor: 'pointer',
             boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
           }}
@@ -247,9 +247,9 @@ export default function LandingPage() {
 
       {/* ── Footer ── */}
       <footer style={{
-        borderTop: '1px solid rgba(255,255,255,0.06)',
+        borderTop: '1px solid var(--border)',
         padding: '20px 32px', textAlign: 'center',
-        fontSize: '12px', color: 'rgba(255,255,255,0.25)',
+        fontSize: '12px', color: 'var(--text-dim)',
         fontFamily: 'DM Mono, monospace',
       }}>
         © {new Date().getFullYear()} FinAdvisor AI · AI, not a licensed financial advisor
