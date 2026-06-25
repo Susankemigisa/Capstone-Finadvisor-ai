@@ -71,11 +71,11 @@ export default function LandingPage() {
             onClick={() => router.push('/login')}
             style={{
               padding: '8px 20px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.15)',
-              background: 'transparent', color: 'var(--text-secondary, #a0a8b8)',
+              background: 'transparent', color: 'rgba(255,252,252,0.85)',
               fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold, #632148)'; e.currentTarget.style.color = 'var(--gold, #632148)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'var(--text-secondary, #a0a8b8)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,252,252,0.85)' }}
           >
             Log in
           </button>
@@ -108,10 +108,10 @@ export default function LandingPage() {
       <section style={{ textAlign: 'center', padding: '96px 24px 80px', maxWidth: '780px', margin: '0 auto' }}>
         <div style={{
           display: 'inline-block', marginBottom: '20px', padding: '5px 14px',
-          borderRadius: '20px', border: '1px solid rgba(99,33,72,0.35)',
-          background: 'rgba(99,33,72,0.08)',
+          borderRadius: '20px', border: '1px solid rgba(177,143,162,0.4)',
+          background: 'rgba(255,252,252,0.06)',
           fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em',
-          color: 'var(--gold, #632148)',
+          color: '#FFFCFC',
         }}>
           POWERED BY GPT-4o · CLAUDE · GEMINI · LLAMA
         </div>
@@ -125,7 +125,7 @@ export default function LandingPage() {
         </h1>
 
         <p style={{
-          fontSize: '17px', lineHeight: 1.7, color: 'var(--text-secondary, #a0a8b8)',
+          fontSize: '17px', lineHeight: 1.7, color: 'rgba(255,252,252,0.82)',
           margin: '0 auto 40px', maxWidth: '560px',
         }}>
           Ask about markets, track your portfolio, plan your budget, and get charts — all in one chat. Built for Africa, works everywhere.
@@ -217,7 +217,7 @@ export default function LandingPage() {
             >
               <div style={{ fontSize: '28px', marginBottom: '12px' }}>{f.icon}</div>
               <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px' }}>{f.title}</div>
-              <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--text-secondary, #a0a8b8)' }}>{f.desc}</div>
+              <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'rgba(255,252,252,0.75)' }}>{f.desc}</div>
             </div>
           ))}
         </div>
@@ -229,7 +229,7 @@ export default function LandingPage() {
         borderTop: '1px solid rgba(255,255,255,0.06)',
       }}>
         <h2 style={{ fontSize: '32px', fontWeight: 800, margin: '0 0 16px' }}>Ready to take control?</h2>
-        <p style={{ color: 'var(--text-secondary, #a0a8b8)', fontSize: '15px', margin: '0 0 32px' }}>
+        <p style={{ color: 'rgba(255,252,252,0.80)', fontSize: '15px', margin: '0 0 32px' }}>
           Free to start. No credit card required.
         </p>
         <button
