@@ -246,17 +246,6 @@ async def stream_agent(
                 ):
                     yield message.content
 
-                # ── Surface planner/tool errors from state ────────────
-                # When the planner or a tool node returns {"error": "...", "is_done": True}
-                # the error lives in the graph state, not in a message chunk.
-                # Without this, the frontend receives no chunks → blank response.
-                if isinstance(chunk, tuple) and isinstance(chunk[0], dict):
-                    state_update = chunk[0]
-                    if state_update.get("error") and state_update.get("is_done"):
-                        err = state_update["error"]
-                        logger.error("agent_state_error", user_id=user_id, error=err)
-                        yield f"\n\n❌ **Error:** {err}"
-
                 # ── Binary tool results ───────────────────────────────
                 # ROOT CAUSE FIX: ToolMessages from chart/image/export tools carry
                 # their entire payload (base64 PNG, PDF, XLSX) as the message content.
@@ -270,6 +259,15 @@ async def stream_agent(
                     and _is_binary_tool_result(message.content)
                 ):
                     yield message.content  # e.g. "CHART_BASE64:iVBOR..." or "FILE_BASE64_PDF:..."
+
+            # ── Surface planner/tool errors from state ────────────
+            # When the planner or a tool node returns {"error": "...", "is_done": True}
+            # the error lives in a state-update dict, NOT in a message tuple.
+            # stream_mode="messages" emits these as bare dicts (not tuples).
+            elif isinstance(chunk, dict) and chunk.get("error") and chunk.get("is_done"):
+                err = chunk["error"]
+                logger.error("agent_state_error", user_id=user_id, error=err)
+                yield f"\n\n❌ **Error:** {err}"
 
             # Handle HITL interrupt event
             elif isinstance(chunk, dict) and chunk.get("__interrupt__"):

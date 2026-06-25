@@ -56,7 +56,7 @@ def _build_system_prompt(state: AgentState) -> str:
     return prompt
 
 
-def planner_node(state: AgentState) -> dict:
+async def planner_node(state: AgentState) -> dict:
     logger.info(
         "planner_node",
         user_id=state.get("user_id"),
@@ -71,8 +71,7 @@ def planner_node(state: AgentState) -> dict:
         temperature = float(state.get("temperature", 0.3))
         top_p = float(state.get("top_p", 1.0))
         # Retry logic — try up to 3 times on transient failures
-        import time as _time
-        # Cache model instances — LangChain model init is expensive (~100-300ms first call)
+        import asyncio as _asyncio
         _model_cache_key = (model_id, temperature, top_p)
         llm = _MODEL_CACHE.get(_model_cache_key)
         last_err = None
@@ -85,7 +84,7 @@ def planner_node(state: AgentState) -> dict:
                 except Exception as e:
                     last_err = e
                     if attempt < 2:
-                        _time.sleep(1.5 ** attempt)
+                        await _asyncio.sleep(1.5 ** attempt)
         if llm is None:
             raise last_err
     except Exception as e:
@@ -105,7 +104,7 @@ def planner_node(state: AgentState) -> dict:
     messages = [SystemMessage(content=system_prompt)] + state.get("messages", [])
 
     try:
-        response = llm_with_tools.invoke(messages)
+        response = await llm_with_tools.ainvoke(messages)
     except Exception as e:
         logger.error("llm_call_failed", model=model_id, error=str(e), exc_info=True)
         return {"error": f"Model call failed ({model_id}): {str(e)}", "is_done": True}
