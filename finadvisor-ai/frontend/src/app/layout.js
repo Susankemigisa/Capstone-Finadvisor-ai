@@ -1,14 +1,8 @@
 import './globals.css'
 
 export const metadata = {
-  icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-    ],
-    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
-  },
+  title: 'FinAdvisor AI',
+  description: 'AI-powered financial advisory',
 }
 
 // Runs before React hydrates — prevents flash of wrong theme.
@@ -28,6 +22,11 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
+      <script dangerouslySetInnerHTML={{ __html: `(function(){
+        var s=localStorage.getItem('finadvisor-theme');
+        var t=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');
+        document.documentElement.classList.add(t);
+      })()` }} />
       <body>{children}</body>
     </html>
   )

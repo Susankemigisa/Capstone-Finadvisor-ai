@@ -81,11 +81,11 @@ export default function LoginPage() {
       
       <div style={{ width: '100%', maxWidth: '400px', position: 'relative', zIndex: 1 }} className="fade-in">
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{ fontFamily: 'DM Mono, monospace', color: '#FFFCFC', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '12px' }}>◆ FINADVISOR AI</div>
+          <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '12px' }}>◆ FINADVISOR AI</div>
           <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '28px', fontWeight: 400, color: 'var(--text-primary)', fontStyle: 'italic' }}>{t('auth.welcomeBack')}</h1>
-          <p style={{ color: 'rgba(255,252,252,0.85)', fontSize: '13px', marginTop: '6px' }}>{t('auth.signInSubtitle')}</p>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginTop: '6px' }}>{t('auth.signInSubtitle')}</p>
         </div>
-        <div className="auth-card">
+        <div className="surface" style={{ padding: '32px' }}>
           {error && <div style={{ background: 'var(--red-dim)', border: '1px solid var(--red)', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', color: 'var(--red)', marginBottom: '20px' }}>{error}</div>}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
             <button onClick={() => handleOAuth('google')} disabled={!!oauthLoading}

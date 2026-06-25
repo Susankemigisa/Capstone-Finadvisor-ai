@@ -87,11 +87,11 @@ export default function RegisterPage() {
       
       <div style={{ width: '100%', maxWidth: '400px', position: 'relative', zIndex: 1 }} className="fade-in">
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '12px' }}>◆ FINADVISOR AI</div>
+          <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '12px' }}>◆ FINADVISOR AI</div>
           <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '28px', fontWeight: 400, color: 'var(--text-primary)', fontStyle: 'italic' }}>{t('auth.createAccount')}</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginTop: '6px' }}>{t('auth.startJourney')}</p>
+          <p style={{ color: 'var(--text-primary)', fontSize: '13px', marginTop: '6px' }}>{t('auth.startJourney')}</p>
         </div>
-        <div className="auth-card">
+        <div className="surface" style={{ padding: '32px' }}>
           {error && <div style={{ background: 'var(--red-dim)', border: '1px solid var(--red)', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', color: 'var(--red)', marginBottom: '20px' }}>{error}</div>}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
             <button onClick={() => handleOAuth('google')} disabled={!!oauthLoading}
@@ -116,18 +116,18 @@ export default function RegisterPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.fullNameLabel')}</label>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.fullNameLabel')}</label>
               <input className="input" type="text" placeholder="Susan Kemigisa" value={form.full_name} onChange={e => setForm({ ...form, full_name: e.target.value })} required autoFocus />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.emailAddress')}</label>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.emailAddress')}</label>
               <input className="input" type="email" placeholder="you@example.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.passwordLabel')}</label>
+              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.passwordLabel')}</label>
               <div style={{ position: 'relative' }}>
                 <input className="input" type={showPassword ? 'text' : 'password'} placeholder={t('auth.passwordHint')} value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required style={{ paddingRight: '44px' }} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '4px', fontSize: '16px', lineHeight: 1 }}>
+                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-primary)', padding: '4px', fontSize: '16px', lineHeight: 1 }}>
                   {showPassword ? '🙈' : '👁'}
                 </button>
               </div>
@@ -151,8 +151,8 @@ export default function RegisterPage() {
               {loading ? t('auth.creatingAccount') : t('auth.createAccountArrow')}
             </button>
           </div>
-          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-secondary)' }}>
-            {t('auth.alreadyHave')}{' '}<Link href="/login" style={{ color: 'var(--gold)', textDecoration: 'none' }}>{t('auth.signInLink')}</Link>
+          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-primary)' }}>
+            {t('auth.alreadyHave')}{' '}<Link href="/login" style={{ color: 'var(--gold-light)', textDecoration: 'none' }}>{t('auth.signInLink')}</Link>
           </p>
         </div>
       </div>
