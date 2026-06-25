@@ -10,10 +10,11 @@ export const useThemeStore = create((set) => ({
   theme: 'dark',
 
   init: () => {
-    // Read what the blocking script already applied — don't re-detect OS
     if (typeof window === 'undefined') return
     const stored = localStorage.getItem('finadvisor-theme')
-    const theme = stored === 'light' ? 'light' : 'dark'
+    // If user has never set a preference, fall back to OS/browser setting
+    const osPrefers = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+    const theme = stored === 'light' ? 'light' : stored === 'dark' ? 'dark' : osPrefers
     applyTheme(theme)
     set({ theme })
   },

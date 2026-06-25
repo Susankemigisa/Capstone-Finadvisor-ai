@@ -14,12 +14,12 @@ export const metadata = {
 }
 
 // Single blocking script — runs synchronously before any paint.
-// Always applies 'dark' unless user explicitly toggled to light in settings.
-// Since both themes are now navy, the class only matters for subtle differences.
+// Priority: stored user preference → OS/browser preference → dark fallback.
 const themeScript = `(function(){
   try {
     var stored = localStorage.getItem('finadvisor-theme');
-    var cls = (stored === 'light') ? 'light' : 'dark';
+    var osLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    var cls = stored === 'light' ? 'light' : stored === 'dark' ? 'dark' : (osLight ? 'light' : 'dark');
     document.documentElement.classList.add(cls);
   } catch(e) {
     document.documentElement.classList.add('dark');
