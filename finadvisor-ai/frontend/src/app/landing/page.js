@@ -83,7 +83,7 @@ export default function LandingPage() {
             onClick={() => router.push('/register')}
             style={{
               padding: '8px 20px', borderRadius: '8px', border: 'none',
-              background: 'var(--gold, #632148)', color: '#0a0d14',
+              background: 'var(--gold, #632148)', color: '#FFFCFC',
               fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'opacity 0.2s',
             }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
@@ -119,9 +119,7 @@ export default function LandingPage() {
         <h1 style={{
           fontSize: 'clamp(36px, 7vw, 68px)', fontWeight: 800, lineHeight: 1.1,
           margin: '0 0 24px',
-          background: 'linear-gradient(135deg, #e8eaf0 0%, #632148 60%, #e8eaf0 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
+          color: '#FFFCFC',
         }}>
           Your AI financial<br />advisor, always on
         </h1>
@@ -138,7 +136,7 @@ export default function LandingPage() {
             onClick={() => router.push('/register')}
             style={{
               padding: '14px 32px', borderRadius: '10px', border: 'none',
-              background: 'var(--gold, #632148)', color: '#0a0d14',
+              background: 'var(--gold, #632148)', color: '#FFFCFC',
               fontSize: '15px', fontWeight: 700, cursor: 'pointer',
               boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
               transition: 'transform 0.2s, box-shadow 0.2s',
@@ -238,7 +236,7 @@ export default function LandingPage() {
           onClick={() => router.push('/register')}
           style={{
             padding: '14px 40px', borderRadius: '10px', border: 'none',
-            background: 'var(--gold, #632148)', color: '#0a0d14',
+            background: 'var(--gold, #632148)', color: '#FFFCFC',
             fontSize: '15px', fontWeight: 700, cursor: 'pointer',
             boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
           }}

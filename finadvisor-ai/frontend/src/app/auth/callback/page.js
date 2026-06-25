@@ -77,7 +77,7 @@ export default function OAuthCallbackPage() {
             <div style={{ fontSize: '32px', marginBottom: '16px', color: 'var(--red)' }}>✕</div>
             <p style={{ color: 'var(--red)', fontSize: '13px', marginBottom: '20px' }}>{error}</p>
             <button onClick={() => router.replace('/login')}
-              style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '10px 24px', cursor: 'pointer', fontSize: '13px', fontWeight: 700 }}>
+              style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', cursor: 'pointer', fontSize: '13px', fontWeight: 700 }}>
               Back to Login
             </button>
           </>
