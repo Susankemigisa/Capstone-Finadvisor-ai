@@ -111,7 +111,7 @@ export default function LandingPage() {
           borderRadius: '20px', border: '1px solid var(--border-bright)',
           background: 'var(--bg-elevated)',
           fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em',
-          color: 'var(--text-secondary)',
+          color: 'var(--text-primary)',
         }}>
           POWERED BY GPT-4o · CLAUDE · GEMINI · LLAMA
         </div>
