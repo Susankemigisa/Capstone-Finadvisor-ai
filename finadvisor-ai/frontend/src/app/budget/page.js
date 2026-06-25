@@ -23,7 +23,7 @@ const CATEGORIES = {
   expense: ['Housing', 'Food', 'Transport', 'Healthcare', 'Entertainment', 'Shopping', 'Utilities', 'Education', 'Savings', 'Other']
 }
 
-const CAT_COLORS = ['#c9a84c','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6','#6ee7b7','#fbbf24']
+const CAT_COLORS = ['#632148','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6','#6ee7b7','#fbbf24']
 
 function CategoryBar({ category, amount, total, color, pct }) {
   return (
@@ -178,7 +178,7 @@ export default function BudgetPage() {
               { label: 'INCOME', value: summary.income, color: '#34d399' },
               { label: 'EXPENSES', value: summary.expenses, color: '#f87171' },
               { label: 'NET', value: summary.net, color: summary.net >= 0 ? '#34d399' : '#f87171' },
-              { label: 'SAVINGS RATE', value: `${Math.max(savingsRate, 0).toFixed(1)}%`, raw: true, color: savingsRate >= 20 ? '#34d399' : savingsRate >= 10 ? '#c9a84c' : '#f87171' },
+              { label: 'SAVINGS RATE', value: `${Math.max(savingsRate, 0).toFixed(1)}%`, raw: true, color: savingsRate >= 20 ? '#34d399' : savingsRate >= 10 ? '#632148' : '#f87171' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
                 <div style={{ fontSize: '10px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '8px' }}>{s.label}</div>

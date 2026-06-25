@@ -150,7 +150,7 @@ export default function OnboardingPage() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 {CURRENCIES.map(c => (
                   <button key={c.code} onClick={() => setCurrency(c.code)}
-                    style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '10px', border: `2px solid ${currency === c.code ? 'var(--gold)' : 'var(--border)'}`, background: currency === c.code ? 'rgba(201,168,76,0.1)' : 'var(--bg-elevated)', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s' }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '10px', border: `2px solid ${currency === c.code ? 'var(--gold)' : 'var(--border)'}`, background: currency === c.code ? 'rgba(99,33,72,0.1)' : 'var(--bg-elevated)', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s' }}>
                     <span style={{ fontSize: '20px' }}>{c.flag}</span>
                     <div>
                       <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>{c.code}</div>
@@ -182,7 +182,7 @@ export default function OnboardingPage() {
                 const selected = selectedGoals.includes(g.id)
                 return (
                   <button key={g.id} onClick={() => toggleGoal(g.id)}
-                    style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', borderRadius: '10px', border: `2px solid ${selected ? 'var(--gold)' : 'var(--border)'}`, background: selected ? 'rgba(201,168,76,0.1)' : 'var(--bg-elevated)', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s' }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', borderRadius: '10px', border: `2px solid ${selected ? 'var(--gold)' : 'var(--border)'}`, background: selected ? 'rgba(99,33,72,0.1)' : 'var(--bg-elevated)', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s' }}>
                     <span style={{ fontSize: '22px', flexShrink: 0 }}>{g.icon}</span>
                     <div>
                       <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>{g.label}</div>
@@ -200,7 +200,7 @@ export default function OnboardingPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {INCOME_RANGES.map(r => (
                   <button key={r.id} onClick={() => setIncomeRange(r.id)}
-                    style={{ padding: '10px 14px', borderRadius: '8px', border: `2px solid ${incomeRange === r.id ? 'var(--gold)' : 'var(--border)'}`, background: incomeRange === r.id ? 'rgba(201,168,76,0.1)' : 'var(--bg-elevated)', cursor: 'pointer', textAlign: 'left', fontSize: '13px', color: 'var(--text-primary)', transition: 'all 0.15s' }}>
+                    style={{ padding: '10px 14px', borderRadius: '8px', border: `2px solid ${incomeRange === r.id ? 'var(--gold)' : 'var(--border)'}`, background: incomeRange === r.id ? 'rgba(99,33,72,0.1)' : 'var(--bg-elevated)', cursor: 'pointer', textAlign: 'left', fontSize: '13px', color: 'var(--text-primary)', transition: 'all 0.15s' }}>
                     {r.label}
                   </button>
                 ))}

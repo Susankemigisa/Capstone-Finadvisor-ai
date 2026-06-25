@@ -63,7 +63,7 @@ export default function LandingPage() {
         position: 'sticky', top: 0, zIndex: 50,
         background: 'rgba(10,13,20,0.85)', backdropFilter: 'blur(12px)',
       }}>
-        <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold, #c9a84c)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
+        <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold, #632148)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
           ◆ FINADVISOR AI
         </span>
         <div style={{ display: 'flex', gap: '12px' }}>
@@ -74,7 +74,7 @@ export default function LandingPage() {
               background: 'transparent', color: 'var(--text-secondary, #a0a8b8)',
               fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold, #c9a84c)'; e.currentTarget.style.color = 'var(--gold, #c9a84c)' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold, #632148)'; e.currentTarget.style.color = 'var(--gold, #632148)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'var(--text-secondary, #a0a8b8)' }}
           >
             Log in
@@ -83,7 +83,7 @@ export default function LandingPage() {
             onClick={() => router.push('/register')}
             style={{
               padding: '8px 20px', borderRadius: '8px', border: 'none',
-              background: 'var(--gold, #c9a84c)', color: '#0a0d14',
+              background: 'var(--gold, #632148)', color: '#0a0d14',
               fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'opacity 0.2s',
             }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
@@ -96,9 +96,9 @@ export default function LandingPage() {
 
       {/* ── Live ticker strip ── */}
       <div style={{
-        background: 'rgba(201,168,76,0.08)', borderBottom: '1px solid rgba(201,168,76,0.15)',
+        background: 'rgba(99,33,72,0.08)', borderBottom: '1px solid rgba(99,33,72,0.15)',
         padding: '8px 32px', fontSize: '12px', fontFamily: 'DM Mono, monospace',
-        color: 'var(--gold, #c9a84c)', letterSpacing: '0.05em',
+        color: 'var(--gold, #632148)', letterSpacing: '0.05em',
         transition: 'opacity 0.4s',
       }}>
         ◆ {TICKERS[tickerIdx]}
@@ -108,10 +108,10 @@ export default function LandingPage() {
       <section style={{ textAlign: 'center', padding: '96px 24px 80px', maxWidth: '780px', margin: '0 auto' }}>
         <div style={{
           display: 'inline-block', marginBottom: '20px', padding: '5px 14px',
-          borderRadius: '20px', border: '1px solid rgba(201,168,76,0.35)',
-          background: 'rgba(201,168,76,0.08)',
+          borderRadius: '20px', border: '1px solid rgba(99,33,72,0.35)',
+          background: 'rgba(99,33,72,0.08)',
           fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em',
-          color: 'var(--gold, #c9a84c)',
+          color: 'var(--gold, #632148)',
         }}>
           POWERED BY GPT-4o · CLAUDE · GEMINI · LLAMA
         </div>
@@ -119,7 +119,7 @@ export default function LandingPage() {
         <h1 style={{
           fontSize: 'clamp(36px, 7vw, 68px)', fontWeight: 800, lineHeight: 1.1,
           margin: '0 0 24px',
-          background: 'linear-gradient(135deg, #e8eaf0 0%, #c9a84c 60%, #e8eaf0 100%)',
+          background: 'linear-gradient(135deg, #e8eaf0 0%, #632148 60%, #e8eaf0 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
         }}>
@@ -138,13 +138,13 @@ export default function LandingPage() {
             onClick={() => router.push('/register')}
             style={{
               padding: '14px 32px', borderRadius: '10px', border: 'none',
-              background: 'var(--gold, #c9a84c)', color: '#0a0d14',
+              background: 'var(--gold, #632148)', color: '#0a0d14',
               fontSize: '15px', fontWeight: 700, cursor: 'pointer',
-              boxShadow: '0 4px 24px rgba(201,168,76,0.35)',
+              boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
               transition: 'transform 0.2s, box-shadow 0.2s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(201,168,76,0.45)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(201,168,76,0.35)' }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(99,33,72,0.45)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(99,33,72,0.35)' }}
           >
             Start for free →
           </button>
@@ -214,7 +214,7 @@ export default function LandingPage() {
               background: 'rgba(255,255,255,0.03)',
               transition: 'border-color 0.2s',
             }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(201,168,76,0.3)'}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(99,33,72,0.3)'}
               onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'}
             >
               <div style={{ fontSize: '28px', marginBottom: '12px' }}>{f.icon}</div>
@@ -238,9 +238,9 @@ export default function LandingPage() {
           onClick={() => router.push('/register')}
           style={{
             padding: '14px 40px', borderRadius: '10px', border: 'none',
-            background: 'var(--gold, #c9a84c)', color: '#0a0d14',
+            background: 'var(--gold, #632148)', color: '#0a0d14',
             fontSize: '15px', fontWeight: 700, cursor: 'pointer',
-            boxShadow: '0 4px 24px rgba(201,168,76,0.35)',
+            boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
           }}
         >
           Create your free account →
@@ -265,7 +265,7 @@ function BubbleUser({ text }) {
     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
       <div style={{
         maxWidth: '70%', padding: '10px 14px', borderRadius: '12px 12px 2px 12px',
-        background: 'rgba(201,168,76,0.18)', border: '1px solid rgba(201,168,76,0.25)',
+        background: 'rgba(99,33,72,0.18)', border: '1px solid rgba(99,33,72,0.25)',
         fontSize: '13px', lineHeight: 1.5, color: '#e8eaf0',
       }}>{text}</div>
     </div>

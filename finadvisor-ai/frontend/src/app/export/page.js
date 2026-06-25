@@ -29,7 +29,7 @@ const EXPORTS = [
     titleKey: 'export.exportPortfolio',
     descKey: 'export.descPortfolio',
     path: '/export/portfolio',
-    color: '#c9a84c',
+    color: '#632148',
   },
   {
     key: 'budget',

@@ -54,7 +54,7 @@ function CodeInput({ value, onChange }) {
           style={{
             width: '48px', height: '56px', textAlign: 'center',
             fontSize: '24px', fontFamily: 'DM Mono, monospace', fontWeight: 700,
-            background: digit ? 'rgba(201,168,76,0.08)' : 'var(--bg-base)',
+            background: digit ? 'rgba(99,33,72,0.08)' : 'var(--bg-base)',
             border: `2px solid ${digit ? 'var(--gold)' : 'var(--border)'}`,
             borderRadius: '10px', color: 'var(--text-primary)',
             outline: 'none', transition: 'all 0.15s', cursor: 'text',

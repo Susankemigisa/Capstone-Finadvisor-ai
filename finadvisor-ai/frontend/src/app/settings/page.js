@@ -15,7 +15,7 @@ const PROVIDERS = [
     { id: 'gpt-4o-mini', label: 'GPT-4o Mini', desc: 'Fast · Great for most questions' },
     { id: 'gpt-4o',      label: 'GPT-4o',      desc: 'Most capable · Best for complex analysis' },
   ]},
-  { name: 'Anthropic', color: '#c9a84c', models: [
+  { name: 'Anthropic', color: '#632148', models: [
     { id: 'claude-haiku-4-5-20251001', label: 'Claude Haiku',  desc: 'Fastest responses' },
     { id: 'claude-sonnet-4-20250514',  label: 'Claude Sonnet', desc: 'Balanced · Recommended' },
     { id: 'claude-opus-4-6',           label: 'Claude Opus',   desc: 'Most powerful Claude' },

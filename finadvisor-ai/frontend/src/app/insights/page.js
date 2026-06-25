@@ -26,7 +26,7 @@ function fmt(n, currency = 'UGX') {
 }
 
 function HealthScoreRing({ score, t }) {
-  const color = score >= 75 ? '#34d399' : score >= 50 ? '#c9a84c' : score >= 25 ? '#fb923c' : '#f87171'
+  const color = score >= 75 ? '#34d399' : score >= 50 ? '#632148' : score >= 25 ? '#fb923c' : '#f87171'
   const label = score >= 75 ? t('insights.excellent') : score >= 50 ? t('insights.good') : score >= 25 ? t('insights.fair') : t('insights.needsWork')
   const size = 140, r = 54, circ = 2 * Math.PI * r
   const fill = (score / 100) * circ * 0.75
@@ -67,7 +67,7 @@ function SpendingBar({ category, amount, total, color }) {
   )
 }
 
-const CAT_COLORS = ['#c9a84c','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6','#6ee7b7','#fbbf24']
+const CAT_COLORS = ['#632148','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6','#6ee7b7','#fbbf24']
 
 function calcHealthScore({ savingsRate, goalProgress, hasEmergencyFund, debtRatio, budgetEntries }) {
   let score = 0
@@ -180,7 +180,7 @@ export default function InsightsPage() {
   if (nearGoals.length > 0)
     insights.push({ type: 'success', text: t('insights.insightNearGoal').replace('{goal}', nearGoals[0].goal_name).replace('{pct}', ((nearGoals[0].current_amount/nearGoals[0].target_amount)*100).toFixed(0)) })
 
-  const insightColors = { success: '#34d399', warning: '#c9a84c', danger: '#f87171', info: '#4a9eff' }
+  const insightColors = { success: '#34d399', warning: '#632148', danger: '#f87171', info: '#4a9eff' }
   const insightBg = { success: '#052e16', warning: '#1a1200', danger: '#2d0a0a', info: '#0c1a2e' }
 
   return (
@@ -235,7 +235,7 @@ export default function InsightsPage() {
                   { label: t('insights.income'), value: income, color: '#34d399' },
                   { label: t('insights.expenses'), value: expenses, color: '#f87171' },
                   { label: t('insights.net'), value: income - expenses, color: income >= expenses ? '#34d399' : '#f87171' },
-                  { label: t('insights.savingsRate'), value: `${Math.max(savingsRate, 0).toFixed(1)}%`, color: savingsRate >= 20 ? '#34d399' : savingsRate >= 10 ? '#c9a84c' : '#f87171', raw: true },
+                  { label: t('insights.savingsRate'), value: `${Math.max(savingsRate, 0).toFixed(1)}%`, color: savingsRate >= 20 ? '#34d399' : savingsRate >= 10 ? '#632148' : '#f87171', raw: true },
                 ].map(({ label, value, color, raw }) => (
                   <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>{label}</span>

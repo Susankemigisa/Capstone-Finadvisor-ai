@@ -134,7 +134,7 @@ function PocketCard({ pocket, onTransact, onDelete }) {
 }
 
 const POCKET_ICONS = ['💰','🏠','✈️','🎓','🚗','💊','🎉','🛡️','👶','💍','📱','🌍']
-const POCKET_COLORS = ['#c9a84c','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6']
+const POCKET_COLORS = ['#632148','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6']
 
 export default function SavingsPage() {
   const router = useRouter()
@@ -146,7 +146,7 @@ export default function SavingsPage() {
   const [summary, setSummary] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ name: '', description: '', target_amount: '', currency: 'UGX', icon: '💰', color: '#c9a84c', target_date: '' })
+  const [form, setForm] = useState({ name: '', description: '', target_amount: '', currency: 'UGX', icon: '💰', color: '#632148', target_date: '' })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -177,7 +177,7 @@ export default function SavingsPage() {
     })
     if (data.pocket) {
       setPockets(prev => [...prev, data.pocket])
-      setForm({ name: '', description: '', target_amount: '', currency: 'UGX', icon: '💰', color: '#c9a84c', target_date: '' })
+      setForm({ name: '', description: '', target_amount: '', currency: 'UGX', icon: '💰', color: '#632148', target_date: '' })
       setShowForm(false)
     } else setError(data.detail || 'Failed to create pocket')
     setSaving(false)

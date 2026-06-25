@@ -17,7 +17,7 @@ function DonutChart({ positions, allocLabel }) {
   if (!positions.length) return null
   const total = positions.reduce((s, p) => s + p.current_value, 0)
   if (!total) return null
-  const COLORS = ['#c9a84c','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6']
+  const COLORS = ['#632148','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6']
   const slices = positions.slice(0, 8).reduce((acc, p, i) => {
     const pct = p.current_value / total, angle = pct * 360, startAngle = acc.cumAngle
     const r = 60, cx = 80, cy = 80, toRad = (d) => (d * Math.PI) / 180

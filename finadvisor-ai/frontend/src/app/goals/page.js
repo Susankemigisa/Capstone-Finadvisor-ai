@@ -23,7 +23,7 @@ const GOAL_ICONS = {
   emergency_fund: '🛡️', retirement: '🌴', custom: '⭐'
 }
 const GOAL_COLORS = {
-  savings: '#4a9eff', investment: '#c9a84c', debt_payoff: '#f87171',
+  savings: '#4a9eff', investment: '#632148', debt_payoff: '#f87171',
   emergency_fund: '#34d399', retirement: '#a78bfa', custom: '#fb923c'
 }
 
@@ -41,7 +41,7 @@ function Confetti({ active }) {
       y: Math.random() * -canvas.height,
       r: Math.random() * 8 + 4,
       d: Math.random() * 80 + 20,
-      color: ['#c9a84c','#34d399','#4a9eff','#f87171','#a78bfa','#fb923c'][Math.floor(Math.random() * 6)],
+      color: ['#632148','#34d399','#4a9eff','#f87171','#a78bfa','#fb923c'][Math.floor(Math.random() * 6)],
       tilt: Math.random() * 10 - 10,
       tiltAngle: 0,
       tiltSpeed: Math.random() * 0.1 + 0.05,
@@ -80,7 +80,7 @@ function GoalCard({ goal, onUpdate, onDelete }) {
   const [saving, setSaving] = useState(false)
   const pct = goal.target_amount > 0 ? Math.min((goal.current_amount / goal.target_amount) * 100, 100) : 0
   const reached = pct >= 100
-  const color = GOAL_COLORS[goal.goal_type] || '#c9a84c'
+  const color = GOAL_COLORS[goal.goal_type] || '#632148'
   const icon = GOAL_ICONS[goal.goal_type] || '⭐'
   const daysLeft = goal.target_date ? Math.ceil((new Date(goal.target_date) - new Date()) / 86400000) : null
 

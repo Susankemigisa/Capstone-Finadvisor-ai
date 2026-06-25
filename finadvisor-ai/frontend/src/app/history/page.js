@@ -221,7 +221,7 @@ export default function HistoryPage() {
                         onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = 'var(--bg-surface)'; e.currentTarget.style.borderColor = 'var(--border)' } }}>
 
                         {/* Chat icon */}
-                        <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: isActive ? 'rgba(201,168,76,0.15)' : 'var(--bg-base)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>
+                        <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: isActive ? 'rgba(99,33,72,0.15)' : 'var(--bg-base)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>
                           ◈
                         </div>
 

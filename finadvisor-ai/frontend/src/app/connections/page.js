@@ -29,7 +29,7 @@ const PROVIDERS = [
 ]
 
 function AccountCard({ account, onDisconnect }) {
-  const providerColor = PROVIDERS.find(p => p.id === account.provider)?.color || '#c9a84c'
+  const providerColor = PROVIDERS.find(p => p.id === account.provider)?.color || '#632148'
   const icon = PROVIDERS.find(p => p.bank === account.bank_name)?.icon || '🏦'
   const lastSync = account.last_synced_at
     ? new Date(account.last_synced_at).toLocaleDateString('en-UG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
