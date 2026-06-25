@@ -40,7 +40,7 @@ export default function LandingPage() {
   if (checking) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--bg-base)' }}>
-        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '13px', letterSpacing: '0.1em' }}>
+        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '13px', letterSpacing: '0.1em' }}>
           ◆ FINADVISOR AI
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function LandingPage() {
         position: 'sticky', top: 0, zIndex: 50,
         background: 'rgba(10,13,20,0.85)', backdropFilter: 'blur(12px)',
       }}>
-        <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
+        <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
           ◆ FINADVISOR AI
         </span>
         <div style={{ display: 'flex', gap: '12px' }}>
@@ -98,7 +98,7 @@ export default function LandingPage() {
       <div style={{
         background: 'rgba(99,33,72,0.08)', borderBottom: '1px solid rgba(99,33,72,0.15)',
         padding: '8px 32px', fontSize: '12px', fontFamily: 'DM Mono, monospace',
-        color: 'var(--gold)', letterSpacing: '0.05em',
+        color: 'var(--gold-light)', letterSpacing: '0.05em',
         transition: 'opacity 0.4s',
       }}>
         ◆ {TICKERS[tickerIdx]}
@@ -276,7 +276,7 @@ function BubbleAI({ text }) {
       <div style={{
         maxWidth: '80%', padding: '10px 14px', borderRadius: '12px 12px 12px 2px',
         background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
-        fontSize: '13px', lineHeight: 1.5, color: 'var(--text-secondary)',
+        fontSize: '13px', lineHeight: 1.5, color: 'var(--text-primary)',
       }}>{text}</div>
     </div>
   )

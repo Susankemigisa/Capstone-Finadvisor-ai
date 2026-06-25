@@ -36,7 +36,7 @@ const CURRENCIES = ['USD','EUR','GBP','UGX','KES','NGN','ZAR','JPY','CAD','AUD',
 function Section({ title, children }) {
   return (
     <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', marginBottom: '16px', overflow: 'hidden' }}>
-      <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)', fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{title}</div>
+      <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)', fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{title}</div>
       <div style={{ padding: '20px' }}>{children}</div>
     </div>
   )
@@ -46,7 +46,7 @@ function Field({ label, hint, children, last }) {
   return (
     <div style={{ marginBottom: last ? 0 : '18px' }}>
       <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: hint ? '3px' : '8px' }}>{label}</label>
-      {hint && <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '8px' }}>{hint}</p>}
+      {hint && <p style={{ fontSize: '12px', color: 'var(--text-primary)', marginBottom: '8px' }}>{hint}</p>}
       {children}
     </div>
   )
@@ -109,7 +109,7 @@ export default function SettingsPage() {
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
-        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '11px' }}>{t('common.loading')}</div>
+        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '11px' }}>{t('common.loading')}</div>
       </div>
     </div>
   )
@@ -126,7 +126,7 @@ export default function SettingsPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
               <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('settings.title')}</h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>{t('settings.subtitle')}</p>
+              <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>{t('settings.subtitle')}</p>
             </div>
           </div>
         </div>
@@ -152,7 +152,7 @@ export default function SettingsPage() {
             {/* Appearance — theme follows OS/browser preference automatically */}
             <Section title={t('settings.appearance')}>
               <Field label={t('settings.theme')} hint="Theme is set automatically based on your browser or OS preference." last>
-                <div style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--bg-elevated)', fontSize: '13px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--bg-elevated)', fontSize: '13px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '16px' }}>🌗</span>
                   <span>FinAdvisor AI follows your device's light/dark mode setting. Change it in your OS or browser settings.</span>
                 </div>
@@ -185,9 +185,9 @@ export default function SettingsPage() {
                                 style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 12px', borderRadius: '6px', border: `1px solid ${active ? 'var(--gold)' : 'transparent'}`, background: active ? 'var(--bg-elevated)' : 'transparent', cursor: 'pointer', textAlign: 'left', marginBottom: '4px' }}>
                                 <div>
                                   <span style={{ fontSize: '13px', fontWeight: 500, color: active ? 'var(--gold-light)' : 'var(--text-primary)' }}>{m.label}</span>
-                                  <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>{m.desc}</span>
+                                  <span style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginTop: '1px' }}>{m.desc}</span>
                                 </div>
-                                {active && <span style={{ color: 'var(--gold)' }}>✓</span>}
+                                {active && <span style={{ color: 'var(--gold-light)' }}>✓</span>}
                               </button>
                             )
                           })}
@@ -220,7 +220,7 @@ export default function SettingsPage() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: 600 }}>{user.tier === 'pro' ? t('settings.proPlan') : t('settings.freePlan')}</div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>{user.tier === 'pro' ? t('settings.unlimited') : t('settings.messagesDay')}</div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-primary)', marginTop: '2px' }}>{user.tier === 'pro' ? t('settings.unlimited') : t('settings.messagesDay')}</div>
                 </div>
                 {user.tier !== 'pro' && (
                   <button onClick={() => router.push('/billing')}
@@ -237,7 +237,7 @@ export default function SettingsPage() {
                   { label: t('settings.calledBy'),    value: form.preferred_name || form.full_name?.split(' ')[0] || '—' },
                 ].map(({ label, value }) => (
                   <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
-                    <span style={{ color: 'var(--text-secondary)' }}>{label}</span>
+                    <span style={{ color: 'var(--text-primary)' }}>{label}</span>
                     <span style={{ color: 'var(--text-primary)', fontFamily: 'DM Mono, monospace' }}>{value}</span>
                   </div>
                 ))}
@@ -255,7 +255,7 @@ export default function SettingsPage() {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
                     <div style={{ fontSize: '13px', fontWeight: 500 }}>{t('settings.deleteAccount')}</div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>{t('settings.deleteDesc')}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-primary)', marginTop: '2px' }}>{t('settings.deleteDesc')}</div>
                   </div>
                   <button onClick={() => setShowDelete(true)}
                     style={{ background: 'transparent', border: '1px solid var(--red)', borderRadius: '6px', color: 'var(--red)', padding: '7px 14px', fontSize: '12px', cursor: 'pointer' }}>
@@ -267,7 +267,7 @@ export default function SettingsPage() {
                   <p style={{ fontSize: '13px', marginBottom: '12px' }}>{t('settings.deleteConfirm')}</p>
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <button onClick={() => setShowDelete(false)}
-                      style={{ flex: 1, background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '6px', color: 'var(--text-secondary)', padding: '8px', fontSize: '12px', cursor: 'pointer' }}>
+                      style={{ flex: 1, background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '6px', color: 'var(--text-primary)', padding: '8px', fontSize: '12px', cursor: 'pointer' }}>
                       {t('settings.cancel')}
                     </button>
                     <button onClick={() => { logout(); router.push('/login') }}

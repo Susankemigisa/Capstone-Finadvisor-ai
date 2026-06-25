@@ -42,7 +42,7 @@ export default function HelpGuide({ onExample, disabled = false }) {
             <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '20px', fontStyle: 'italic', fontWeight: 400 }}>What can I help you with? 💡</h2>
-                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                <p style={{ fontSize: '12px', color: 'var(--text-primary)', marginTop: '2px' }}>
                   {disabled ? '⏳ Wait for the current reply to finish…' : 'Click any example to try it'}
                 </p>
               </div>
@@ -70,7 +70,7 @@ export default function HelpGuide({ onExample, disabled = false }) {
                   <div style={{ fontSize: '20px', marginBottom: '6px' }}>{tip.icon}</div>
                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>{tip.title}</div>
                   <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginBottom: '6px' }}>{tip.desc}</div>
-                  <div style={{ fontSize: '11px', color: 'var(--gold)', fontStyle: 'italic', lineHeight: 1.4 }}>&ldquo;{tip.example}&rdquo;</div>
+                  <div style={{ fontSize: '11px', color: 'var(--gold-light)', fontStyle: 'italic', lineHeight: 1.4 }}>&ldquo;{tip.example}&rdquo;</div>
                 </button>
               ))}
             </div>

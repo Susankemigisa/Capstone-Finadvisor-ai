@@ -32,7 +32,7 @@ function RuleCard({ rule, onToggle, onDelete, t }) {
           <div style={{ fontSize: '22px' }}>{rule.is_active ? '⚡' : '⏸'}</div>
           <div>
             <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-primary)' }}>{rule.name}</div>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-primary)', marginTop: '2px' }}>
               {rule.rule_type === 'percentage'
                 ? t('rules.savePercentageOf').replace('{pct}', rule.amount_value)
                 : t('rules.saveFixedFrom').replace('{amount}', fmt(rule.amount_value))}
@@ -55,19 +55,19 @@ function RuleCard({ rule, onToggle, onDelete, t }) {
 
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         {pocket && (
-          <div style={{ background: 'var(--bg-elevated)', borderRadius: '6px', padding: '5px 10px', fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <div style={{ background: 'var(--bg-elevated)', borderRadius: '6px', padding: '5px 10px', fontSize: '11px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span>→</span> <strong style={{ color: 'var(--text-primary)' }}>{pocket.icon || '💰'} {pocket.name}</strong>
           </div>
         )}
-        <div style={{ background: 'var(--bg-elevated)', borderRadius: '6px', padding: '5px 10px', fontSize: '11px', color: 'var(--text-secondary)' }}>
+        <div style={{ background: 'var(--bg-elevated)', borderRadius: '6px', padding: '5px 10px', fontSize: '11px', color: 'var(--text-primary)' }}>
           📍 {account ? account.account_name : t('rules.allAccounts')}
         </div>
       </div>
 
       {rule.times_triggered > 0 && (
-        <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border)', display: 'flex', gap: '20px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+        <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border)', display: 'flex', gap: '20px', fontSize: '12px', color: 'var(--text-primary)' }}>
           <span>{t('rules.triggeredCount')} <strong style={{ color: 'var(--text-primary)' }}>{rule.times_triggered}×</strong></span>
-          <span>{t('rules.totalSaved')} <strong style={{ color: 'var(--gold)' }}>{fmt(rule.total_saved)}</strong></span>
+          <span>{t('rules.totalSaved')} <strong style={{ color: 'var(--gold-light)' }}>{fmt(rule.total_saved)}</strong></span>
           {rule.last_triggered_at && <span>{t('rules.lastTriggered')}: {new Date(rule.last_triggered_at).toLocaleDateString()}</span>}
         </div>
       )}
@@ -155,7 +155,7 @@ export default function RulesPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
               <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('rules.title')}</h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>{t('rules.ruleSubtitle')}</p>
+              <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>{t('rules.ruleSubtitle')}</p>
             </div>
             <button onClick={() => { setShowForm(!showForm); setError('') }}
               style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
@@ -171,7 +171,7 @@ export default function RulesPage() {
               {[
                 { label: t('rules.activeRules'), value: activeRules, color: '#34d399' },
                 { label: t('rules.totalRules'), value: rules.length, color: 'var(--text-primary)' },
-                { label: t('rules.autoSaved'), value: new Intl.NumberFormat('en-UG', { style: 'currency', currency: 'UGX', maximumFractionDigits: 0 }).format(totalAutoSaved), color: 'var(--gold)' },
+                { label: t('rules.autoSaved'), value: new Intl.NumberFormat('en-UG', { style: 'currency', currency: 'UGX', maximumFractionDigits: 0 }).format(totalAutoSaved), color: 'var(--gold-light)' },
               ].map((s, i) => (
                 <div key={i} style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
                   <div style={{ fontSize: '10px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '8px' }}>{s.label}</div>
@@ -183,7 +183,7 @@ export default function RulesPage() {
 
           {/* No pockets warning */}
           {pockets.length === 0 && !loading && (
-            <div style={{ background: 'var(--bg-main)', border: '1px solid var(--gold-dim)', borderRadius: '10px', padding: '14px 18px', marginBottom: '20px', fontSize: '13px', color: 'var(--gold)' }}>
+            <div style={{ background: 'var(--bg-main)', border: '1px solid var(--gold-dim)', borderRadius: '10px', padding: '14px 18px', marginBottom: '20px', fontSize: '13px', color: 'var(--gold-light)' }}>
               ⚠️ {t('rules.needPocketWarning')} <a href="/savings" style={{ color: 'var(--gold)', fontWeight: 600, textDecoration: 'underline' }}>{t('rules.createPocketFirst')} →</a>
             </div>
           )}
@@ -191,15 +191,15 @@ export default function RulesPage() {
           {/* New rule form */}
           {showForm && (
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--gold-dim)', borderRadius: '14px', padding: '24px', marginBottom: '24px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', marginBottom: '18px' }}>{t('rules.newRule')}</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.08em', marginBottom: '18px' }}>{t('rules.newRule')}</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('rules.ruleName')} *</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('rules.ruleName')} *</label>
                   <input className="input" placeholder={t('rules.ruleNamePlaceholder') || 'e.g. Save 20% of everything'} value={form.name}
                     onChange={e => setForm({ ...form, name: e.target.value })} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('rules.saveIntoPocket')} *</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('rules.saveIntoPocket')} *</label>
                   <select value={form.pocket_id} onChange={e => setForm({ ...form, pocket_id: e.target.value })}
                     style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none' }}>
                     <option value="">{t('rules.selectPocketPlaceholder')}</option>
@@ -207,7 +207,7 @@ export default function RulesPage() {
                   </select>
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('rules.ruleType')}</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('rules.ruleType')}</label>
                   <select value={form.rule_type} onChange={e => setForm({ ...form, rule_type: e.target.value })}
                     style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none' }}>
                     <option value="percentage">{t('rules.percentageOfIncome')}</option>
@@ -215,14 +215,14 @@ export default function RulesPage() {
                   </select>
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>
                     {form.rule_type === 'percentage' ? t('rules.percentageLabel') : t('rules.fixedAmountLabel')}
                   </label>
                   <input className="input" type="number" placeholder={form.rule_type === 'percentage' ? '20' : '100000'} value={form.amount_value}
                     onChange={e => setForm({ ...form, amount_value: e.target.value })} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>
                     {t('rules.keywordFilter')} <span style={{ color: 'var(--text-dim)' }}>({t('rules.keywordOptional')})</span>
                   </label>
                   <input className="input" placeholder={t('rules.keywordPlaceholder')} value={form.trigger_keyword}
@@ -230,7 +230,7 @@ export default function RulesPage() {
                   <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '4px' }}>{t('rules.keywordHint')}</div>
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>
                     {t('rules.minimumAmount')} <span style={{ color: 'var(--text-dim)' }}>({t('rules.keywordOptional')})</span>
                   </label>
                   <input className="input" type="number" placeholder="e.g. 50000" value={form.trigger_amount_min}
@@ -238,7 +238,7 @@ export default function RulesPage() {
                 </div>
                 {accounts.length > 0 && (
                   <div style={{ gridColumn: '1 / -1' }}>
-                    <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+                    <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>
                       {t('rules.applyToAccount')} <span style={{ color: 'var(--text-dim)' }}>({t('rules.keywordOptional')})</span>
                     </label>
                     <select value={form.source_account_id} onChange={e => setForm({ ...form, source_account_id: e.target.value })}
@@ -251,8 +251,8 @@ export default function RulesPage() {
 
                 {/* Preview */}
                 {form.amount_value && form.pocket_id && (
-                  <div style={{ gridColumn: '1 / -1', background: 'var(--bg-elevated)', borderRadius: '8px', padding: '12px', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                    <strong style={{ color: 'var(--gold)' }}>{t('rules.preview')}</strong> {t('rules.whenMoneyArrives')}
+                  <div style={{ gridColumn: '1 / -1', background: 'var(--bg-elevated)', borderRadius: '8px', padding: '12px', fontSize: '12px', color: 'var(--text-primary)' }}>
+                    <strong style={{ color: 'var(--gold-light)' }}>{t('rules.preview')}</strong> {t('rules.whenMoneyArrives')}
                     {form.trigger_keyword ? ` ${t('rules.keywordMatch')} "${form.trigger_keyword}"` : ` (${t('rules.anyIncome')})`}
                     {form.trigger_amount_min ? ` ${t('rules.minimumMatch')} ${fmt(parseFloat(form.trigger_amount_min))}` : ''},
                     {' '}{t('rules.saveIntoPocket').toLowerCase()} {form.rule_type === 'percentage' ? `${form.amount_value}%` : fmt(parseFloat(form.amount_value))} →{' '}
@@ -271,12 +271,12 @@ export default function RulesPage() {
 
           {/* Rules list */}
           {loading ? (
-            <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>{t('rules.loadingRules')}</div>
+            <div style={{ color: 'var(--text-primary)', fontSize: '13px' }}>{t('rules.loadingRules')}</div>
           ) : rules.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '70px 20px' }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>⚡</div>
               <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>{t('rules.noRules')}</div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '380px', margin: '0 auto 24px' }}>
+              <div style={{ fontSize: '13px', color: 'var(--text-primary)', maxWidth: '380px', margin: '0 auto 24px' }}>
                 {t('rules.firstRuleHint')}
               </div>
               {pockets.length > 0 ? (

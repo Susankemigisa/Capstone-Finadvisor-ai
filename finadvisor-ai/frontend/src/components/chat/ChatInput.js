@@ -215,9 +215,9 @@ export default function ChatInput({ onSend, disabled, placeholder = 'Ask about s
             return (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--bg-elevated)', border: `1px solid ${isDoc ? 'var(--gold-dim)' : 'var(--border)'}`, borderRadius: '6px', padding: '4px 8px', fontSize: '11px' }}>
                 <span>{isDoc ? '📄' : '🖼️'}</span>
-                <span style={{ color: 'var(--text-secondary)' }}>{a.name}</span>
+                <span style={{ color: 'var(--text-primary)' }}>{a.name}</span>
                 <span style={{ color: 'var(--text-dim)' }}>({formatSize(a.size)})</span>
-                {isDoc && <span style={{ color: 'var(--gold)', fontSize: '10px' }}>{uploading ? '⏳' : '→ AI'}</span>}
+                {isDoc && <span style={{ color: 'var(--gold-light)', fontSize: '10px' }}>{uploading ? '⏳' : '→ AI'}</span>}
                 <button onClick={() => removeAttachment(i)}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-dim)', padding: '0', lineHeight: 1, fontSize: '13px' }}>✕</button>
               </div>

@@ -86,7 +86,7 @@ function PocketCard({ pocket, onTransact, onDelete }) {
           {fmt(pocket.current_amount, pocket.currency)}
         </div>
         {pocket.target_amount > 0 && (
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+          <div style={{ fontSize: '12px', color: 'var(--text-primary)', marginTop: '2px' }}>
             of {fmt(pocket.target_amount, pocket.currency)} goal
             {pocket.target_date && ` · due ${new Date(pocket.target_date).toLocaleDateString('en-UG', { month: 'short', year: 'numeric' })}`}
           </div>
@@ -106,7 +106,7 @@ function PocketCard({ pocket, onTransact, onDelete }) {
           + Save
         </button>
         <button onClick={() => { setTxType('withdrawal'); setShowTransact(!showTransact) }}
-          style={{ flex: 1, background: 'var(--bg-elevated)', color: 'var(--text-secondary)', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px', fontSize: '12px', cursor: 'pointer' }}>
+          style={{ flex: 1, background: 'var(--bg-elevated)', color: 'var(--text-primary)', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px', fontSize: '12px', cursor: 'pointer' }}>
           Withdraw
         </button>
         <button onClick={() => onDelete(pocket.id)}
@@ -206,7 +206,7 @@ export default function SavingsPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
               <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('savings.title')}</h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>Virtual buckets — your money stays in your real bank, this tracks what&apos;s earmarked</p>
+              <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>Virtual buckets — your money stays in your real bank, this tracks what&apos;s earmarked</p>
             </div>
             <button onClick={() => setShowForm(!showForm)}
               style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
@@ -220,7 +220,7 @@ export default function SavingsPage() {
           {pockets.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px', marginBottom: '24px' }}>
               {[
-                { label: 'TOTAL SAVED', value: fmt(totalSaved), color: 'var(--gold)' },
+                { label: 'TOTAL SAVED', value: fmt(totalSaved), color: 'var(--gold-light)' },
                 { label: 'TOTAL TARGET', value: fmt(totalTarget), color: 'var(--text-primary)' },
                 { label: 'POCKETS', value: pockets.length, color: 'var(--text-primary)' },
                 { label: 'GOALS REACHED', value: `${reached} 🎉`, color: '#34d399' },
@@ -236,32 +236,32 @@ export default function SavingsPage() {
           {/* New pocket form */}
           {showForm && (
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--gold-dim)', borderRadius: '14px', padding: '24px', marginBottom: '24px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', marginBottom: '18px' }}>{t('savings.newPocket')}</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.08em', marginBottom: '18px' }}>{t('savings.newPocket')}</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('savings.pocketName')} *</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('savings.pocketName')} *</label>
                   <input className="input" placeholder="e.g. Emergency Fund, Holiday Trip, New Laptop" value={form.name}
                     onChange={e => setForm({ ...form, name: e.target.value })} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('savings.targetAmount')}</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('savings.targetAmount')}</label>
                   <input className="input" type="number" placeholder="e.g. 5000000" value={form.target_amount}
                     onChange={e => setForm({ ...form, target_amount: e.target.value })} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('savings.currency')}</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('savings.currency')}</label>
                   <select value={form.currency} onChange={e => setForm({ ...form, currency: e.target.value })}
                     style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none' }}>
                     {['UGX','USD','KES','GBP','EUR'].map(c => <option key={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('savings.targetDate')}</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('savings.targetDate')}</label>
                   <input className="input" type="date" value={form.target_date}
                     onChange={e => setForm({ ...form, target_date: e.target.value })} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '8px' }}>{t('savings.icon')}</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '8px' }}>{t('savings.icon')}</label>
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {POCKET_ICONS.map(icon => (
                       <button key={icon} onClick={() => setForm({ ...form, icon })}
@@ -272,7 +272,7 @@ export default function SavingsPage() {
                   </div>
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '8px' }}>{t('savings.color')}</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '8px' }}>{t('savings.color')}</label>
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {POCKET_COLORS.map(color => (
                       <button key={color} onClick={() => setForm({ ...form, color })}
@@ -281,7 +281,7 @@ export default function SavingsPage() {
                   </div>
                 </div>
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('savings.description')}</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('savings.description')}</label>
                   <input className="input" placeholder="What is this pocket for?" value={form.description}
                     onChange={e => setForm({ ...form, description: e.target.value })} />
                 </div>
@@ -309,7 +309,7 @@ export default function SavingsPage() {
             <div style={{ textAlign: 'center', padding: '80px 20px' }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>💰</div>
               <div style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>{t('savings.noPockets')}</div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '400px', margin: '0 auto 24px' }}>
+              <div style={{ fontSize: '13px', color: 'var(--text-primary)', maxWidth: '400px', margin: '0 auto 24px' }}>
                 Create a pocket for each savings goal — Emergency Fund, Holiday Trip, New Phone. Your money stays in your real bank account, this just helps you track it.
               </div>
               <button onClick={() => setShowForm(true)}

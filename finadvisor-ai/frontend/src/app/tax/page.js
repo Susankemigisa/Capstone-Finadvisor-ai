@@ -31,8 +31,8 @@ function TaxCard({ record, onDelete }) {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
         <div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '28px', fontWeight: 700, color: 'var(--gold)' }}>{record.tax_year}</div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>{t(`tax.filing_${record.filing_status}`) || record.filing_status}</div>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '28px', fontWeight: 700, color: 'var(--gold-light)' }}>{record.tax_year}</div>
+          <div style={{ fontSize: '12px', color: 'var(--text-primary)', marginTop: '2px' }}>{t(`tax.filing_${record.filing_status}`) || record.filing_status}</div>
         </div>
         <button onClick={() => onDelete(record.id)}
           style={{ background: 'none', border: '1px solid var(--border)', borderRadius: '6px', padding: '4px 8px', color: 'var(--red, #f87171)', cursor: 'pointer', fontSize: '12px' }}>
@@ -45,7 +45,7 @@ function TaxCard({ record, onDelete }) {
           { label: t('tax.annualIncome'), value: `$${(record.annual_income || 0).toLocaleString()}` },
           { label: t('tax.shortTermGains'), value: `$${(record.capital_gains_short || 0).toLocaleString()}` },
           { label: t('tax.longTermGains'), value: `$${(record.capital_gains_long || 0).toLocaleString()}` },
-          { label: t('tax.effectiveRate'), value: `${effectiveRate}%`, color: 'var(--gold)' },
+          { label: t('tax.effectiveRate'), value: `${effectiveRate}%`, color: 'var(--gold-light)' },
         ].map((row, i) => (
           <div key={i}>
             <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginBottom: '3px', letterSpacing: '0.05em' }}>{row.label}</div>
@@ -55,14 +55,14 @@ function TaxCard({ record, onDelete }) {
       </div>
 
       <div style={{ background: 'var(--bg-base)', borderRadius: '8px', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: '12px', color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>{t('tax.estimatedTax')}</span>
+        <span style={{ fontSize: '12px', color: 'var(--text-primary)', letterSpacing: '0.05em' }}>{t('tax.estimatedTax')}</span>
         <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '20px', fontWeight: 700, color: '#f87171' }}>
           ${(record.estimated_tax_owed || 0).toLocaleString()}
         </span>
       </div>
 
       {record.notes && (
-        <div style={{ marginTop: '10px', fontSize: '12px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>{record.notes}</div>
+        <div style={{ marginTop: '10px', fontSize: '12px', color: 'var(--text-primary)', fontStyle: 'italic' }}>{record.notes}</div>
       )}
     </div>
   )
@@ -160,7 +160,7 @@ export default function TaxPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
               <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('tax.title')}</h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>{t('tax.subtitle')}</p>
+              <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>{t('tax.subtitle')}</p>
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button onClick={() =>{ setShowForm(!showForm); setPreview(null) }}
@@ -174,37 +174,37 @@ export default function TaxPage() {
         {/* Form */}
         {showForm && (
           <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--gold)', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '16px', letterSpacing: '0.05em' }}>{t('tax.label')}</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '0.05em' }}>{t('tax.label')}</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('tax.taxYear')}</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('tax.taxYear')}</label>
                 <input className="input" type="number" value={form.tax_year}
                   onChange={e => setForm({ ...form, tax_year: parseInt(e.target.value) })} />
               </div>
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('tax.filingStatus')}</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('tax.filingStatus')}</label>
                 <select value={form.filing_status} onChange={e => setForm({ ...form, filing_status: e.target.value })}
                   style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none' }}>
                   {[['single', t('tax.filing_single')],['married_filing_jointly', t('tax.filing_married_jointly')],['married_filing_separately', t('tax.filing_married_separately')],['head_of_household', t('tax.filing_head_household')]].map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                 </select>
               </div>
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('tax.annualIncome')}</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('tax.annualIncome')}</label>
                 <input className="input" type="number" placeholder="75000" value={form.annual_income}
                   onChange={e => { setForm({ ...form, annual_income: e.target.value }); setPreview(null) }} />
               </div>
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('tax.shortTermGains')}</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('tax.shortTermGains')}</label>
                 <input className="input" type="number" placeholder="0" value={form.capital_gains_short}
                   onChange={e => { setForm({ ...form, capital_gains_short: e.target.value }); setPreview(null) }} />
               </div>
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('tax.longTermGains')}</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('tax.longTermGains')}</label>
                 <input className="input" type="number" placeholder="0" value={form.capital_gains_long}
                   onChange={e => { setForm({ ...form, capital_gains_long: e.target.value }); setPreview(null) }} />
               </div>
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('tax.notes')}</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>{t('tax.notes')}</label>
                 <input className="input" placeholder={t('tax.notesPlaceholder')} value={form.notes}
                   onChange={e => setForm({ ...form, notes: e.target.value })} />
               </div>
@@ -213,7 +213,7 @@ export default function TaxPage() {
             {/* Estimate preview */}
             {preview !== null && (
               <div style={{ marginTop: '16px', background: 'var(--bg-base)', borderRadius: '8px', padding: '14px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>{t('tax.estimatedTax')}</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-primary)' }}>{t('tax.estimatedTax')}</span>
                 <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '22px', fontWeight: 700, color: '#f87171' }}>${preview.toLocaleString()}</span>
               </div>
             )}
@@ -234,9 +234,9 @@ export default function TaxPage() {
 
         {/* Records */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-secondary)' }}>{t('tax.loading')}</div>
+          <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-primary)' }}>{t('tax.loading')}</div>
         ) : records.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-secondary)' }}>
+          <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-primary)' }}>
             <div style={{ fontSize: '40px', marginBottom: '12px' }}>🧾</div>
             <div style={{ fontSize: '16px', color: 'var(--text-primary)', marginBottom: '6px' }}>{t('tax.empty')}</div>
             <div style={{ fontSize: '13px' }}>{t('tax.emptyHint')}</div>

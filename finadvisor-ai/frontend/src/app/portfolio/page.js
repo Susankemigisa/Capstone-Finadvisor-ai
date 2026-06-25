@@ -40,7 +40,7 @@ function DonutChart({ positions, allocLabel }) {
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}>
             <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: s.color, flexShrink: 0 }} />
             <span style={{ color: 'var(--text-primary)', fontWeight: 500, minWidth: '48px', fontFamily: 'DM Mono, monospace' }}>{s.ticker}</span>
-            <span style={{ color: 'var(--text-secondary)' }}>{s.pct.toFixed(1)}%</span>
+            <span style={{ color: 'var(--text-primary)' }}>{s.pct.toFixed(1)}%</span>
           </div>
         ))}
       </div>
@@ -55,7 +55,7 @@ function StatCard({ label, value, sub, color, icon }) {
         <span>{icon}</span>{label}
       </div>
       <div style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'DM Mono, monospace', color: color || 'var(--text-primary)', marginBottom: '4px' }}>{value}</div>
-      {sub && <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{sub}</div>}
+      {sub && <div style={{ fontSize: '12px', color: 'var(--text-primary)' }}>{sub}</div>}
     </div>
   )
 }
@@ -80,27 +80,27 @@ function AddPositionModal({ onClose, onAdd }) {
         {error && <div style={{ background: 'var(--red-dim)', border: '1px solid var(--red)', borderRadius: '6px', padding: '10px 12px', fontSize: '12px', color: 'var(--red)', marginBottom: '14px' }}>{error}</div>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div>
-            <label style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>{t('portfolio.tickerSymbol')}</label>
+            <label style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>{t('portfolio.tickerSymbol')}</label>
             <input className="input" value={form.ticker} onChange={e => setForm({...form, ticker: e.target.value.toUpperCase()})} placeholder={t('portfolio.tickerPlaceholder')} style={{ fontFamily: 'DM Mono, monospace' }} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>{t('portfolio.sharesUnits')}</label>
+              <label style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>{t('portfolio.sharesUnits')}</label>
               <input className="input" type="number" value={form.shares} onChange={e => setForm({...form, shares: e.target.value})} placeholder="10" />
             </div>
             <div>
-              <label style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>{t('portfolio.avgBuyPrice')}</label>
+              <label style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>{t('portfolio.avgBuyPrice')}</label>
               <input className="input" type="number" value={form.avg_buy_price} onChange={e => setForm({...form, avg_buy_price: e.target.value})} placeholder="150.00" />
             </div>
           </div>
           <div>
-            <label style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>{t('portfolio.assetType')}</label>
+            <label style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.06em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>{t('portfolio.assetType')}</label>
             <select className="input" value={form.asset_type} onChange={e => setForm({...form, asset_type: e.target.value})} style={{ cursor: 'pointer' }}>
               <option value="stock">{t('assetTypes.stock')}</option><option value="crypto">{t('assetTypes.crypto')}</option><option value="etf">{t('assetTypes.etf')}</option>
             </select>
           </div>
           <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
-            <button onClick={onClose} style={{ flex: 1, background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', padding: '10px', cursor: 'pointer', fontSize: '13px' }}>{t('settings.cancel')}</button>
+            <button onClick={onClose} style={{ flex: 1, background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-primary)', padding: '10px', cursor: 'pointer', fontSize: '13px' }}>{t('settings.cancel')}</button>
             <button onClick={submit} disabled={loading} style={{ flex: 2, background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: 700, opacity: loading ? 0.7 : 1 }}>
               {loading ? t('portfolio.adding') : t('portfolio.addPosition')}
             </button>
@@ -147,7 +147,7 @@ export default function PortfolioPage() {
 
   if (authLoading || !user) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--bg-base)' }}>
-      <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '11px' }}>{t('common.loading')}</div>
+      <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '11px' }}>{t('common.loading')}</div>
     </div>
   )
 
@@ -162,10 +162,10 @@ export default function PortfolioPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
               <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('portfolio.title')}</h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>{t('portfolio.subtitle')}</p>
+              <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>{t('portfolio.subtitle')}</p>
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button onClick={fetchPortfolio} style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', padding: '8px 14px', cursor: 'pointer', fontSize: '12px' }}>↺ {t('portfolio.refresh')}</button>
+              <button onClick={fetchPortfolio} style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-primary)', padding: '8px 14px', cursor: 'pointer', fontSize: '12px' }}>↺ {t('portfolio.refresh')}</button>
               <button onClick={() => setShowAdd(true)} style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '8px 16px', cursor: 'pointer', fontSize: '12px', fontWeight: 700 }}>{t('portfolio.addPosition')}</button>
             </div>
           </div>
@@ -173,7 +173,7 @@ export default function PortfolioPage() {
 
         <div style={{ padding: '24px 28px' }}>
           <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          {loading && <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-secondary)', fontFamily: 'DM Mono, monospace', fontSize: '12px' }}>{t('common.loading')}</div>}
+          {loading && <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-primary)', fontFamily: 'DM Mono, monospace', fontSize: '12px' }}>{t('common.loading')}</div>}
           {error && <div style={{ background: 'var(--red-dim)', border: '1px solid var(--red)', borderRadius: '10px', padding: '16px', color: 'var(--red)', fontSize: '13px', marginBottom: '20px' }}>{error}</div>}
           {!loading && !error && (
             <>
@@ -193,7 +193,7 @@ export default function PortfolioPage() {
                 <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '16px', padding: '60px', textAlign: 'center' }}>
                   <div style={{ fontSize: '40px', marginBottom: '16px' }}>◎</div>
                   <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '22px', fontStyle: 'italic', marginBottom: '8px' }}>{t('portfolio.emptyTitle')}</h2>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '24px' }}>{t('portfolio.emptyDesc')}</p>
+                  <p style={{ color: 'var(--text-primary)', fontSize: '13px', marginBottom: '24px' }}>{t('portfolio.emptyDesc')}</p>
                   <button onClick={() => setShowAdd(true)} style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '12px 28px', cursor: 'pointer', fontSize: '13px', fontWeight: 700 }}>{t('portfolio.addFirst')}</button>
                 </div>
               ) : (
@@ -221,15 +221,15 @@ export default function PortfolioPage() {
                                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                                 <td style={{ padding: '14px 16px' }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontFamily: 'DM Mono, monospace', fontWeight: 700, color: 'var(--gold)' }}>{pos.ticker.slice(0, 2)}</div>
+                                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontFamily: 'DM Mono, monospace', fontWeight: 700, color: 'var(--gold-light)' }}>{pos.ticker.slice(0, 2)}</div>
                                     <div>
                                       <div style={{ fontSize: '13px', fontWeight: 600, fontFamily: 'DM Mono, monospace' }}>{pos.ticker}</div>
                                       <div style={{ fontSize: '10px', color: 'var(--text-dim)', textTransform: 'uppercase' }}>{pos.asset_type}</div>
                                     </div>
                                   </div>
                                 </td>
-                                <td style={{ padding: '14px 16px', fontSize: '13px', fontFamily: 'DM Mono, monospace', color: 'var(--text-secondary)' }}>{pos.shares}</td>
-                                <td style={{ padding: '14px 16px', fontSize: '13px', fontFamily: 'DM Mono, monospace', color: 'var(--text-secondary)' }}>${pos.avg_buy_price.toLocaleString()}</td>
+                                <td style={{ padding: '14px 16px', fontSize: '13px', fontFamily: 'DM Mono, monospace', color: 'var(--text-primary)' }}>{pos.shares}</td>
+                                <td style={{ padding: '14px 16px', fontSize: '13px', fontFamily: 'DM Mono, monospace', color: 'var(--text-primary)' }}>${pos.avg_buy_price.toLocaleString()}</td>
                                 <td style={{ padding: '14px 16px', fontSize: '13px', fontFamily: 'DM Mono, monospace', fontWeight: 600 }}>${pos.current_price.toLocaleString()}</td>
                                 <td style={{ padding: '14px 16px', fontSize: '13px', fontFamily: 'DM Mono, monospace' }}>{fmt(pos.current_value)}</td>
                                 <td style={{ padding: '14px 16px' }}>
@@ -267,7 +267,7 @@ export default function PortfolioPage() {
                           { label: t('portfolio.topPerformer'), prompt: 'Which of my holdings is performing best?' },
                         ].map((a) => (
                           <button key={a.label} onClick={() => { localStorage.setItem('pending_prompt', a.prompt); router.push('/chat') }}
-                            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '6px', padding: '10px 12px', cursor: 'pointer', textAlign: 'left', fontSize: '12px', color: 'var(--text-secondary)', transition: 'all 0.1s' }}
+                            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '6px', padding: '10px 12px', cursor: 'pointer', textAlign: 'left', fontSize: '12px', color: 'var(--text-primary)', transition: 'all 0.1s' }}
                             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold-dim)'; e.currentTarget.style.color = 'var(--text-primary)' }}
                             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)' }}>
                             {a.label} →

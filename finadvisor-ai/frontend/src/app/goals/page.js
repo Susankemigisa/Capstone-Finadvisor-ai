@@ -107,12 +107,12 @@ function GoalCard({ goal, onUpdate, onDelete }) {
           <span style={{ fontSize: '26px' }}>{icon}</span>
           <div>
             <div style={{ fontWeight: 600, fontSize: '15px', color: 'var(--text-primary)' }}>{goal.goal_name}</div>
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'capitalize', marginTop: '2px' }}>{(goal.goal_type || '').replace('_', ' ')}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-primary)', textTransform: 'capitalize', marginTop: '2px' }}>{(goal.goal_type || '').replace('_', ' ')}</div>
           </div>
         </div>
         <div style={{ display: 'flex', gap: '6px' }}>
           <button onClick={() => setEditing(!editing)}
-            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '6px', padding: '5px 12px', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '12px' }}>
+            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '6px', padding: '5px 12px', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '12px' }}>
             Update
           </button>
           <button onClick={() => onDelete(goal.id)}
@@ -123,7 +123,7 @@ function GoalCard({ goal, onUpdate, onDelete }) {
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '6px' }}>
-        <span style={{ color: 'var(--text-secondary)' }}>
+        <span style={{ color: 'var(--text-primary)' }}>
           <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--text-primary)', fontWeight: 700 }}>
             {(goal.current_amount || 0).toLocaleString()}
           </span> / {goal.target_amount.toLocaleString()}
@@ -136,7 +136,7 @@ function GoalCard({ goal, onUpdate, onDelete }) {
         <div style={{ width: `${pct}%`, height: '100%', background: reached ? '#34d399' : color, borderRadius: '4px', transition: 'width 0.6s ease' }} />
       </div>
 
-      <div style={{ display: 'flex', gap: '14px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+      <div style={{ display: 'flex', gap: '14px', fontSize: '12px', color: 'var(--text-primary)' }}>
         {daysLeft !== null && (
           <span>{daysLeft > 0 ? `${daysLeft} days left` : daysLeft === 0 ? '📅 Due today' : `${Math.abs(daysLeft)} days overdue`}</span>
         )}
@@ -145,7 +145,7 @@ function GoalCard({ goal, onUpdate, onDelete }) {
 
       {editing && (
         <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid var(--border)', display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <label style={{ fontSize: '12px', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>Current amount</label>
+          <label style={{ fontSize: '12px', color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>Current amount</label>
           <input type="number" value={amount} onChange={e => setAmount(e.target.value)}
             style={{ flex: 1, background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '6px', padding: '7px 10px', color: 'var(--text-primary)', fontSize: '13px', fontFamily: 'DM Mono, monospace', outline: 'none' }} />
           <button onClick={handleSave} disabled={saving}
@@ -234,7 +234,7 @@ export default function GoalsPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px' }}>
             <div>
               <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('goals.title')}</h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>Track progress towards your financial goals</p>
+              <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>Track progress towards your financial goals</p>
             </div>
             <button onClick={() => setShowForm(!showForm)}
               style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
@@ -248,14 +248,14 @@ export default function GoalsPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px', marginBottom: '24px' }}>
               {[
                 { label: 'TOTAL GOALS', value: goals.length, sub: `${completed} completed` },
-                { label: 'TARGET',  value: totalTarget.toLocaleString(), color: 'var(--gold)' },
+                { label: 'TARGET',  value: totalTarget.toLocaleString(), color: 'var(--gold-light)' },
                 { label: 'SAVED',   value: totalSaved.toLocaleString(),  color: '#34d399' },
                 { label: 'OVERALL', value: `${totalTarget > 0 ? ((totalSaved / totalTarget) * 100).toFixed(1) : 0}%`, color: '#4a9eff' },
               ].map((s, i) => (
                 <div key={i} style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
                   <div style={{ fontSize: '10px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '8px' }}>{s.label}</div>
                   <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '20px', fontWeight: 700, color: s.color || 'var(--text-primary)' }}>{s.value}</div>
-                  {s.sub && <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px' }}>{s.sub}</div>}
+                  {s.sub && <div style={{ fontSize: '11px', color: 'var(--text-primary)', marginTop: '4px' }}>{s.sub}</div>}
                 </div>
               ))}
             </div>
@@ -263,29 +263,29 @@ export default function GoalsPage() {
 
           {showForm && (
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--gold-dim)', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', marginBottom: '16px' }}>NEW FINANCIAL GOAL</div>
+              <div style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.08em', marginBottom: '16px' }}>NEW FINANCIAL GOAL</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>GOAL NAME *</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>GOAL NAME *</label>
                   <input className="input" placeholder="e.g. Emergency Fund, Holiday, New Car" value={form.goal_name} onChange={e => setForm({ ...form, goal_name: e.target.value })} autoFocus />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>TYPE</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>TYPE</label>
                   <select value={form.goal_type} onChange={e => setForm({ ...form, goal_type: e.target.value })}
                     style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none' }}>
                     {Object.entries(GOAL_ICONS).map(([k, v]) => <option key={k} value={k}>{v} {k.replace('_', ' ')}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>TARGET AMOUNT *</label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>TARGET AMOUNT *</label>
                   <input className="input" type="number" placeholder="e.g. 5000000" value={form.target_amount} onChange={e => setForm({ ...form, target_amount: e.target.value })} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>TARGET DATE <span style={{ color: 'var(--text-dim)' }}>(optional)</span></label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>TARGET DATE <span style={{ color: 'var(--text-dim)' }}>(optional)</span></label>
                   <input className="input" type="date" value={form.target_date} onChange={e => setForm({ ...form, target_date: e.target.value })} />
                 </div>
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>NOTES <span style={{ color: 'var(--text-dim)' }}>(optional)</span></label>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginBottom: '6px' }}>NOTES <span style={{ color: 'var(--text-dim)' }}>(optional)</span></label>
                   <input className="input" placeholder="Why is this goal important to you?" value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} />
                 </div>
               </div>
@@ -298,12 +298,12 @@ export default function GoalsPage() {
           )}
 
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-secondary)' }}>Loading goals...</div>
+            <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-primary)' }}>Loading goals...</div>
           ) : goals.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '70px 20px', background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px' }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎯</div>
               <div style={{ fontSize: '17px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>No goals yet</div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '360px', margin: '0 auto 24px', lineHeight: 1.6 }}>
+              <div style={{ fontSize: '13px', color: 'var(--text-primary)', maxWidth: '360px', margin: '0 auto 24px', lineHeight: 1.6 }}>
                 Goals give your savings a purpose. Whether it's an emergency fund, a holiday, or a new business — set a target and watch your progress grow.
               </div>
               <button onClick={() => setShowForm(true)}

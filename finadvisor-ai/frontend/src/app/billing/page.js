@@ -128,7 +128,7 @@ export default function BillingPage() {
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
-        <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>{t('billing.loading')}</div>
+        <div style={{ color: 'var(--text-primary)', fontSize: '13px' }}>{t('billing.loading')}</div>
       </div>
     </div>
   )
@@ -142,7 +142,7 @@ export default function BillingPage() {
             <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>
               {isPro ? t('billing.titlePro') : t('billing.title')}
             </h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>
+            <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>
               {t('billing.subtitle')}
             </p>
           </div>
@@ -154,8 +154,8 @@ export default function BillingPage() {
           {isPro && (
             <div style={{ background: 'var(--bg-surface)', border: '2px solid var(--gold)', borderRadius: '16px', padding: '32px', textAlign: 'center', marginBottom: '24px' }}>
               <div style={{ fontSize: '48px', marginBottom: '12px' }}>◆</div>
-              <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '14px', letterSpacing: '0.1em', marginBottom: '8px' }}>{t('billing.proMember')}</div>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '8px' }}>
+              <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '14px', letterSpacing: '0.1em', marginBottom: '8px' }}>{t('billing.proMember')}</div>
+              <div style={{ color: 'var(--text-primary)', fontSize: '13px', marginBottom: '8px' }}>
                 {t('billing.planLabel')}: <strong style={{ color: 'var(--text-primary)' }}>{billingStatus?.plan === 'pro_yearly' ? t('billing.proYearly') : t('billing.proMonthly')}</strong>
                 {' · '}
                 {t('billing.providerLabel')}: <strong style={{ color: 'var(--text-primary)', textTransform: 'capitalize' }}>{billingStatus?.provider || '—'}</strong>
@@ -191,18 +191,18 @@ export default function BillingPage() {
                 <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px' }}>
                   <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px' }}>{t('billing.free')}</div>
                   <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '28px', fontWeight: 700, marginBottom: '4px' }}>UGX 0</div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '20px' }}>{t('billing.foreverFree')}</div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-primary)', marginBottom: '20px' }}>{t('billing.foreverFree')}</div>
                   {[
                     t('billing.freePlanFeature1'),
                     t('billing.freePlanFeature2'),
                     t('billing.freePlanFeature3'),
                     t('billing.freePlanFeature4'),
                   ].map(f => (
-                    <div key={f} style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '8px', display: 'flex', gap: '8px' }}>
+                    <div key={f} style={{ fontSize: '12px', color: 'var(--text-primary)', marginBottom: '8px', display: 'flex', gap: '8px' }}>
                       <span style={{ color: 'var(--text-dim)' }}>○</span> {f}
                     </div>
                   ))}
-                  <button disabled style={{ width: '100%', marginTop: '16px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px', fontSize: '13px', color: 'var(--text-secondary)', cursor: 'not-allowed' }}>
+                  <button disabled style={{ width: '100%', marginTop: '16px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px', fontSize: '13px', color: 'var(--text-primary)', cursor: 'not-allowed' }}>
                     {t('billing.currentPlanBtn')}
                   </button>
                 </div>
@@ -216,12 +216,12 @@ export default function BillingPage() {
                   <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '28px', fontWeight: 700, color: 'var(--gold)', marginBottom: '4px' }}>
                     UGX {selectedPlan ? fmt(selectedPlan.amount_ugx) : '—'}
                   </div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-primary)', marginBottom: '20px' }}>
                     per {selectedPlan?.interval_label || t('billing.perMonth')}
                   </div>
                   {(selectedPlan?.features || []).map(f => (
                     <div key={f} style={{ fontSize: '12px', marginBottom: '8px', display: 'flex', gap: '8px' }}>
-                      <span style={{ color: 'var(--gold)' }}>◆</span> {f}
+                      <span style={{ color: 'var(--gold-light)' }}>◆</span> {f}
                     </div>
                   ))}
                   <button onClick={() => setStep('pay')}
@@ -241,16 +241,16 @@ export default function BillingPage() {
           {!isPro && step === 'pay' && (
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '16px', padding: '32px' }}>
               <button onClick={() => { setStep('plans'); setSelectedProvider(null); setPhone(''); setPhoneError('') }}
-                style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '13px', marginBottom: '20px', padding: 0 }}>
+                style={{ background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '13px', marginBottom: '20px', padding: 0 }}>
                 ← {t('billing.backBtn')}
               </button>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
-                {t('billing.payingLabel')} <strong style={{ color: 'var(--gold)' }}>UGX {selectedPlan ? fmt(selectedPlan.amount_ugx) : '—'}</strong>
+              <div style={{ fontSize: '13px', color: 'var(--text-primary)', marginBottom: '20px' }}>
+                {t('billing.payingLabel')} <strong style={{ color: 'var(--gold-light)' }}>UGX {selectedPlan ? fmt(selectedPlan.amount_ugx) : '—'}</strong>
                 {' '}{t('billing.forLabel')} <strong style={{ color: 'var(--text-primary)' }}>{selectedPlan?.name}</strong>
               </div>
 
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '10px' }}>{t('billing.selectNetwork')}</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.08em', display: 'block', marginBottom: '10px' }}>{t('billing.selectNetwork')}</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                   {PROVIDERS.map(p => (
                     <button key={p.id} onClick={() => { setSelectedProvider(p); setPhone(''); setPhoneError('') }}
@@ -265,7 +265,7 @@ export default function BillingPage() {
 
               {selectedProvider && (
                 <div style={{ marginBottom: '20px' }}>
-                  <label style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>
                     {t('billing.yourNumberLabel').replace('{provider}', selectedProvider.name.toUpperCase())}
                   </label>
                   <input
@@ -281,7 +281,7 @@ export default function BillingPage() {
                 </div>
               )}
 
-              <div style={{ background: 'var(--bg-elevated)', borderRadius: '10px', padding: '14px', marginBottom: '20px', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+              <div style={{ background: 'var(--bg-elevated)', borderRadius: '10px', padding: '14px', marginBottom: '20px', fontSize: '12px', color: 'var(--text-primary)', lineHeight: 1.7 }}>
                 <strong style={{ color: 'var(--text-primary)' }}>{t('billing.howItWorks')}</strong>
                 <br />1. {t('billing.howStep1')}
                 <br />2. {t('billing.howStep2').replace('{provider}', selectedProvider?.name || 'MoMo')}
@@ -306,7 +306,7 @@ export default function BillingPage() {
               <div style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
                 {t('billing.processingPayment')}…
               </div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.7 }}>
+              <div style={{ fontSize: '13px', color: 'var(--text-primary)', marginBottom: '16px', lineHeight: 1.7 }}>
                 {selectedProvider?.id === 'mtn' ? (
                   <>
                     {t('billing.mtnProcessing').replace('{amount}', `UGX ${selectedPlan ? fmt(selectedPlan.amount_ugx) : ''}`)}
@@ -337,7 +337,7 @@ export default function BillingPage() {
             <div style={{ background: 'var(--bg-surface)', border: '2px solid #34d399', borderRadius: '16px', padding: '48px', textAlign: 'center' }}>
               <div style={{ fontSize: '56px', marginBottom: '16px' }}>🎉</div>
               <div style={{ fontSize: '22px', fontWeight: 700, color: '#34d399', marginBottom: '8px' }}>{t('billing.successTitle')}</div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '28px' }}>
+              <div style={{ fontSize: '13px', color: 'var(--text-primary)', marginBottom: '28px' }}>
                 {t('billing.successMsg')}
               </div>
               <button onClick={() => router.push('/chat')}
@@ -352,7 +352,7 @@ export default function BillingPage() {
             <div style={{ background: 'var(--bg-surface)', border: '1px solid #f87171', borderRadius: '16px', padding: '32px', textAlign: 'center' }}>
               <div style={{ fontSize: '40px', marginBottom: '16px' }}>❌</div>
               <div style={{ fontSize: '16px', fontWeight: 600, color: '#f87171', marginBottom: '8px' }}>{t('billing.paymentFailed')}</div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '24px' }}>{errorMsg}</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-primary)', marginBottom: '24px' }}>{errorMsg}</div>
               <button onClick={() => { setStep('pay'); setErrorMsg('') }}
                 style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
                 {t('billing.tryAgain')}

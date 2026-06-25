@@ -77,7 +77,7 @@ export default function PageShell({ children, title, subtitle }) {
             </div>
 
             {/* FinAdvisor logo */}
-            <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '10px', letterSpacing: '0.1em', flexShrink: 0 }}>
+            <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '10px', letterSpacing: '0.1em', flexShrink: 0 }}>
               ◆ FA
             </div>
           </div>

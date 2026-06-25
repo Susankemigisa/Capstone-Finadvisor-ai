@@ -104,10 +104,10 @@ export default function OnboardingPage() {
         {step === 0 && (
           <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '20px', padding: '40px', textAlign: 'center' }}>
             <div style={{ fontSize: '56px', marginBottom: '20px' }}>◆</div>
-            <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '28px', fontStyle: 'italic', fontWeight: 400, marginBottom: '12px', color: 'var(--gold)' }}>
+            <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '28px', fontStyle: 'italic', fontWeight: 400, marginBottom: '12px', color: 'var(--gold-light)' }}>
               Welcome to FinAdvisor
             </h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.7, margin: '0 auto 32px', maxWidth: '380px' }}>
+            <p style={{ color: 'var(--text-primary)', fontSize: '14px', lineHeight: 1.7, margin: '0 auto 32px', maxWidth: '380px' }}>
               Your AI-powered financial advisor. Ask anything about your money, track your portfolio, manage your budget, and get personalised guidance — all in one place.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '32px', textAlign: 'left', maxWidth: '320px', margin: '0 auto 32px' }}>
@@ -119,7 +119,7 @@ export default function OnboardingPage() {
               ].map(({ icon, text }) => (
                 <div key={text} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                   <span style={{ fontSize: '18px', flexShrink: 0 }}>{icon}</span>
-                  <span style={{ fontSize: '13px', color: 'var(--text-secondary)', paddingTop: '2px' }}>{text}</span>
+                  <span style={{ fontSize: '13px', color: 'var(--text-primary)', paddingTop: '2px' }}>{text}</span>
                 </div>
               ))}
             </div>
@@ -137,16 +137,16 @@ export default function OnboardingPage() {
         {step === 1 && (
           <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '20px', padding: '40px' }}>
             <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400, marginBottom: '6px' }}>Tell us about you</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '28px' }}>Just two quick things so FinAdvisor can personalise your experience</p>
+            <p style={{ color: 'var(--text-primary)', fontSize: '13px', marginBottom: '28px' }}>Just two quick things so FinAdvisor can personalise your experience</p>
 
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>WHAT SHOULD WE CALL YOU?</label>
+              <label style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>WHAT SHOULD WE CALL YOU?</label>
               <input className="input" placeholder="Your first name or nickname" value={preferredName}
                 onChange={e => setPreferredName(e.target.value)} autoFocus style={{ fontSize: '16px', padding: '12px 16px' }} />
             </div>
 
             <div style={{ marginBottom: '32px' }}>
-              <label style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>YOUR MAIN CURRENCY</label>
+              <label style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>YOUR MAIN CURRENCY</label>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 {CURRENCIES.map(c => (
                   <button key={c.code} onClick={() => setCurrency(c.code)}
@@ -173,7 +173,7 @@ export default function OnboardingPage() {
             <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400, marginBottom: '6px' }}>
               What matters most to you, {name}?
             </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '24px' }}>
+            <p style={{ color: 'var(--text-primary)', fontSize: '13px', marginBottom: '24px' }}>
               Select all that apply — your AI advisor will tailor its advice to your priorities.
             </p>
 
@@ -194,7 +194,7 @@ export default function OnboardingPage() {
             </div>
 
             <div style={{ marginBottom: '28px' }}>
-              <label style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.08em', display: 'block', marginBottom: '10px' }}>
+              <label style={{ fontSize: '11px', color: 'var(--text-primary)', letterSpacing: '0.08em', display: 'block', marginBottom: '10px' }}>
                 MONTHLY INCOME RANGE <span style={{ color: 'var(--text-dim)', fontWeight: 400 }}>(optional)</span>
               </label>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -221,10 +221,10 @@ export default function OnboardingPage() {
         {step === 3 && (
           <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '20px', padding: '40px', textAlign: 'center' }}>
             <div style={{ fontSize: '56px', marginBottom: '16px' }}>🎉</div>
-            <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '28px', fontStyle: 'italic', fontWeight: 400, marginBottom: '12px', color: 'var(--gold)' }}>
+            <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '28px', fontStyle: 'italic', fontWeight: 400, marginBottom: '12px', color: 'var(--gold-light)' }}>
               {"You're all set, "}{name}!
             </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.7, marginBottom: '32px' }}>
+            <p style={{ color: 'var(--text-primary)', fontSize: '14px', lineHeight: 1.7, marginBottom: '32px' }}>
               Your AI financial advisor is ready. Here are some things to try first:
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '32px', textAlign: 'left' }}>
@@ -239,7 +239,7 @@ export default function OnboardingPage() {
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gold-dim)'}
                   onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
                   <span style={{ fontSize: '20px', flexShrink: 0 }}>{icon}</span>
-                  <span style={{ fontSize: '13px', color: 'var(--text-secondary)', paddingTop: '1px', lineHeight: 1.5 }}>{text}</span>
+                  <span style={{ fontSize: '13px', color: 'var(--text-primary)', paddingTop: '1px', lineHeight: 1.5 }}>{text}</span>
                 </a>
               ))}
             </div>

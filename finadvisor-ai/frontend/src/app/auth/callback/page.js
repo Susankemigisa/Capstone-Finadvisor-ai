@@ -65,12 +65,12 @@ export default function OAuthCallbackPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-base)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center', maxWidth: '400px', padding: '24px' }}>
-        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '24px' }}>◆ FINADVISOR AI</div>
+        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '24px' }}>◆ FINADVISOR AI</div>
         {!error ? (
           <>
-            <div style={{ width: '40px', height: '40px', border: '2px solid var(--gold)', borderTopColor: 'transparent', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 0.8s linear infinite' }} />
+            <div style={{ width: '40px', height: '40px', border: '2px solid var(--gold-light)', borderTopColor: 'transparent', borderRadius: '50%', margin: '0 auto 20px', animation: 'spin 0.8s linear infinite' }} />
             <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>{status}</p>
+            <p style={{ color: 'var(--text-primary)', fontSize: '13px' }}>{status}</p>
           </>
         ) : (
           <>

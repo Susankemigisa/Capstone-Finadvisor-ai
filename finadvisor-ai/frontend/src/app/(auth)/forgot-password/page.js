@@ -73,8 +73,7 @@ const BG = {
 }
 const GRID_OVERLAY = {
   position: 'fixed', inset: 0,
-  backgroundImage: 'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)',
-  backgroundSize: '60px 60px', opacity: 0.3, pointerEvents: 'none',
+  pointerEvents: 'none',
 }
 const CARD = { padding: '36px', borderRadius: '16px', background: 'var(--bg-surface)', border: '1px solid var(--border)' }
 const BTN_PRIMARY = {
@@ -155,7 +154,7 @@ export default function ForgotPasswordPage() {
 
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-          <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '10px' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '10px' }}>
             ◆ FINADVISOR AI
           </div>
           <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '28px', fontWeight: 400, color: 'var(--text-primary)', fontStyle: 'italic', margin: 0 }}>
@@ -166,12 +165,12 @@ export default function ForgotPasswordPage() {
         {/* ── Step 1: Enter email ── */}
         {step === 'request' && (
           <div style={CARD}>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '24px', lineHeight: 1.6 }}>
+            <p style={{ color: 'var(--text-primary)', fontSize: '13px', marginBottom: '24px', lineHeight: 1.6 }}>
               {t('auth.resetSubtitle')}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '6px', letterSpacing: '0.05em' }}>
+                <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '0.05em' }}>
                   {t('auth.emailAddress')}
                 </label>
                 <input
@@ -195,14 +194,14 @@ export default function ForgotPasswordPage() {
             <p style={{ color: 'var(--text-primary)', fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>
               {t('auth.checkInbox')}
             </p>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.6, marginBottom: '28px' }}>
-              We sent a <strong style={{ color: 'var(--text-primary)' }}>6-digit code</strong> to <strong style={{ color: 'var(--gold)' }}>{email}</strong>. 
+            <p style={{ color: 'var(--text-primary)', fontSize: '13px', lineHeight: 1.6, marginBottom: '28px' }}>
+              We sent a <strong style={{ color: 'var(--text-primary)' }}>6-digit code</strong> to <strong style={{ color: 'var(--gold-light)' }}>{email}</strong>. 
               Copy it from your email and enter it below.
             </p>
             <button style={{ ...BTN_PRIMARY, marginBottom: '16px' }} onClick={() => setStep('enter-code')}>
               Enter Code →
             </button>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '12px', margin: 0 }}>
+            <p style={{ color: 'var(--text-primary)', fontSize: '12px', margin: 0 }}>
               Didn&apos;t get it?{' '}
               <button onClick={() => setStep('request')} style={{ background: 'none', border: 'none', color: 'var(--gold)', cursor: 'pointer', fontSize: '12px', padding: 0 }}>
                 Try again
@@ -214,14 +213,14 @@ export default function ForgotPasswordPage() {
         {/* ── Step 3: Enter 6-digit code + new password ── */}
         {step === 'enter-code' && (
           <div style={CARD}>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '24px', lineHeight: 1.6 }}>
+            <p style={{ color: 'var(--text-primary)', fontSize: '13px', marginBottom: '24px', lineHeight: 1.6 }}>
               Enter the <strong style={{ color: 'var(--text-primary)' }}>6-digit code</strong> from your email, then choose a new password.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
               {/* Code boxes */}
               <div>
-                <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '10px', letterSpacing: '0.05em', textAlign: 'center' }}>
+                <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '10px', letterSpacing: '0.05em', textAlign: 'center' }}>
                   RESET CODE FROM EMAIL
                 </label>
                 <CodeInput value={code} onChange={setCode} />
@@ -232,7 +231,7 @@ export default function ForgotPasswordPage() {
 
               {/* New password */}
               <div>
-                <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '6px', letterSpacing: '0.05em' }}>
+                <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '0.05em' }}>
                   {t('auth.newPasswordLabel')}
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -245,7 +244,7 @@ export default function ForgotPasswordPage() {
                     style={{ paddingRight: '44px' }}
                   />
                   <button type="button" onClick={() => setShowPassword(!showPassword)}
-                    style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '4px', fontSize: '16px', lineHeight: 1 }}>
+                    style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-primary)', padding: '4px', fontSize: '16px', lineHeight: 1 }}>
                     {showPassword ? '🙈' : '👁'}
                   </button>
                 </div>
@@ -277,7 +276,7 @@ export default function ForgotPasswordPage() {
                 {loading ? t('auth.resetting') : t('auth.setNewPassword')}
               </button>
 
-              <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
+              <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-primary)', margin: 0 }}>
                 Wrong email?{' '}
                 <button onClick={() => setStep('request')} style={{ background: 'none', border: 'none', color: 'var(--gold)', cursor: 'pointer', fontSize: '12px', padding: 0 }}>
                   Start over
@@ -291,7 +290,7 @@ export default function ForgotPasswordPage() {
         {step === 'done' && (
           <div style={{ ...CARD, textAlign: 'center' }}>
             <div style={{ fontSize: '56px', marginBottom: '16px' }}>✅</div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '28px' }}>
+            <p style={{ color: 'var(--text-primary)', fontSize: '14px', marginBottom: '28px' }}>
               {t('auth.passwordUpdatedMsg')}
             </p>
             <Link href="/login">
@@ -301,9 +300,9 @@ export default function ForgotPasswordPage() {
         )}
 
         {step !== 'done' && (
-          <p style={{ textAlign: 'center', marginTop: '20px', color: 'var(--text-secondary)', fontSize: '13px' }}>
+          <p style={{ textAlign: 'center', marginTop: '20px', color: 'var(--text-primary)', fontSize: '13px' }}>
             {t('auth.rememberedIt')}{' '}
-            <Link href="/login" style={{ color: 'var(--gold)', textDecoration: 'none' }}>{t('auth.signInLink')}</Link>
+            <Link href="/login" style={{ color: 'var(--gold-light)', textDecoration: 'none' }}>{t('auth.signInLink')}</Link>
           </p>
         )}
       </div>

@@ -92,7 +92,7 @@ export default function AlertsPage() {
         <div style={{ padding: '20px 28px', borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '24px', fontStyle: 'italic', fontWeight: 400 }}>{t('alerts.title')} 🔔</h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>{alerts.length} {alerts.length !== 1 ? t('alerts.subtitlePlural') : t('alerts.subtitle')}</p>
+            <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>{alerts.length} {alerts.length !== 1 ? t('alerts.subtitlePlural') : t('alerts.subtitle')}</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ fontSize: '11px', color: 'var(--text-dim)', textAlign: 'right' }}>
@@ -138,7 +138,7 @@ export default function AlertsPage() {
                   style={{ textAlign: 'left', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', transition: 'border-color 0.15s' }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gold-dim)'}
                   onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
-                  <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--gold)' }}>{s.label}</div>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--gold-light)' }}>{s.label}</div>
                   <div style={{ fontSize: '10px', color: 'var(--green)', marginTop: '2px' }}>{s.desc}</div>
                 </button>
               ))}
@@ -183,8 +183,8 @@ export default function AlertsPage() {
               {alerts.map(alert => (
                 <div key={alert.id} style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '14px', fontWeight: 700, color: 'var(--gold)' }}>{alert.ticker}</div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '14px', fontWeight: 700, color: 'var(--gold-light)' }}>{alert.ticker}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-primary)' }}>
                       {alert.condition === 'above' ? '↑ above' : '↓ below'} <strong style={{ color: 'var(--text-primary)' }}>${parseFloat(alert.target_price).toFixed(2)}</strong>
                     </div>
                     <div style={{ fontSize: '10px', color: 'var(--text-dim)', background: 'var(--bg-elevated)', borderRadius: '4px', padding: '2px 8px' }}>{alert.asset_type}</div>

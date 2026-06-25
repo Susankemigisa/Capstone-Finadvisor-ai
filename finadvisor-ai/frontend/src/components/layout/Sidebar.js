@@ -118,7 +118,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
     }}>
       {/* Header */}
       <div style={{ padding: '16px 12px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '10px', minHeight: '56px' }}>
-        {(!collapsed || isMobile) && <div style={{ flex: 1 }}><div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '10px', letterSpacing: '0.12em' }}>◆ FINADVISOR</div></div>}
+        {(!collapsed || isMobile) && <div style={{ flex: 1 }}><div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '10px', letterSpacing: '0.12em' }}>◆ FINADVISOR</div></div>}
         {isMobile ? (
           <button onClick={onMobileClose} style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', padding: '4px', fontSize: '18px' }}>✕</button>
         ) : (
@@ -184,7 +184,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
               <div>
                 <div style={{ fontSize: '9px', color: 'var(--text-dim)', letterSpacing: '0.08em', padding: '4px 8px', textTransform: 'uppercase', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>{searchQuery ? `${filteredSessions.length} result${filteredSessions.length !== 1 ? 's' : ''}` : t('nav.recent')}</span>
-                  <Link href="/history" prefetch={false} style={{ color: 'var(--gold)', fontSize: '9px', textDecoration: 'none', letterSpacing: '0.06em', opacity: 0.8 }}
+                  <Link href="/history" prefetch={false} style={{ color: 'var(--gold-light)', fontSize: '9px', textDecoration: 'none', letterSpacing: '0.06em', opacity: 0.8 }}
                     onMouseEnter={e => e.currentTarget.style.opacity = '1'}
                     onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}>
                     {t('nav.viewAll') || 'View all'} →
@@ -203,7 +203,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
                 )}
                 {!searchQuery && sessions.length > 12 && (
                   <Link href="/history" prefetch={false} style={{ textDecoration: 'none', display: 'block', marginTop: '4px' }}>
-                    <div style={{ width: '100%', padding: '6px', background: 'none', border: '1px solid var(--border)', borderRadius: '6px', color: 'var(--gold)', fontSize: '11px', cursor: 'pointer', textAlign: 'center', letterSpacing: '0.04em' }}>
+                    <div style={{ width: '100%', padding: '6px', background: 'none', border: '1px solid var(--border)', borderRadius: '6px', color: 'var(--gold-light)', fontSize: '11px', cursor: 'pointer', textAlign: 'center', letterSpacing: '0.04em' }}>
                       {t('nav.showAll') || 'View all'} {sessions.length} →
                     </div>
                   </Link>
