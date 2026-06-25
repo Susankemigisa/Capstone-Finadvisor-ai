@@ -157,7 +157,7 @@ body { background: var(--bg-base); color: var(--text-primary); font-family: 'DM 
 .auth-bg::after { content: ''; position: fixed; bottom: -15%; left: -10%; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(99,33,72,0.2) 0%, transparent 70%); pointer-events: none; }
 
 /* auth card */
-.auth-card { background: rgba(3,62,91,0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(26,106,138,0.35); border-radius: var(--radius-lg); padding: 32px; }
+.auth-card { background: rgba(3,62,91,0.45); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(26,106,138,0.35); border-radius: var(--radius-lg); padding: 32px; }
 
 /* mobile */
 @media (max-width: 767px) {
