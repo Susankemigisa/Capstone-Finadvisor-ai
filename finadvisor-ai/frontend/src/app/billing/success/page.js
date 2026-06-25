@@ -38,7 +38,7 @@ export default function BillingSuccess() {
         </p>
         <button
           onClick={() => router.replace('/chat')}
-          style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '10px 28px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'DM Mono, monospace' }}>
+          style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 28px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'DM Mono, monospace' }}>
           Go to Chat →
         </button>
       </div>

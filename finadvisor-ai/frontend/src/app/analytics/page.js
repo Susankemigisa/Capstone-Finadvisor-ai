@@ -199,7 +199,7 @@ export default function AnalyticsPage() {
               <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '22px', fontStyle: 'italic', marginBottom: '8px' }}>{t('analytics.noData')}</h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '24px' }}>Start chatting to see your activity here</p>
               <button onClick={() => router.push('/chat')}
-                style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '12px 28px', cursor: 'pointer', fontSize: '13px', fontWeight: 700 }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '12px 28px', cursor: 'pointer', fontSize: '13px', fontWeight: 700 }}>
                 Go to Chat →
               </button>
             </div>

@@ -328,7 +328,7 @@ export default function MessageBubble({ message, isStreaming = false, onRegenera
   return (
     <div className="fade-in" style={{ display: 'flex', justifyContent: isUser ? 'flex-end' : 'flex-start', marginBottom: '16px', paddingLeft: isUser ? '48px' : '0', paddingRight: isUser ? '0' : '48px' }}>
       {!isUser && (
-        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--gold-dim), var(--bg-elevated))', border: '1px solid var(--gold-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: 'var(--gold)', flexShrink: 0, marginRight: '10px', marginTop: '2px' }}>◆</div>
+        <div style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid var(--gold-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: 'var(--gold)', flexShrink: 0, marginRight: '10px', marginTop: '2px' }}>◆</div>
       )}
       <div style={{ maxWidth: '100%', flex: 1 }}>
         <div style={{ background: isUser ? 'var(--bg-elevated)' : 'var(--bg-surface)', border: `1px solid ${isUser ? 'var(--border-bright)' : 'var(--border)'}`, borderRadius: isUser ? '10px 10px 2px 10px' : '2px 10px 10px 10px', padding: '12px 16px' }}>

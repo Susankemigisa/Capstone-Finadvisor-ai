@@ -181,7 +181,7 @@ export default function InsightsPage() {
     insights.push({ type: 'success', text: t('insights.insightNearGoal').replace('{goal}', nearGoals[0].goal_name).replace('{pct}', ((nearGoals[0].current_amount/nearGoals[0].target_amount)*100).toFixed(0)) })
 
   const insightColors = { success: '#34d399', warning: '#632148', danger: '#f87171', info: '#4a9eff' }
-  const insightBg = { success: '#052e16', warning: '#1a1200', danger: '#2d0a0a', info: '#0c1a2e' }
+  const insightBg = { success: '#052e16', warning: 'var(--bg-main)', danger: '#2d0a0a', info: '#0c1a2e' }
 
   return (
     <PageShell title={t('insights.title')}>

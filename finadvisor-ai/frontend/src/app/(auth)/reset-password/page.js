@@ -45,7 +45,7 @@ function ResetForm() {
   }
 
   return (
-    <div className="surface" style={{ padding: '32px' }}>
+    <div className="auth-card">
       <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '20px' }}>{t('auth.setNewPasswordSubtitle')}</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {!token && (
@@ -86,8 +86,8 @@ export default function ResetPasswordPage() {
   const { init: initLang } = useLangStore()
   const t = useTranslate()
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div style={{ position: 'fixed', inset: 0, backgroundImage: 'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)', backgroundSize: '60px 60px', opacity: 0.3, pointerEvents: 'none' }} />
+    <div className="auth-bg">
+      
       <div style={{ width: '100%', maxWidth: '400px', position: 'relative', zIndex: 1 }} className="fade-in">
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '12px' }}>◆ FINADVISOR AI</div>

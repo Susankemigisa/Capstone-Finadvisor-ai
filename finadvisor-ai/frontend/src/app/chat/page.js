@@ -221,7 +221,7 @@ export default function ChatPage() {
           const s = totalSecs % 60
           const timeStr = h > 0 ? `${h}h ${m}m` : m > 0 ? `${m}m ${s}s` : `${s}s`
           return (
-            <div style={{ margin: '0 16px 12px', padding: '16px 18px', background: 'linear-gradient(135deg, #0f0a00, #1a1200)', border: '1px solid var(--gold-dim)', borderRadius: '12px' }}>
+            <div style={{ margin: '0 16px 12px', padding: '16px 18px', border: '1px solid var(--gold-dim)', borderRadius: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
                 <span style={{ fontSize: '18px' }}>⏳</span>
                 <span style={{ fontWeight: 600, color: 'var(--gold)', fontSize: '13px' }}>Message limit reached</span>

@@ -183,7 +183,7 @@ export default function RulesPage() {
 
           {/* No pockets warning */}
           {pockets.length === 0 && !loading && (
-            <div style={{ background: '#1a1200', border: '1px solid var(--gold-dim)', borderRadius: '10px', padding: '14px 18px', marginBottom: '20px', fontSize: '13px', color: 'var(--gold)' }}>
+            <div style={{ background: 'var(--bg-main)', border: '1px solid var(--gold-dim)', borderRadius: '10px', padding: '14px 18px', marginBottom: '20px', fontSize: '13px', color: 'var(--gold)' }}>
               ⚠️ {t('rules.needPocketWarning')} <a href="/savings" style={{ color: 'var(--gold)', fontWeight: 600, textDecoration: 'underline' }}>{t('rules.createPocketFirst')} →</a>
             </div>
           )}

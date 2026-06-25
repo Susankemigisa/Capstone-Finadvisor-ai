@@ -97,7 +97,7 @@ export default function AlertsPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ fontSize: '11px', color: 'var(--text-dim)', textAlign: 'right' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite' }} />
+                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--green)', animation: 'pulse 2s infinite' }} />
                 {t('alerts.autoCheck')}
               </div>
             </div>
@@ -111,11 +111,11 @@ export default function AlertsPage() {
         <div style={{ padding: '24px 28px', maxWidth: '700px', margin: '0 auto' }}>
           {/* Triggered alerts */}
           {triggered.length > 0 && (
-            <div style={{ background: 'linear-gradient(135deg, #0a1a0a, #0f2a0f)', border: '1px solid #22c55e', borderRadius: '12px', padding: '16px 20px', marginBottom: '24px' }}>
-              <div style={{ fontWeight: 600, color: '#22c55e', marginBottom: '8px' }}>🎯 {t('alerts.triggered')}</div>
+            <div style={{ border: '1px solid var(--green)', borderRadius: '12px', padding: '16px 20px', marginBottom: '24px' }}>
+              <div style={{ fontWeight: 600, color: 'var(--green)', marginBottom: '8px' }}>🎯 {t('alerts.triggered')}</div>
               {triggered.map(a => (
                 <div key={a.id} style={{ fontSize: '13px', color: 'var(--text-primary)', marginTop: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>{a.ticker} hit <strong style={{color:'#22c55e'}}>${a.current_price?.toFixed(2)}</strong> — {t('alerts.targetWas')} {a.condition} ${a.target_price}</span>
+                  <span>{a.ticker} hit <strong style={{color:'var(--green)'}}>${a.current_price?.toFixed(2)}</strong> — {t('alerts.targetWas')} {a.condition} ${a.target_price}</span>
                   <span style={{ fontSize: '11px', color: 'var(--text-dim)', marginLeft: '12px', whiteSpace: 'nowrap' }}>
                     {new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </span>
@@ -139,7 +139,7 @@ export default function AlertsPage() {
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gold-dim)'}
                   onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--gold)' }}>{s.label}</div>
-                  <div style={{ fontSize: '10px', color: '#22c55e', marginTop: '2px' }}>{s.desc}</div>
+                  <div style={{ fontSize: '10px', color: 'var(--green)', marginTop: '2px' }}>{s.desc}</div>
                 </button>
               ))}
             </div>
@@ -166,7 +166,7 @@ export default function AlertsPage() {
                 className="input" />
             </div>
             <button onClick={createAlert} disabled={saving || !form.ticker || !form.target_price}
-              style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '8px 20px', cursor: 'pointer', fontSize: '13px', fontWeight: 600, opacity: (!form.ticker || !form.target_price) ? 0.5 : 1 }}>
+              style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '8px 20px', cursor: 'pointer', fontSize: '13px', fontWeight: 600, opacity: (!form.ticker || !form.target_price) ? 0.5 : 1 }}>
               {saving ? t('alerts.creating') : t('alerts.create')}
             </button>
           </div>

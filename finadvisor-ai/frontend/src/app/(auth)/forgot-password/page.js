@@ -79,7 +79,7 @@ const GRID_OVERLAY = {
 const CARD = { padding: '36px', borderRadius: '16px', background: 'var(--bg-surface)', border: '1px solid var(--border)' }
 const BTN_PRIMARY = {
   width: '100%', justifyContent: 'center', padding: '12px',
-  background: 'var(--gold)', color: '#0a0c10', border: 'none',
+  background: 'var(--gold)', color: '#FFFCFC', border: 'none',
   borderRadius: '10px', fontSize: '14px', fontWeight: 700,
   cursor: 'pointer', transition: 'opacity 0.15s',
 }

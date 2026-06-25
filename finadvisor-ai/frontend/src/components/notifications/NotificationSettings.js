@@ -66,7 +66,7 @@ export default function NotificationSettings() {
   const Toggle = ({ value, onChange }) => (
     <button onClick={onChange}
       style={{ width: '36px', height: '20px', borderRadius: '10px', border: 'none', background: value ? 'var(--gold)' : 'var(--bg-elevated)', cursor: 'pointer', position: 'relative', transition: 'background 0.2s', flexShrink: 0 }}>
-      <div style={{ width: '14px', height: '14px', borderRadius: '50%', background: value ? '#0a0c10' : 'var(--text-dim)', position: 'absolute', top: '3px', left: value ? '19px' : '3px', transition: 'left 0.2s' }} />
+      <div style={{ width: '14px', height: '14px', borderRadius: '50%', background: value ? '#FFFCFC' : 'var(--text-dim)', position: 'absolute', top: '3px', left: value ? '19px' : '3px', transition: 'left 0.2s' }} />
     </button>
   )
 
@@ -115,7 +115,7 @@ export default function NotificationSettings() {
               <p style={{ fontSize: '12px', color: 'var(--red)' }}>{t('settings.pushDenied') || 'Permission denied. Enable in browser settings.'}</p>
             ) : (
               <button onClick={enablePush}
-                style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '6px', padding: '8px 16px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '6px', padding: '8px 16px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                 {pushStatus === 'requesting' ? (t('settings.requesting') || 'Requesting...') : (t('settings.enablePush') || 'Enable Push Notifications')}
               </button>
             )}
@@ -124,7 +124,7 @@ export default function NotificationSettings() {
       </div>
 
       <button onClick={savePrefs} disabled={saving}
-        style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+        style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}>
         {saving ? (t('settings.saving') || 'Saving...') : (t('settings.savePreferences') || 'Save Preferences')}
       </button>
     </div>

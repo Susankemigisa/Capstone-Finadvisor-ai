@@ -224,7 +224,7 @@ export default function SettingsPage() {
                 </div>
                 {user.tier !== 'pro' && (
                   <button onClick={() => router.push('/billing')}
-                    style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '6px', padding: '9px 18px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+                    style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '6px', padding: '9px 18px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                     {t('settings.upgradePro')}
                   </button>
                 )}
@@ -282,7 +282,7 @@ export default function SettingsPage() {
             {/* Save button */}
             <div style={{ position: 'sticky', bottom: 0, background: 'var(--bg-base)', padding: '16px 0', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '12px' }}>
               <button onClick={handleSave} disabled={saving}
-                style={{ background: saved ? 'var(--green-dim)' : 'var(--gold)', color: saved ? 'var(--green)' : '#0a0c10', border: saved ? '1px solid var(--green)' : 'none', borderRadius: '8px', padding: '11px 28px', fontSize: '14px', fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: saving ? 0.7 : 1 }}>
+                style={{ background: saved ? 'var(--green-dim)' : 'var(--gold)', color: saved ? 'var(--green)' : '#FFFCFC', border: saved ? '1px solid var(--green)' : 'none', borderRadius: '8px', padding: '11px 28px', fontSize: '14px', fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: saving ? 0.7 : 1 }}>
                 {saving ? t('settings.saving') : saved ? t('settings.saved') : t('settings.saveAll')}
               </button>
               {saved && <span style={{ fontSize: '12px', color: 'var(--green)' }}>{t('settings.savedHint')}</span>}

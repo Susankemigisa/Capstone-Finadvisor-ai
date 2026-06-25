@@ -25,7 +25,7 @@ const PROVIDERS = [
   { id: 'mono',         name: 'Centenary Bank',    icon: '🏦', color: '#004080', type: 'bank',         bank: 'Centenary Bank',      hint: 'Your Centenary account number' },
   { id: 'mono',         name: 'Equity Bank',       icon: '🏦', color: '#CC0000', type: 'bank',         bank: 'Equity Bank Uganda',  hint: 'Your Equity account number' },
   { id: 'flutterwave',  name: 'Card / Other',      icon: '💳', color: '#F5A623', type: 'card',         bank: 'Flutterwave',         hint: 'Email address linked to your Flutterwave account' },
-  { id: 'manual',       name: 'Manual Entry',      icon: '✏️', color: '#8892a4', type: 'manual',       bank: 'Manual',              hint: 'No live sync — you update the balance yourself' },
+  { id: 'manual',       name: 'Manual Entry',      icon: '✏️', color: 'var(--text-secondary)', type: 'manual',       bank: 'Manual',              hint: 'No live sync — you update the balance yourself' },
 ]
 
 function AccountCard({ account, onDisconnect }) {

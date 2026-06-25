@@ -267,7 +267,7 @@ export default function ChatInput({ onSend, disabled, placeholder = 'Ask about s
         )}
 
         <button onClick={handleSend} disabled={disabled || isUploading || (!value.trim() && attachments.length === 0)}
-          style={{ width: '32px', height: '32px', borderRadius: '6px', border: 'none', background: (value.trim() || attachments.length > 0) && !disabled && !isUploading ? 'var(--gold)' : 'var(--border)', color: (value.trim() || attachments.length > 0) && !disabled && !isUploading ? '#0a0c10' : 'var(--text-dim)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', flexShrink: 0, fontWeight: 700, transition: 'all 0.15s' }}>
+          style={{ width: '32px', height: '32px', borderRadius: '6px', border: 'none', background: (value.trim() || attachments.length > 0) && !disabled && !isUploading ? 'var(--gold)' : 'var(--border)', color: (value.trim() || attachments.length > 0) && !disabled && !isUploading ? '#FFFCFC' : 'var(--text-dim)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', flexShrink: 0, fontWeight: 700, transition: 'all 0.15s' }}>
           {isUploading ? '⏳' : '↑'}
         </button>
       </div>

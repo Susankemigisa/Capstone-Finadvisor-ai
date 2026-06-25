@@ -50,8 +50,8 @@ export default function LandingPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'var(--bg-base, #0a0d14)',
-      color: 'var(--text-primary, #e8eaf0)',
+      background: 'var(--bg-base, #FFFCFC)',
+      color: 'var(--text-primary, var(--text-primary))',
       fontFamily: 'var(--font-body, Inter, system-ui, sans-serif)',
       overflowX: 'hidden',
     }}>
@@ -63,7 +63,7 @@ export default function LandingPage() {
         position: 'sticky', top: 0, zIndex: 50,
         background: 'rgba(10,13,20,0.85)', backdropFilter: 'blur(12px)',
       }}>
-        <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold, #632148)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
+        <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
           ◆ FINADVISOR AI
         </span>
         <div style={{ display: 'flex', gap: '12px' }}>
@@ -74,7 +74,7 @@ export default function LandingPage() {
               background: 'transparent', color: 'rgba(255,252,252,0.85)',
               fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold, #632148)'; e.currentTarget.style.color = 'var(--gold, #632148)' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.color = 'var(--gold)' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,252,252,0.85)' }}
           >
             Log in
@@ -83,7 +83,7 @@ export default function LandingPage() {
             onClick={() => router.push('/register')}
             style={{
               padding: '8px 20px', borderRadius: '8px', border: 'none',
-              background: 'var(--gold, #632148)', color: '#FFFCFC',
+              background: 'var(--gold)', color: '#FFFCFC',
               fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'opacity 0.2s',
             }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
@@ -98,7 +98,7 @@ export default function LandingPage() {
       <div style={{
         background: 'rgba(99,33,72,0.08)', borderBottom: '1px solid rgba(99,33,72,0.15)',
         padding: '8px 32px', fontSize: '12px', fontFamily: 'DM Mono, monospace',
-        color: 'var(--gold, #632148)', letterSpacing: '0.05em',
+        color: 'var(--gold)', letterSpacing: '0.05em',
         transition: 'opacity 0.4s',
       }}>
         ◆ {TICKERS[tickerIdx]}
@@ -136,7 +136,7 @@ export default function LandingPage() {
             onClick={() => router.push('/register')}
             style={{
               padding: '14px 32px', borderRadius: '10px', border: 'none',
-              background: 'var(--gold, #632148)', color: '#FFFCFC',
+              background: 'var(--gold)', color: '#FFFCFC',
               fontSize: '15px', fontWeight: 700, cursor: 'pointer',
               boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
               transition: 'transform 0.2s, box-shadow 0.2s',
@@ -152,7 +152,7 @@ export default function LandingPage() {
               padding: '14px 32px', borderRadius: '10px',
               border: '1px solid rgba(255,255,255,0.15)',
               background: 'rgba(255,255,255,0.04)',
-              color: 'var(--text-primary, #e8eaf0)',
+              color: 'var(--text-primary, var(--text-primary))',
               fontSize: '15px', cursor: 'pointer', transition: 'border-color 0.2s',
             }}
             onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)'}
@@ -236,7 +236,7 @@ export default function LandingPage() {
           onClick={() => router.push('/register')}
           style={{
             padding: '14px 40px', borderRadius: '10px', border: 'none',
-            background: 'var(--gold, #632148)', color: '#FFFCFC',
+            background: 'var(--gold)', color: '#FFFCFC',
             fontSize: '15px', fontWeight: 700, cursor: 'pointer',
             boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
           }}

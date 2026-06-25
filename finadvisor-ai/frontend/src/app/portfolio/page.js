@@ -101,7 +101,7 @@ function AddPositionModal({ onClose, onAdd }) {
           </div>
           <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
             <button onClick={onClose} style={{ flex: 1, background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', padding: '10px', cursor: 'pointer', fontSize: '13px' }}>{t('settings.cancel')}</button>
-            <button onClick={submit} disabled={loading} style={{ flex: 2, background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '10px', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: 700, opacity: loading ? 0.7 : 1 }}>
+            <button onClick={submit} disabled={loading} style={{ flex: 2, background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: 700, opacity: loading ? 0.7 : 1 }}>
               {loading ? t('portfolio.adding') : t('portfolio.addPosition')}
             </button>
           </div>
@@ -166,7 +166,7 @@ export default function PortfolioPage() {
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button onClick={fetchPortfolio} style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text-secondary)', padding: '8px 14px', cursor: 'pointer', fontSize: '12px' }}>↺ {t('portfolio.refresh')}</button>
-              <button onClick={() => setShowAdd(true)} style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '8px 16px', cursor: 'pointer', fontSize: '12px', fontWeight: 700 }}>{t('portfolio.addPosition')}</button>
+              <button onClick={() => setShowAdd(true)} style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '8px 16px', cursor: 'pointer', fontSize: '12px', fontWeight: 700 }}>{t('portfolio.addPosition')}</button>
             </div>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function PortfolioPage() {
                   <div style={{ fontSize: '40px', marginBottom: '16px' }}>◎</div>
                   <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '22px', fontStyle: 'italic', marginBottom: '8px' }}>{t('portfolio.emptyTitle')}</h2>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '24px' }}>{t('portfolio.emptyDesc')}</p>
-                  <button onClick={() => setShowAdd(true)} style={{ background: 'var(--gold)', color: '#0a0c10', border: 'none', borderRadius: '8px', padding: '12px 28px', cursor: 'pointer', fontSize: '13px', fontWeight: 700 }}>{t('portfolio.addFirst')}</button>
+                  <button onClick={() => setShowAdd(true)} style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '12px 28px', cursor: 'pointer', fontSize: '13px', fontWeight: 700 }}>{t('portfolio.addFirst')}</button>
                 </div>
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '20px' }}>
