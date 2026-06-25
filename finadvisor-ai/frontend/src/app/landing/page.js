@@ -23,7 +23,11 @@ export default function LandingPage() {
   useEffect(() => {
     init().then(() => {
       const { user } = useAuthStore.getState()
-      if (user) { router.replace('/chat') } else { setChecking(false) }
+      if (user) {
+        router.replace('/chat')
+      } else {
+        setChecking(false)
+      }
     })
   }, [])
 
@@ -36,122 +40,218 @@ export default function LandingPage() {
   if (checking) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--bg-base)' }}>
-        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '13px', letterSpacing: '0.1em' }}>◆ FINADVISOR AI</div>
+        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '13px', letterSpacing: '0.1em' }}>
+          ◆ FINADVISOR AI
+        </div>
       </div>
     )
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-primary)', fontFamily: 'DM Sans, system-ui, sans-serif', overflowX: 'hidden' }}>
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--bg-base)',
+      color: 'var(--text-primary, var(--text-primary))',
+      fontFamily: 'var(--font-body, Inter, system-ui, sans-serif)',
+      overflowX: 'hidden',
+    }}>
 
-      {/* ── Nav — pinned navy in both modes ── */}
+      {/* ── Nav ── */}
       <nav style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '18px 32px', position: 'sticky', top: 0, zIndex: 50,
-        background: '#02304a',
-        borderBottom: '2px solid #632148',
+        padding: '18px 32px', borderBottom: '1px solid var(--border)',
+        position: 'sticky', top: 0, zIndex: 50,
+        background: 'var(--bg-surface)', borderBottom: '1px solid var(--border)',
       }}>
-        <span style={{ fontFamily: 'DM Mono, monospace', color: '#8a2f63', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
+        <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
           ◆ FINADVISOR AI
         </span>
         <div style={{ display: 'flex', gap: '12px' }}>
-          <button onClick={() => router.push('/login')} style={{ padding: '8px 20px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: '#FFFCFC', fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = '#8a2f63'; e.currentTarget.style.color = '#c8b0be' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = '#FFFCFC' }}>
+          <button
+            onClick={() => router.push('/login')}
+            style={{
+              padding: '8px 20px', borderRadius: '8px', border: '1px solid var(--border)',
+              background: 'transparent', color: 'var(--text-primary)',
+              fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.color = 'var(--gold)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-primary)' }}
+          >
             Log in
           </button>
-          <button onClick={() => router.push('/register')} style={{ padding: '8px 20px', borderRadius: '8px', border: 'none', background: '#632148', color: '#FFFCFC', fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'opacity 0.2s' }}
+          <button
+            onClick={() => router.push('/register')}
+            style={{
+              padding: '8px 20px', borderRadius: '8px', border: 'none',
+              background: 'var(--gold)', color: 'var(--text-primary)',
+              fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'opacity 0.2s',
+            }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
-            onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          >
             Get started free
           </button>
         </div>
       </nav>
 
-      {/* ── Ticker strip — slightly lighter navy ── */}
-      <div style={{ background: '#033E5B', borderBottom: '1px solid rgba(99,33,72,0.3)', padding: '8px 32px', fontSize: '12px', fontFamily: 'DM Mono, monospace', color: '#8a2f63', letterSpacing: '0.05em', transition: 'opacity 0.4s' }}>
+      {/* ── Live ticker strip ── */}
+      <div style={{
+        background: 'var(--bg-elevated)', borderBottom: '1px solid rgba(99,33,72,0.15)',
+        padding: '8px 32px', fontSize: '12px', fontFamily: 'DM Mono, monospace',
+        color: 'var(--gold)', letterSpacing: '0.05em',
+        transition: 'opacity 0.4s',
+      }}>
         ◆ {TICKERS[tickerIdx]}
       </div>
 
-      {/* ── Hero — uses theme bg so it's cream in light, dark in dark ── */}
+      {/* ── Hero ── */}
       <section style={{ textAlign: 'center', padding: '96px 24px 80px', maxWidth: '780px', margin: '0 auto' }}>
-        <div style={{ display: 'inline-block', marginBottom: '20px', padding: '5px 14px', borderRadius: '20px', border: '1px solid var(--border-bright)', background: 'var(--bg-elevated)', fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em', color: 'var(--text-primary)' }}>
+        <div style={{
+          display: 'inline-block', marginBottom: '20px', padding: '5px 14px',
+          borderRadius: '20px', border: '1px solid var(--border-bright)',
+          background: 'var(--bg-elevated)',
+          fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em',
+          color: 'var(--text-primary)',
+        }}>
           POWERED BY GPT-4o · CLAUDE · GEMINI · LLAMA
         </div>
-        <h1 style={{ fontSize: 'clamp(36px, 7vw, 68px)', fontWeight: 800, lineHeight: 1.1, margin: '0 0 24px', color: 'var(--text-primary)' }}>
+
+        <h1 style={{
+          fontSize: 'clamp(36px, 7vw, 68px)', fontWeight: 800, lineHeight: 1.1,
+          margin: '0 0 24px',
+          color: 'var(--text-primary)',
+        }}>
           Your AI financial<br />advisor, always on
         </h1>
-        <p style={{ fontSize: '17px', lineHeight: 1.7, color: 'var(--text-secondary)', margin: '0 auto 40px', maxWidth: '560px' }}>
+
+        <p style={{
+          fontSize: '17px', lineHeight: 1.7, color: 'var(--text-primary)',
+          margin: '0 auto 40px', maxWidth: '560px',
+        }}>
           Ask about markets, track your portfolio, plan your budget, and get charts — all in one chat. Built for Africa, works everywhere.
         </p>
+
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button onClick={() => router.push('/register')} style={{ padding: '14px 32px', borderRadius: '10px', border: 'none', background: '#632148', color: '#FFFCFC', fontSize: '15px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 24px rgba(99,33,72,0.35)', transition: 'transform 0.2s, box-shadow 0.2s' }}
+          <button
+            onClick={() => router.push('/register')}
+            style={{
+              padding: '14px 32px', borderRadius: '10px', border: 'none',
+              background: 'var(--gold)', color: 'var(--text-primary)',
+              fontSize: '15px', fontWeight: 700, cursor: 'pointer',
+              boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+            }}
             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(99,33,72,0.45)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(99,33,72,0.35)' }}>
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(99,33,72,0.35)' }}
+          >
             Start for free →
           </button>
-          <button onClick={() => router.push('/login')} style={{ padding: '14px 32px', borderRadius: '10px', border: '1px solid var(--border)', background: 'var(--bg-elevated)', color: 'var(--text-primary)', fontSize: '15px', cursor: 'pointer', transition: 'border-color 0.2s' }}
+          <button
+            onClick={() => router.push('/login')}
+            style={{
+              padding: '14px 32px', borderRadius: '10px',
+              border: '1px solid var(--border)',
+              background: 'var(--bg-elevated)',
+              color: 'var(--text-primary, var(--text-primary))',
+              fontSize: '15px', cursor: 'pointer', transition: 'border-color 0.2s',
+            }}
             onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--border-bright)'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+          >
             Log in
           </button>
         </div>
       </section>
 
-      {/* ── Chat preview — always navy so it looks like the real app ── */}
+      {/* ── Fake chat preview ── */}
       <section style={{ maxWidth: '680px', margin: '0 auto 96px', padding: '0 24px' }}>
-        <div style={{ borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', background: '#033E5B', overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,0.25)' }}>
-          <div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', gap: '8px', background: '#02304a' }}>
+        <div style={{
+          borderRadius: '16px', border: '1px solid var(--border)',
+          background: 'var(--bg-elevated)', overflow: 'hidden',
+          boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
+        }}>
+          {/* window chrome */}
+          <div style={{
+            padding: '12px 16px', borderBottom: '1px solid var(--border)',
+            display: 'flex', alignItems: 'center', gap: '8px',
+          }}>
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57', display: 'inline-block' }} />
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ffbd2e', display: 'inline-block' }} />
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28ca41', display: 'inline-block' }} />
-            <span style={{ marginLeft: 8, fontSize: 12, color: '#7ab0c0', fontFamily: 'DM Mono, monospace' }}>FinAdvisor AI · Chat</span>
+            <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--text-dim)', fontFamily: 'DM Mono, monospace' }}>FinAdvisor AI · Chat</span>
           </div>
+          {/* messages */}
           <div style={{ padding: '20px 20px 8px' }}>
             <BubbleUser text="Show me my portfolio allocation as a pie chart 📊" />
-            <BubbleAI text="Here's your portfolio pie chart! 🥧 It shows your allocation across 5 holdings — AAPL at 38%, BTC 22%, NVDA 18%, MSFT 14%, and Cash 8%. Your tech concentration is high; I'd suggest diversification into bonds or international ETFs." />
+            <BubbleAI text="Here's your portfolio pie chart! 🥧 It shows your allocation across 5 holdings — AAPL at 38%, BTC 22%, NVDA 18%, MSFT 14%, and Cash 8%. Your tech concentration is high; I'd suggest some diversification into bonds or international ETFs." />
             <BubbleUser text="What's the current Bitcoin price?" />
-            <BubbleAI text="Bitcoin (BTC) is trading at $67,204.32 ▲ 1.41% in the last 24h 🚀. Market cap is ~$1.32T. Want me to log a position or chart the 30-day trend?" />
+            <BubbleAI text="Bitcoin (BTC) is trading at $67,204.32 ▲ 1.41% in the last 24h 🚀. Market cap is ~$1.32T. Want me to log a position to your portfolio or chart the 30-day price trend?" />
           </div>
-          <div style={{ padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-            <div style={{ borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 14px', fontSize: '13px', color: '#7ab0c0', background: '#054d70' }}>
+          <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
+            <div style={{
+              borderRadius: '8px', border: '1px solid var(--border)',
+              padding: '10px 14px', fontSize: '13px',
+              color: 'var(--text-dim)', background: 'var(--bg-elevated)',
+            }}>
               Ask about stocks, crypto, your budget...
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Features — uses theme bg ── */}
-      <section style={{ maxWidth: '960px', margin: '0 auto 0', padding: '0 24px 96px' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '28px', fontWeight: 700, marginBottom: '48px', color: 'var(--text-primary)' }}>
+      {/* ── Features grid ── */}
+      <section style={{ maxWidth: '960px', margin: '0 auto 96px', padding: '0 24px' }}>
+        <h2 style={{ textAlign: 'center', fontSize: '28px', fontWeight: 700, marginBottom: '48px' }}>
           Everything you need in one place
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
           {FEATURES.map(f => (
-            <div key={f.title} style={{ padding: '24px', borderRadius: '12px', border: '1px solid var(--border)', background: 'var(--bg-surface)', transition: 'border-color 0.2s, transform 0.2s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(99,33,72,0.4)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)' }}>
+            <div key={f.title} style={{
+              padding: '24px', borderRadius: '12px',
+              border: '1px solid var(--border)',
+              background: 'var(--bg-main)',
+              transition: 'border-color 0.2s',
+            }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(99,33,72,0.3)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+            >
               <div style={{ fontSize: '28px', marginBottom: '12px' }}>{f.icon}</div>
-              <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-primary)' }}>{f.title}</div>
+              <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px' }}>{f.title}</div>
               <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--text-secondary)' }}>{f.desc}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── CTA band — always navy ── */}
-      <section style={{ textAlign: 'center', padding: '80px 24px 96px', background: '#02304a', borderTop: '2px solid #632148', marginTop: '96px' }}>
-        <h2 style={{ fontSize: '32px', fontWeight: 800, margin: '0 0 16px', color: '#FFFCFC' }}>Ready to take control?</h2>
-        <p style={{ color: '#c8b0be', fontSize: '15px', margin: '0 0 32px' }}>Free to start. No credit card required.</p>
-        <button onClick={() => router.push('/register')} style={{ padding: '14px 40px', borderRadius: '10px', border: 'none', background: '#632148', color: '#FFFCFC', fontSize: '15px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 24px rgba(99,33,72,0.5)', transition: 'transform 0.2s, opacity 0.2s' }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.opacity = '0.9' }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.opacity = '1' }}>
+      {/* ── CTA footer ── */}
+      <section style={{
+        textAlign: 'center', padding: '80px 24px 96px',
+        borderTop: '1px solid var(--border)',
+      }}>
+        <h2 style={{ fontSize: '32px', fontWeight: 800, margin: '0 0 16px' }}>Ready to take control?</h2>
+        <p style={{ color: 'var(--text-primary)', fontSize: '15px', margin: '0 0 32px' }}>
+          Free to start. No credit card required.
+        </p>
+        <button
+          onClick={() => router.push('/register')}
+          style={{
+            padding: '14px 40px', borderRadius: '10px', border: 'none',
+            background: 'var(--gold)', color: 'var(--text-primary)',
+            fontSize: '15px', fontWeight: 700, cursor: 'pointer',
+            boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
+          }}
+        >
           Create your free account →
         </button>
       </section>
 
-      {/* ── Footer — always navy ── */}
-      <footer style={{ background: '#021526', borderTop: '1px solid rgba(255,255,255,0.06)', padding: '20px 32px', textAlign: 'center', fontSize: '12px', color: '#7ab0c0', fontFamily: 'DM Mono, monospace' }}>
+      {/* ── Footer ── */}
+      <footer style={{
+        borderTop: '1px solid var(--border)',
+        padding: '20px 32px', textAlign: 'center',
+        fontSize: '12px', color: 'var(--text-dim)',
+        fontFamily: 'DM Mono, monospace',
+      }}>
         © {new Date().getFullYear()} FinAdvisor AI · AI, not a licensed financial advisor
       </footer>
     </div>
@@ -161,7 +261,11 @@ export default function LandingPage() {
 function BubbleUser({ text }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
-      <div style={{ maxWidth: '70%', padding: '10px 14px', borderRadius: '12px 12px 2px 12px', background: '#3d1430', border: '1px solid #632148', fontSize: '13px', lineHeight: 1.5, color: '#FFFCFC' }}>{text}</div>
+      <div style={{
+        maxWidth: '70%', padding: '10px 14px', borderRadius: '12px 12px 2px 12px',
+        background: 'var(--gold-dim)', border: '1px solid var(--gold)',
+        fontSize: '13px', lineHeight: 1.5, color: 'var(--text-primary)',
+      }}>{text}</div>
     </div>
   )
 }
@@ -169,7 +273,11 @@ function BubbleUser({ text }) {
 function BubbleAI({ text }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '12px' }}>
-      <div style={{ maxWidth: '80%', padding: '10px 14px', borderRadius: '12px 12px 12px 2px', background: '#054d70', border: '1px solid rgba(255,255,255,0.08)', fontSize: '13px', lineHeight: 1.5, color: '#FFFCFC' }}>{text}</div>
+      <div style={{
+        maxWidth: '80%', padding: '10px 14px', borderRadius: '12px 12px 12px 2px',
+        background: 'var(--bg-elevated)', border: '1px solid var(--border)',
+        fontSize: '13px', lineHeight: 1.5, color: 'var(--text-primary)',
+      }}>{text}</div>
     </div>
   )
 }
