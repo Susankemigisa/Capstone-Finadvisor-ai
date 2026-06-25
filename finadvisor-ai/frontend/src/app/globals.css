@@ -9,6 +9,7 @@
    Palette: #040B14 · #033E5B · #632148 · #B18FA2 · #FFFCFC
    ═══════════════════════════════════════════════════ */
 
+/* ── DARK MODE (default) ── */
 :root, html.dark {
   /* backgrounds — navy scale */
   --bg-base:        #021526;
@@ -43,31 +44,79 @@
   --radius-lg:      10px;
 }
 
+/* ── LIGHT MODE ── */
+/* Cream + plum palette; navy used as accent only (sidebar, nav) */
 html.light {
-  --bg-base:        #021526;
-  --bg-surface:     #033E5B;
-  --bg-elevated:    #054d70;
-  --bg-hover:       #065e88;
-  --bg-sidebar:     #02304a;
-  --bg-main:        #02243a;
-  --border:         #0a4d6b;
-  --border-bright:  #1a6a8a;
+  /* backgrounds — cream/warm white scale */
+  --bg-base:        #FFFCFC;
+  --bg-surface:     #f5f0f2;
+  --bg-elevated:    #ede5e9;
+  --bg-hover:       #e2d5db;
+  --bg-sidebar:     #033E5B;   /* navy sidebar — the one bold anchor */
+  --bg-main:        #FFFCFC;
+
+  /* borders */
+  --border:         #d9cdd3;
+  --border-bright:  #b18fa2;   /* dusty pink as border accent */
+
+  /* accent — same plum, works beautifully on cream */
   --gold:           #632148;
-  --gold-light:     #8a2f63;
-  --gold-dim:       #3d1430;
-  --text-primary:   #FFFCFC;
-  --text-secondary: #c8b0be;
-  --text-dim:       #7ab0c0;
-  --green:          #2ecc8a;
-  --green-dim:      #0d3d28;
-  --red:            #e05252;
-  --red-dim:        #3d1818;
-  --blue:           #7ecfef;
+  --gold-light:     #7d2a5a;
+  --gold-dim:       #f0e5ea;   /* very light plum tint for hover states */
+
+  /* text */
+  --text-primary:   #040B14;   /* near-black for readability */
+  --text-secondary: #4a3040;   /* dark plum-toned secondary */
+  --text-dim:       #7a6070;   /* muted warm grey */
+
+  /* semantic — slightly richer for light bg visibility */
+  --green:          #1a9e65;
+  --green-dim:      #e0f5ec;
+  --red:            #c0392b;
+  --red-dim:        #fce8e6;
+  --blue:           #033E5B;   /* navy as link/info color */
+
   --radius:         6px;
   --radius-lg:      10px;
 }
 
+/* ── SYSTEM PREFERENCE FALLBACK (no stored preference yet) ── */
+@media (prefers-color-scheme: light) {
+  html:not(.dark):not(.light) {
+    --bg-base:        #FFFCFC;
+    --bg-surface:     #f5f0f2;
+    --bg-elevated:    #ede5e9;
+    --bg-hover:       #e2d5db;
+    --bg-sidebar:     #033E5B;
+    --bg-main:        #FFFCFC;
+    --border:         #d9cdd3;
+    --border-bright:  #b18fa2;
+    --gold:           #632148;
+    --gold-light:     #7d2a5a;
+    --gold-dim:       #f0e5ea;
+    --text-primary:   #040B14;
+    --text-secondary: #4a3040;
+    --text-dim:       #7a6070;
+    --green:          #1a9e65;
+    --green-dim:      #e0f5ec;
+    --red:            #c0392b;
+    --red-dim:        #fce8e6;
+    --blue:           #033E5B;
+    color-scheme: light;
+  }
+}
 
+@media (prefers-color-scheme: dark) {
+  html:not(.dark):not(.light) {
+    color-scheme: dark;
+  }
+}
+
+/* ── SIDEBAR OVERRIDES: keep text readable on navy sidebar in light mode ── */
+html.light .sidebar-text,
+html.light [data-sidebar] {
+  color: #FFFCFC;
+}
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { color-scheme: dark; }
@@ -133,6 +182,8 @@ body { background: var(--bg-base); color: var(--text-primary); font-family: 'DM 
 .auth-bg { min-height: 100vh; background: var(--bg-base); display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; overflow: hidden; }
 html.dark .auth-bg::before { content: ''; position: fixed; top: -20%; right: -10%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(3,62,91,0.55) 0%, transparent 70%); pointer-events: none; }
 html.dark .auth-bg::after { content: ''; position: fixed; bottom: -15%; left: -10%; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(99,33,72,0.2) 0%, transparent 70%); pointer-events: none; }
+html.light .auth-bg::before { content: ''; position: fixed; top: -20%; right: -10%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(177,143,162,0.2) 0%, transparent 70%); pointer-events: none; }
+html.light .auth-bg::after { content: ''; position: fixed; bottom: -15%; left: -10%; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(99,33,72,0.08) 0%, transparent 70%); pointer-events: none; }
 
 /* mobile */
 @media (max-width: 767px) {
@@ -147,29 +198,4 @@ html.dark .auth-bg::after { content: ''; position: fixed; bottom: -15%; left: -1
 @media (max-width: 480px) {
   .portfolio-grid { grid-template-columns: 1fr !important; }
   .stat-grid-4 { grid-template-columns: 1fr !important; }
-}
-
-@media (prefers-color-scheme: light) {
-  html:not(.dark):not(.light) {
-    --bg-base:        #021526;
-    --bg-surface:     #033E5B;
-    --bg-elevated:    #054d70;
-    --bg-hover:       #065e88;
-    --bg-sidebar:     #02304a;
-    --bg-main:        #02243a;
-    --border:         #0a4d6b;
-    --border-bright:  #1a6a8a;
-    --gold:           #632148;
-    --gold-light:     #8a2f63;
-    --gold-dim:       #3d1430;
-    --text-primary:   #FFFCFC;
-    --text-secondary: #c8b0be;
-    --text-dim:       #7ab0c0;
-    --green:          #2ecc8a;
-    --green-dim:      #0d3d28;
-    --red:            #e05252;
-    --red-dim:        #3d1818;
-    --blue:           #7ecfef;
-    color-scheme: dark;
-  }
 }
