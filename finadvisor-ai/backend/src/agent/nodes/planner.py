@@ -99,7 +99,7 @@ async def planner_node(state: AgentState) -> dict:
     except Exception as e:
         logger.error("tools_load_failed", error=str(e), exc_info=True)
         return {"error": f"Failed to load tools: {str(e)}", "is_done": True}
-    llm_with_tools = llm.bind_tools(tools)
+    llm_with_tools = llm.bind_tools(tools, tool_choice="auto")
 
     messages = [SystemMessage(content=system_prompt)] + state.get("messages", [])
 
