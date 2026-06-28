@@ -87,14 +87,14 @@ export default function RegisterPage() {
   const strengthLabels = [t('auth.passwordStrength8'), t('auth.passwordStrengthUpper'), t('auth.passwordStrengthLower'), t('auth.passwordStrengthNum')]
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', background: '#021526' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', background: 'transparent', position: 'relative' }}>
 
       {/* ── Left: Branding panel ── */}
       <div style={{
         position: 'relative', overflow: 'hidden',
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         padding: '48px',
-        background: 'url(/auth-bg.jpg) center/cover no-repeat',
+        background: 'transparent',
       }}>
         {/* Dark overlay so text stays readable */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(2,21,38,0.82) 0%, rgba(3,62,91,0.70) 50%, rgba(2,21,38,0.85) 100%)', zIndex: 0, pointerEvents: 'none' }} />
@@ -143,7 +143,7 @@ export default function RegisterPage() {
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '48px', background: '#021526',
-        borderLeft: '1px solid #0a4d6b',
+        
         overflowY: 'auto',
       }}>
         <div style={{ width: '100%', maxWidth: '380px' }} className="fade-in">

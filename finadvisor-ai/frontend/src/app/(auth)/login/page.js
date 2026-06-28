@@ -25,12 +25,6 @@ function GitHubIcon() {
   )
 }
 
-const STATS = [
-  { value: '17', label: 'Languages' },
-  { value: '5', label: 'AI Models' },
-  { value: '12', label: 'Beta Users' },
-]
-
 const FEATURES = [
   '📈 Live market data & portfolio tracking',
   '🧠 AI answers on budgets, tax & goals',
@@ -87,14 +81,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', background: '#021526' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', background: 'transparent', position: 'relative' }}>
 
       {/* ── Left: Branding panel ── */}
       <div style={{
         position: 'relative', overflow: 'hidden',
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         padding: '48px',
-        background: 'url(/auth-bg.jpg) center/cover no-repeat',
+        background: 'transparent',
       }}>
         {/* Dark overlay so text stays readable */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(2,21,38,0.82) 0%, rgba(3,62,91,0.70) 50%, rgba(2,21,38,0.85) 100%)', zIndex: 0, pointerEvents: 'none' }} />
@@ -128,16 +122,6 @@ export default function LoginPage() {
               </div>
             ))}
           </div>
-
-          {/* Stats row */}
-          <div style={{ display: 'flex', gap: '32px' }}>
-            {STATS.map(s => (
-              <div key={s.label}>
-                <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '28px', fontWeight: 700, color: '#FFFCFC' }}>{s.value}</div>
-                <div style={{ fontSize: '11px', color: '#7ab0c0', letterSpacing: '0.05em', marginTop: '2px' }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Bottom tag */}
@@ -150,7 +134,7 @@ export default function LoginPage() {
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '48px', background: '#021526',
-        borderLeft: '1px solid #0a4d6b',
+        
       }}>
         <div style={{ width: '100%', maxWidth: '380px' }} className="fade-in">
 
