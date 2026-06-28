@@ -101,7 +101,6 @@ export default function LandingPage() {
         background: 'var(--bg-elevated)', borderBottom: '1px solid rgba(99,33,72,0.15)',
         padding: '8px 32px', fontSize: '12px', fontFamily: 'DM Mono, monospace',
         color: 'var(--gold)', letterSpacing: '0.05em',
-        transition: 'opacity 0.4s',
       }}>
         ◆ {TICKERS[tickerIdx]}
       </div>
@@ -110,52 +109,40 @@ export default function LandingPage() {
       <section style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        minHeight: 'calc(100vh - 97px)',
+        height: 'calc(100vh - 97px)',
       }}>
-
-        {/* Left: Video panel */}
-        <div style={{
-          position: 'relative',
-          overflow: 'hidden',
-          background: '#021526',
-        }}>
+        {/* Left: Video */}
+        <div style={{ position: 'relative', overflow: 'hidden', background: '#021526' }}>
           <video
             autoPlay
             muted
             loop
             playsInline
             style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block',
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover', display: 'block',
             }}
           >
             <source src="/hero.mp4" type="video/mp4" />
           </video>
-          {/* Subtle right-side fade to blend into content */}
+          {/* Right-edge fade into bg */}
           <div style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(to right, transparent 60%, var(--bg-base) 100%)',
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to right, transparent 55%, var(--bg-base) 100%)',
             pointerEvents: 'none',
           }} />
-          {/* Subtle bottom fade */}
+          {/* Bottom fade */}
           <div style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(to top, var(--bg-base) 0%, transparent 20%)',
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to top, var(--bg-base) 0%, transparent 15%)',
             pointerEvents: 'none',
           }} />
         </div>
 
         {/* Right: Text + CTA */}
         <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center',
           padding: '64px 56px 64px 48px',
         }}>
           <div style={{
@@ -224,87 +211,28 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Fake chat preview ── */}
-      <section style={{ maxWidth: '680px', margin: '0 auto 96px', padding: '0 24px' }}>
-        <div style={{
-          borderRadius: '16px', border: '1px solid var(--border)',
-          background: 'var(--bg-elevated)', overflow: 'hidden',
-          boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
-        }}>
-          <div style={{
-            padding: '12px 16px', borderBottom: '1px solid var(--border)',
-            display: 'flex', alignItems: 'center', gap: '8px',
-          }}>
-            <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57', display: 'inline-block' }} />
-            <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ffbd2e', display: 'inline-block' }} />
-            <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28ca41', display: 'inline-block' }} />
-            <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--text-dim)', fontFamily: 'DM Mono, monospace' }}>FinAdvisor AI · Chat</span>
-          </div>
-          <div style={{ padding: '20px 20px 8px' }}>
-            <BubbleUser text="Show me my portfolio allocation as a pie chart 📊" />
-            <BubbleAI text="Here's your portfolio pie chart! 🥧 It shows your allocation across 5 holdings — AAPL at 38%, BTC 22%, NVDA 18%, MSFT 14%, and Cash 8%. Your tech concentration is high; I'd suggest some diversification into bonds or international ETFs." />
-            <BubbleUser text="What's the current Bitcoin price?" />
-            <BubbleAI text="Bitcoin (BTC) is trading at $67,204.32 ▲ 1.41% in the last 24h 🚀. Market cap is ~$1.32T. Want me to log a position to your portfolio or chart the 30-day price trend?" />
-          </div>
-          <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
-            <div style={{
-              borderRadius: '8px', border: '1px solid var(--border)',
-              padding: '10px 14px', fontSize: '13px',
-              color: 'var(--text-dim)', background: 'var(--bg-elevated)',
-            }}>
-              Ask about stocks, crypto, your budget...
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── Features grid ── */}
-      <section style={{ maxWidth: '960px', margin: '0 auto 96px', padding: '0 24px' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '28px', fontWeight: 700, marginBottom: '48px' }}>
+      <section style={{ maxWidth: '960px', margin: '0 auto', padding: '72px 24px 80px' }}>
+        <h2 style={{ textAlign: 'center', fontSize: '24px', fontWeight: 700, marginBottom: '40px', color: 'var(--text-primary)' }}>
           Everything you need in one place
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
           {FEATURES.map(f => (
             <div key={f.title} style={{
-              padding: '24px', borderRadius: '12px',
+              padding: '20px', borderRadius: '12px',
               border: '1px solid var(--border)',
-              background: 'var(--bg-main)',
+              background: 'var(--bg-elevated)',
               transition: 'border-color 0.2s',
             }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(99,33,72,0.3)'}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(99,33,72,0.4)'}
               onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
             >
-              <div style={{ fontSize: '28px', marginBottom: '12px' }}>{f.icon}</div>
-              <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '6px' }}>{f.title}</div>
-              <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--text-secondary)' }}>{f.desc}</div>
+              <div style={{ fontSize: '24px', marginBottom: '10px' }}>{f.icon}</div>
+              <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>{f.title}</div>
+              <div style={{ fontSize: '12px', lineHeight: 1.6, color: 'var(--text-secondary)' }}>{f.desc}</div>
             </div>
           ))}
         </div>
-      </section>
-
-      {/* ── CTA banner ── */}
-      <section style={{
-        textAlign: 'center', padding: '80px 24px 96px',
-        borderTop: '1px solid var(--border)',
-      }}>
-        <h2 style={{ fontSize: '32px', fontWeight: 800, margin: '0 0 16px' }}>Ready to take control?</h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', margin: '0 0 32px' }}>
-          Free to start. No credit card required.
-        </p>
-        <button
-          onClick={() => router.push('/register')}
-          style={{
-            padding: '14px 40px', borderRadius: '10px', border: 'none',
-            background: '#632148', color: '#FFFCFC',
-            fontSize: '15px', fontWeight: 700, cursor: 'pointer',
-            boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
-            transition: 'transform 0.2s',
-          }}
-          onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
-          onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-        >
-          Create your free account →
-        </button>
       </section>
 
       {/* ── Footer ── */}
@@ -316,30 +244,6 @@ export default function LandingPage() {
       }}>
         © {new Date().getFullYear()} FinAdvisor AI · AI, not a licensed financial advisor
       </footer>
-    </div>
-  )
-}
-
-function BubbleUser({ text }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
-      <div style={{
-        maxWidth: '70%', padding: '10px 14px', borderRadius: '12px 12px 2px 12px',
-        background: 'var(--gold-dim)', border: '1px solid var(--gold)',
-        fontSize: '13px', lineHeight: 1.5, color: 'var(--text-primary)',
-      }}>{text}</div>
-    </div>
-  )
-}
-
-function BubbleAI({ text }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '12px' }}>
-      <div style={{
-        maxWidth: '80%', padding: '10px 14px', borderRadius: '12px 12px 12px 2px',
-        background: 'var(--bg-elevated)', border: '1px solid var(--border)',
-        fontSize: '13px', lineHeight: 1.5, color: 'var(--text-primary)',
-      }}>{text}</div>
     </div>
   )
 }
