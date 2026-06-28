@@ -51,7 +51,7 @@ export default function LandingPage() {
     <div style={{
       minHeight: '100vh',
       background: 'var(--bg-base)',
-      color: 'var(--text-primary, var(--text-primary))',
+      color: 'var(--text-primary)',
       fontFamily: 'var(--font-body, Inter, system-ui, sans-serif)',
       overflowX: 'hidden',
     }}>
@@ -59,9 +59,11 @@ export default function LandingPage() {
       {/* ── Nav ── */}
       <nav style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '18px 32px', borderBottom: '1px solid var(--border)',
+        padding: '18px 32px',
         position: 'sticky', top: 0, zIndex: 50,
-        background: 'var(--bg-surface)', borderBottom: '1px solid var(--border)',
+        background: 'rgba(4,11,20,0.85)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid var(--border)',
       }}>
         <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
           ◆ FINADVISOR AI
@@ -104,18 +106,62 @@ export default function LandingPage() {
         ◆ {TICKERS[tickerIdx]}
       </div>
 
-      {/* ── Hero — split layout: text left, video in phone right ── */}
+      {/* ── Hero — split screen: video left, text right ── */}
       <section style={{
-        display: 'flex', alignItems: 'center', minHeight: '88vh',
-        maxWidth: '1200px', margin: '0 auto', padding: '48px 32px', gap: '48px',
-        flexWrap: 'wrap',
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        minHeight: 'calc(100vh - 97px)',
       }}>
-        {/* Left: headline + CTA */}
-        <div style={{ flex: '1 1 340px', minWidth: '280px' }}>
+
+        {/* Left: Video panel */}
+        <div style={{
+          position: 'relative',
+          overflow: 'hidden',
+          background: '#021526',
+        }}>
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          >
+            <source src="/hero.mp4" type="video/mp4" />
+          </video>
+          {/* Subtle right-side fade to blend into content */}
           <div style={{
-            display: 'inline-block', marginBottom: '20px', padding: '5px 14px',
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to right, transparent 60%, var(--bg-base) 100%)',
+            pointerEvents: 'none',
+          }} />
+          {/* Subtle bottom fade */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to top, var(--bg-base) 0%, transparent 20%)',
+            pointerEvents: 'none',
+          }} />
+        </div>
+
+        {/* Right: Text + CTA */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: '64px 56px 64px 48px',
+        }}>
+          <div style={{
+            display: 'inline-block', marginBottom: '24px', padding: '5px 14px',
             borderRadius: '20px', border: '1px solid var(--border-bright)',
-            background: 'var(--bg-elevated)',
+            background: 'var(--bg-elevated)', alignSelf: 'flex-start',
             fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em',
             color: 'var(--text-primary)',
           }}>
@@ -123,7 +169,7 @@ export default function LandingPage() {
           </div>
 
           <h1 style={{
-            fontSize: 'clamp(32px, 5vw, 60px)', fontWeight: 800, lineHeight: 1.1,
+            fontSize: 'clamp(32px, 3.5vw, 58px)', fontWeight: 800, lineHeight: 1.1,
             margin: '0 0 24px', color: 'var(--text-primary)',
             fontFamily: 'Cambria, Georgia, serif',
           }}>
@@ -132,12 +178,12 @@ export default function LandingPage() {
 
           <p style={{
             fontSize: '17px', lineHeight: 1.7, color: 'var(--text-secondary)',
-            margin: '0 0 36px', maxWidth: '480px',
+            margin: '0 0 40px', maxWidth: '420px',
           }}>
             Ask about markets, track your portfolio, plan your budget, and get charts — all in one chat. Built for Africa, works everywhere.
           </p>
 
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '28px' }}>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '36px' }}>
             <button
               onClick={() => router.push('/register')}
               style={{
@@ -158,48 +204,22 @@ export default function LandingPage() {
                 padding: '14px 32px', borderRadius: '10px',
                 border: '1px solid var(--border)', background: 'var(--bg-elevated)',
                 color: 'var(--text-primary)', fontSize: '15px', cursor: 'pointer',
+                transition: 'border-color 0.2s',
               }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--border-bright)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
             >
               Log in
             </button>
           </div>
 
           {/* Trust badges */}
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
             {['12 real users', 'Live on Vercel', '5 AI models', '17 languages'].map(badge => (
               <div key={badge} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-secondary)', fontFamily: 'DM Mono, monospace' }}>
                 <span style={{ color: '#2ecc8a' }}>✓</span> {badge}
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Right: video inside phone frame */}
-        <div style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ position: 'relative', width: '260px' }}>
-            {/* Glow behind phone */}
-            <div style={{ position: 'absolute', inset: '-40px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,33,72,0.25) 0%, transparent 70%)', zIndex: 0, pointerEvents: 'none' }} />
-            <div style={{ position: 'absolute', inset: '-30px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(3,62,91,0.35) 0%, transparent 70%)', zIndex: 0, pointerEvents: 'none' }} />
-            {/* Phone shell */}
-            <div style={{
-              position: 'relative', zIndex: 1,
-              background: '#040B14', borderRadius: '38px', padding: '10px',
-              boxShadow: '0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07)',
-              border: '2px solid rgba(255,255,255,0.05)',
-            }}>
-              {/* Notch */}
-              <div style={{ position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: '18px', background: '#040B14', borderRadius: '0 0 12px 12px', zIndex: 3 }} />
-              {/* Screen with video */}
-              <div style={{ borderRadius: '30px', overflow: 'hidden', aspectRatio: '9/16', background: '#021526', position: 'relative' }}>
-                <img
-                  src="/hero.jpg"
-                  alt="FinAdvisor AI dashboard"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
-                />
-              </div>
-              {/* Home bar */}
-              <div style={{ margin: '8px auto 2px', width: '80px', height: '4px', background: 'rgba(255,255,255,0.12)', borderRadius: '2px' }} />
-            </div>
           </div>
         </div>
       </section>
@@ -211,7 +231,6 @@ export default function LandingPage() {
           background: 'var(--bg-elevated)', overflow: 'hidden',
           boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
         }}>
-          {/* window chrome */}
           <div style={{
             padding: '12px 16px', borderBottom: '1px solid var(--border)',
             display: 'flex', alignItems: 'center', gap: '8px',
@@ -221,7 +240,6 @@ export default function LandingPage() {
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28ca41', display: 'inline-block' }} />
             <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--text-dim)', fontFamily: 'DM Mono, monospace' }}>FinAdvisor AI · Chat</span>
           </div>
-          {/* messages */}
           <div style={{ padding: '20px 20px 8px' }}>
             <BubbleUser text="Show me my portfolio allocation as a pie chart 📊" />
             <BubbleAI text="Here's your portfolio pie chart! 🥧 It shows your allocation across 5 holdings — AAPL at 38%, BTC 22%, NVDA 18%, MSFT 14%, and Cash 8%. Your tech concentration is high; I'd suggest some diversification into bonds or international ETFs." />
@@ -264,23 +282,26 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── CTA footer ── */}
+      {/* ── CTA banner ── */}
       <section style={{
         textAlign: 'center', padding: '80px 24px 96px',
         borderTop: '1px solid var(--border)',
       }}>
         <h2 style={{ fontSize: '32px', fontWeight: 800, margin: '0 0 16px' }}>Ready to take control?</h2>
-        <p style={{ color: 'var(--text-primary)', fontSize: '15px', margin: '0 0 32px' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', margin: '0 0 32px' }}>
           Free to start. No credit card required.
         </p>
         <button
           onClick={() => router.push('/register')}
           style={{
             padding: '14px 40px', borderRadius: '10px', border: 'none',
-            background: 'var(--gold)', color: 'var(--text-primary)',
+            background: '#632148', color: '#FFFCFC',
             fontSize: '15px', fontWeight: 700, cursor: 'pointer',
             boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
+            transition: 'transform 0.2s',
           }}
+          onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+          onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
         >
           Create your free account →
         </button>
