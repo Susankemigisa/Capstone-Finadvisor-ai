@@ -197,8 +197,10 @@ export default function LandingPage() {
                   loop
                   playsInline
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  onError={(e) => console.error('Video failed to load:', e)}
                 >
                   <source src="/hero.mp4" type="video/mp4" />
+                  {/* Fallback: show a dark background if video fails */}
                 </video>
               </div>
               {/* Home bar */}
