@@ -93,7 +93,7 @@ export default function RegisterPage() {
         position: 'absolute', inset: 0,
         backgroundImage: 'url(/auth-bg.jpg)',
         backgroundSize: 'cover',
-        backgroundPosition: 'top center',
+        backgroundPosition: '50% 20%',
         zIndex: 0,
       }} />
 
