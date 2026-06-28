@@ -87,7 +87,7 @@ export default function LoginPage() {
         position: 'absolute', inset: 0,
         backgroundImage: 'url(/auth-bg.jpg)',
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundPosition: 'top center',
         zIndex: 0,
       }} />
 
