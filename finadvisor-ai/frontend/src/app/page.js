@@ -39,8 +39,8 @@ export default function LandingPage() {
 
   if (checking) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--bg-base)' }}>
-        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '13px', letterSpacing: '0.1em' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#021526' }}>
+        <div style={{ fontFamily: 'DM Mono, monospace', color: '#8a2f63', fontSize: '13px', letterSpacing: '0.1em' }}>
           ◆ FINADVISOR AI
         </div>
       </div>
@@ -50,34 +50,37 @@ export default function LandingPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'var(--bg-base)',
-      color: 'var(--text-primary)',
-      fontFamily: 'var(--font-body, Inter, system-ui, sans-serif)',
+      background: '#021526',
+      color: '#FFFCFC',
+      fontFamily: 'DM Sans, Inter, system-ui, sans-serif',
       overflowX: 'hidden',
     }}>
 
-      {/* ── Nav ── */}
+      {/* ── Nav — solid dark, never transparent ── */}
       <nav style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '18px 32px',
         position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(4,11,20,0.85)',
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid var(--border)',
+        background: '#021526',
+        borderBottom: '1px solid #0a4d6b',
       }}>
-        <span style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600 }}>
+        <span style={{
+          fontFamily: 'DM Mono, monospace',
+          color: '#FFFCFC',
+          fontSize: '14px', letterSpacing: '0.12em', fontWeight: 600,
+        }}>
           ◆ FINADVISOR AI
         </span>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button
             onClick={() => router.push('/login')}
             style={{
-              padding: '8px 20px', borderRadius: '8px', border: '1px solid var(--border)',
-              background: 'transparent', color: 'var(--text-primary)',
+              padding: '8px 20px', borderRadius: '8px', border: '1px solid #0a4d6b',
+              background: 'transparent', color: '#FFFCFC',
               fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.color = 'var(--gold)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-primary)' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = '#632148'; e.currentTarget.style.color = '#FFFCFC' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = '#0a4d6b'; e.currentTarget.style.color = '#FFFCFC' }}
           >
             Log in
           </button>
@@ -85,7 +88,7 @@ export default function LandingPage() {
             onClick={() => router.push('/register')}
             style={{
               padding: '8px 20px', borderRadius: '8px', border: 'none',
-              background: 'var(--gold)', color: 'var(--text-primary)',
+              background: '#632148', color: '#FFFCFC',
               fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'opacity 0.2s',
             }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
@@ -96,11 +99,14 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ── Live ticker strip ── */}
+      {/* ── Ticker strip — solid dark, high contrast ── */}
       <div style={{
-        background: 'var(--bg-elevated)', borderBottom: '1px solid rgba(99,33,72,0.15)',
-        padding: '8px 32px', fontSize: '12px', fontFamily: 'DM Mono, monospace',
-        color: 'var(--gold)', letterSpacing: '0.05em',
+        background: '#033E5B',
+        borderBottom: '1px solid #0a4d6b',
+        padding: '8px 32px',
+        fontSize: '12px', fontFamily: 'DM Mono, monospace',
+        color: '#FFFCFC',
+        letterSpacing: '0.05em',
       }}>
         ◆ {TICKERS[tickerIdx]}
       </div>
@@ -111,6 +117,7 @@ export default function LandingPage() {
         gridTemplateColumns: '1fr 1fr',
         height: 'calc(100vh - 97px)',
       }}>
+
         {/* Left: Video */}
         <div style={{ position: 'relative', overflow: 'hidden', background: '#021526' }}>
           <video
@@ -129,13 +136,13 @@ export default function LandingPage() {
           {/* Right-edge fade into bg */}
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'linear-gradient(to right, transparent 55%, var(--bg-base) 100%)',
+            background: 'linear-gradient(to right, transparent 55%, #021526 100%)',
             pointerEvents: 'none',
           }} />
           {/* Bottom fade */}
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'linear-gradient(to top, var(--bg-base) 0%, transparent 15%)',
+            background: 'linear-gradient(to top, #021526 0%, transparent 15%)',
             pointerEvents: 'none',
           }} />
         </div>
@@ -144,27 +151,28 @@ export default function LandingPage() {
         <div style={{
           display: 'flex', flexDirection: 'column', justifyContent: 'center',
           padding: '64px 56px 64px 48px',
+          background: '#021526',
         }}>
           <div style={{
             display: 'inline-block', marginBottom: '24px', padding: '5px 14px',
-            borderRadius: '20px', border: '1px solid var(--border-bright)',
-            background: 'var(--bg-elevated)', alignSelf: 'flex-start',
+            borderRadius: '20px', border: '1px solid #1a6a8a',
+            background: '#033E5B', alignSelf: 'flex-start',
             fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em',
-            color: 'var(--text-primary)',
+            color: '#FFFCFC',
           }}>
             POWERED BY GPT-4o · CLAUDE · GEMINI · GROQ · LLAMA
           </div>
 
           <h1 style={{
             fontSize: 'clamp(32px, 3.5vw, 58px)', fontWeight: 800, lineHeight: 1.1,
-            margin: '0 0 24px', color: 'var(--text-primary)',
+            margin: '0 0 24px', color: '#FFFCFC',
             fontFamily: 'Cambria, Georgia, serif',
           }}>
             Your AI financial<br />advisor,<br />always on.
           </h1>
 
           <p style={{
-            fontSize: '17px', lineHeight: 1.7, color: 'var(--text-secondary)',
+            fontSize: '17px', lineHeight: 1.7, color: '#c8b0be',
             margin: '0 0 40px', maxWidth: '420px',
           }}>
             Ask about markets, track your portfolio, plan your budget, and get charts — all in one chat. Built for Africa, works everywhere.
@@ -189,12 +197,12 @@ export default function LandingPage() {
               onClick={() => router.push('/login')}
               style={{
                 padding: '14px 32px', borderRadius: '10px',
-                border: '1px solid var(--border)', background: 'var(--bg-elevated)',
-                color: 'var(--text-primary)', fontSize: '15px', cursor: 'pointer',
+                border: '1px solid #1a6a8a', background: '#033E5B',
+                color: '#FFFCFC', fontSize: '15px', cursor: 'pointer',
                 transition: 'border-color 0.2s',
               }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--border-bright)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#FFFCFC'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = '#1a6a8a'}
             >
               Log in
             </button>
@@ -203,7 +211,7 @@ export default function LandingPage() {
           {/* Trust badges */}
           <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
             {['12 real users', 'Live on Vercel', '5 AI models', '17 languages'].map(badge => (
-              <div key={badge} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-secondary)', fontFamily: 'DM Mono, monospace' }}>
+              <div key={badge} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#c8b0be', fontFamily: 'DM Mono, monospace' }}>
                 <span style={{ color: '#2ecc8a' }}>✓</span> {badge}
               </div>
             ))}
@@ -213,23 +221,23 @@ export default function LandingPage() {
 
       {/* ── Features grid ── */}
       <section style={{ maxWidth: '960px', margin: '0 auto', padding: '72px 24px 80px' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '24px', fontWeight: 700, marginBottom: '40px', color: 'var(--text-primary)' }}>
+        <h2 style={{ textAlign: 'center', fontSize: '24px', fontWeight: 700, marginBottom: '40px', color: '#FFFCFC' }}>
           Everything you need in one place
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
           {FEATURES.map(f => (
             <div key={f.title} style={{
               padding: '20px', borderRadius: '12px',
-              border: '1px solid var(--border)',
-              background: 'var(--bg-elevated)',
+              border: '1px solid #0a4d6b',
+              background: '#033E5B',
               transition: 'border-color 0.2s',
             }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(99,33,72,0.4)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#632148'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = '#0a4d6b'}
             >
               <div style={{ fontSize: '24px', marginBottom: '10px' }}>{f.icon}</div>
-              <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px' }}>{f.title}</div>
-              <div style={{ fontSize: '12px', lineHeight: 1.6, color: 'var(--text-secondary)' }}>{f.desc}</div>
+              <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px', color: '#FFFCFC' }}>{f.title}</div>
+              <div style={{ fontSize: '12px', lineHeight: 1.6, color: '#c8b0be' }}>{f.desc}</div>
             </div>
           ))}
         </div>
@@ -237,9 +245,9 @@ export default function LandingPage() {
 
       {/* ── Footer ── */}
       <footer style={{
-        borderTop: '1px solid var(--border)',
+        borderTop: '1px solid #0a4d6b',
         padding: '20px 32px', textAlign: 'center',
-        fontSize: '12px', color: 'var(--text-dim)',
+        fontSize: '12px', color: '#7ab0c0',
         fontFamily: 'DM Mono, monospace',
       }}>
         © {new Date().getFullYear()} FinAdvisor AI · AI, not a licensed financial advisor
