@@ -87,17 +87,17 @@ export default function RegisterPage() {
   const strengthLabels = [t('auth.passwordStrength8'), t('auth.passwordStrengthUpper'), t('auth.passwordStrengthLower'), t('auth.passwordStrengthNum')]
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', background: 'url(/auth-bg.jpg) center/cover no-repeat', position: 'relative' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', background: 'transparent', position: 'relative' }}>
 
       {/* ── Left: Branding panel ── */}
       <div style={{
         position: 'relative', overflow: 'hidden',
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         padding: '48px',
-        background: 'url(/auth-bg.jpg) center/cover no-repeat',
+        background: 'transparent',
       }}>
         {/* Dark overlay so text stays readable */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(2,21,38,0.65) 0%, rgba(3,62,91,0.50) 50%, rgba(2,21,38,0.70) 100%)', zIndex: 0, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(2,21,38,0.55) 0%, rgba(3,62,91,0.35) 50%, rgba(2,21,38,0.60) 100%)', zIndex: 0, pointerEvents: 'none' }} />
 
         {/* Animated orbs */}
         <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '360px', height: '360px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,33,72,0.35) 0%, transparent 70%)', animation: 'pulse 6s ease-in-out infinite', pointerEvents: 'none' }} />
@@ -142,11 +142,11 @@ export default function RegisterPage() {
       {/* ── Right: Register form ── */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '48px', background: '#021526',
+        padding: '48px', background: 'linear-gradient(to right, transparent, rgba(2,21,38,0.75) 25%)',
         
         overflowY: 'auto',
       }}>
-        <div style={{ width: '100%', maxWidth: '380px' }} className="fade-in">
+        <div style={{ width: '100%', maxWidth: '380px', background: 'rgba(2,21,38,0.80)', backdropFilter: 'blur(16px)', borderRadius: '16px', padding: '40px', border: 'none' }} className="fade-in">
 
           <div style={{ marginBottom: '32px' }}>
             <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '30px', fontWeight: 400, fontStyle: 'italic', color: '#FFFCFC', marginBottom: '8px' }}>
