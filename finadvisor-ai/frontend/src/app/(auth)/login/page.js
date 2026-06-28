@@ -81,17 +81,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', background: 'transparent', position: 'relative' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', background: 'url(/auth-bg.jpg) center/cover no-repeat', position: 'relative' }}>
 
       {/* ── Left: Branding panel ── */}
       <div style={{
         position: 'relative', overflow: 'hidden',
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         padding: '48px',
-        background: 'transparent',
+        background: 'url(/auth-bg.jpg) center/cover no-repeat',
       }}>
         {/* Dark overlay so text stays readable */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(2,21,38,0.82) 0%, rgba(3,62,91,0.70) 50%, rgba(2,21,38,0.85) 100%)', zIndex: 0, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(2,21,38,0.65) 0%, rgba(3,62,91,0.50) 50%, rgba(2,21,38,0.70) 100%)', zIndex: 0, pointerEvents: 'none' }} />
 
         {/* Animated orbs */}
         <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '360px', height: '360px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,33,72,0.35) 0%, transparent 70%)', animation: 'pulse 6s ease-in-out infinite', pointerEvents: 'none' }} />
