@@ -25,10 +25,16 @@ function GitHubIcon() {
   )
 }
 
+const PERKS = [
+  { icon: '📈', text: 'Live market prices & portfolio tracking' },
+  { icon: '🧠', text: 'AI answers on budgets, tax & retirement' },
+  { icon: '💳', text: 'MTN MoMo & Airtel Money built in' },
+  { icon: '🌍', text: '17 languages including Luganda & Swahili' },
+]
+
 export default function RegisterPage() {
   const router = useRouter()
   const { register } = useAuthStore()
-  const { init: initLang } = useLangStore()
   const t = useTranslate()
   const [form, setForm] = useState({ full_name: '', email: '', password: '' })
   const [error, setError] = useState('')
@@ -41,8 +47,6 @@ export default function RegisterPage() {
     setError(''); setLoading(true)
     try {
       const data = await register(form.email, form.password, form.full_name)
-      // NEW USERS always go to onboarding — never directly to chat
-      // onboarding_complete is false by default on new accounts
       const user = data?.user || useAuthStore.getState().user
       if (user?.onboarding_complete) {
         router.push('/chat')
@@ -83,62 +87,128 @@ export default function RegisterPage() {
   const strengthLabels = [t('auth.passwordStrength8'), t('auth.passwordStrengthUpper'), t('auth.passwordStrengthLower'), t('auth.passwordStrengthNum')]
 
   return (
-    <div className="auth-bg">
-      
-      <div style={{ width: '100%', maxWidth: '400px', position: 'relative', zIndex: 1 }} className="fade-in">
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '12px' }}>◆ FINADVISOR AI</div>
-          <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '28px', fontWeight: 400, color: 'var(--text-primary)', fontStyle: 'italic' }}>{t('auth.createAccount')}</h1>
-          <p style={{ color: 'var(--text-primary)', fontSize: '13px', marginTop: '6px' }}>{t('auth.startJourney')}</p>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', background: '#021526' }}>
+
+      {/* ── Left: Branding panel ── */}
+      <div style={{
+        position: 'relative', overflow: 'hidden',
+        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+        padding: '48px',
+        background: 'linear-gradient(135deg, #021526 0%, #033E5B 50%, #02243a 100%)',
+      }}>
+        {/* Animated orbs */}
+        <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '360px', height: '360px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,33,72,0.35) 0%, transparent 70%)', animation: 'pulse 6s ease-in-out infinite', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-60px', left: '-60px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(3,62,91,0.5) 0%, transparent 70%)', animation: 'pulse 8s ease-in-out infinite reverse', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '40%', left: '30%', width: '200px', height: '200px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,33,72,0.15) 0%, transparent 70%)', animation: 'pulse 10s ease-in-out infinite', pointerEvents: 'none' }} />
+
+        {/* Logo */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', color: '#FFFCFC', fontSize: '14px', letterSpacing: '0.15em', fontWeight: 600 }}>
+            ◆ FINADVISOR AI
+          </div>
         </div>
-        <div className="surface" style={{ padding: '32px' }}>
-          {error && <div style={{ background: 'var(--red-dim)', border: '1px solid var(--red)', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', color: 'var(--red)', marginBottom: '20px' }}>{error}</div>}
+
+        {/* Center content */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h2 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '42px', fontWeight: 400, fontStyle: 'italic', color: '#FFFCFC', lineHeight: 1.2, marginBottom: '16px' }}>
+            Start your financial<br />journey today.
+          </h2>
+          <p style={{ fontSize: '15px', color: '#c8b0be', lineHeight: 1.7, marginBottom: '40px', maxWidth: '340px' }}>
+            Join thousands getting smarter about money with AI built for African markets.
+          </p>
+
+          {/* Perks */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {PERKS.map(p => (
+              <div key={p.text} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'rgba(99,33,72,0.2)', border: '1px solid rgba(99,33,72,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>
+                  {p.icon}
+                </div>
+                <span style={{ fontSize: '13px', color: '#c8b0be', lineHeight: 1.4 }}>{p.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom tag */}
+        <div style={{ position: 'relative', zIndex: 1, fontSize: '11px', color: '#7ab0c0', fontFamily: 'DM Mono, monospace' }}>
+          Free to start · No credit card required
+        </div>
+      </div>
+
+      {/* ── Right: Register form ── */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '48px', background: '#021526',
+        borderLeft: '1px solid #0a4d6b',
+        overflowY: 'auto',
+      }}>
+        <div style={{ width: '100%', maxWidth: '380px' }} className="fade-in">
+
+          <div style={{ marginBottom: '32px' }}>
+            <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '30px', fontWeight: 400, fontStyle: 'italic', color: '#FFFCFC', marginBottom: '8px' }}>
+              {t('auth.createAccount')}
+            </h1>
+            <p style={{ color: '#c8b0be', fontSize: '13px' }}>{t('auth.startJourney')}</p>
+          </div>
+
+          {error && (
+            <div style={{ background: 'rgba(224,82,82,0.1)', border: '1px solid #e05252', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', color: '#e05252', marginBottom: '20px' }}>
+              {error}
+            </div>
+          )}
+
+          {/* OAuth buttons */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
             <button onClick={() => handleOAuth('google')} disabled={!!oauthLoading}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', padding: '11px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', cursor: oauthLoading ? 'not-allowed' : 'pointer', fontSize: '13px', color: 'var(--text-primary)', transition: 'all 0.15s', opacity: oauthLoading === 'github' ? 0.5 : 1 }}
-              onMouseEnter={e => { if (!oauthLoading) e.currentTarget.style.borderColor = 'var(--gold-dim)' }}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
-              {oauthLoading === 'google' ? <div style={{ width: '18px', height: '18px', border: '2px solid var(--gold)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /> : <GoogleIcon />}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', padding: '12px', background: '#033E5B', border: '1px solid #0a4d6b', borderRadius: '8px', cursor: oauthLoading ? 'not-allowed' : 'pointer', fontSize: '13px', color: '#FFFCFC', transition: 'all 0.15s', opacity: oauthLoading === 'github' ? 0.5 : 1 }}
+              onMouseEnter={e => { if (!oauthLoading) { e.currentTarget.style.borderColor = '#632148'; e.currentTarget.style.background = '#054d70' } }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#0a4d6b'; e.currentTarget.style.background = '#033E5B' }}>
+              {oauthLoading === 'google' ? <div style={{ width: '18px', height: '18px', border: '2px solid #632148', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /> : <GoogleIcon />}
               {t('auth.continueGoogle')}
             </button>
             <button onClick={() => handleOAuth('github')} disabled={!!oauthLoading}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', padding: '11px', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', cursor: oauthLoading ? 'not-allowed' : 'pointer', fontSize: '13px', color: 'var(--text-primary)', transition: 'all 0.15s', opacity: oauthLoading === 'google' ? 0.5 : 1 }}
-              onMouseEnter={e => { if (!oauthLoading) e.currentTarget.style.borderColor = 'var(--gold-dim)' }}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
-              {oauthLoading === 'github' ? <div style={{ width: '18px', height: '18px', border: '2px solid var(--gold)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /> : <GitHubIcon />}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', padding: '12px', background: '#033E5B', border: '1px solid #0a4d6b', borderRadius: '8px', cursor: oauthLoading ? 'not-allowed' : 'pointer', fontSize: '13px', color: '#FFFCFC', transition: 'all 0.15s', opacity: oauthLoading === 'google' ? 0.5 : 1 }}
+              onMouseEnter={e => { if (!oauthLoading) { e.currentTarget.style.borderColor = '#632148'; e.currentTarget.style.background = '#054d70' } }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#0a4d6b'; e.currentTarget.style.background = '#033E5B' }}>
+              {oauthLoading === 'github' ? <div style={{ width: '18px', height: '18px', border: '2px solid #632148', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /> : <GitHubIcon />}
               {t('auth.continueGithub')}
             </button>
           </div>
+
+          {/* Divider */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <div style={{ flex: 1, height: '1px', background: 'var(--border)' }} />
-            <span style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.05em' }}>{t('auth.or')}</span>
-            <div style={{ flex: 1, height: '1px', background: 'var(--border)' }} />
+            <div style={{ flex: 1, height: '1px', background: '#0a4d6b' }} />
+            <span style={{ fontSize: '11px', color: '#7ab0c0', letterSpacing: '0.05em' }}>{t('auth.or')}</span>
+            <div style={{ flex: 1, height: '1px', background: '#0a4d6b' }} />
           </div>
+
+          {/* Form fields */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.fullNameLabel')}</label>
+              <label style={{ display: 'block', fontSize: '12px', color: '#FFFCFC', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.fullNameLabel')}</label>
               <input className="input" type="text" placeholder="Susan Kemigisa" value={form.full_name} onChange={e => setForm({ ...form, full_name: e.target.value })} required autoFocus />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.emailAddress')}</label>
+              <label style={{ display: 'block', fontSize: '12px', color: '#FFFCFC', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.emailAddress')}</label>
               <input className="input" type="email" placeholder="you@example.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.passwordLabel')}</label>
+              <label style={{ display: 'block', fontSize: '12px', color: '#FFFCFC', marginBottom: '6px', letterSpacing: '0.05em' }}>{t('auth.passwordLabel')}</label>
               <div style={{ position: 'relative' }}>
                 <input className="input" type={showPassword ? 'text' : 'password'} placeholder={t('auth.passwordHint')} value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required style={{ paddingRight: '44px' }} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-primary)', padding: '4px', fontSize: '16px', lineHeight: 1 }}>
+                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#FFFCFC', padding: '4px', fontSize: '16px', lineHeight: 1 }}>
                   {showPassword ? '🙈' : '👁'}
                 </button>
               </div>
               {form.password && (
                 <div style={{ marginTop: '8px' }}>
                   <div style={{ display: 'flex', gap: '4px', marginBottom: '6px' }}>
-                    {checks.map((ok, i) => <div key={i} style={{ height: '3px', flex: 1, borderRadius: '2px', background: ok ? '#34d399' : 'var(--border-bright)', transition: 'background 0.2s' }} />)}
+                    {checks.map((ok, i) => <div key={i} style={{ height: '3px', flex: 1, borderRadius: '2px', background: ok ? '#34d399' : '#0a4d6b', transition: 'background 0.2s' }} />)}
                   </div>
                   <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     {checks.map((ok, i) => (
-                      <span key={i} style={{ fontSize: '11px', color: ok ? '#34d399' : 'var(--text-dim)' }}>
+                      <span key={i} style={{ fontSize: '11px', color: ok ? '#34d399' : '#7ab0c0' }}>
                         {ok ? '✓' : '○'} {strengthLabels[i]}
                       </span>
                     ))}
@@ -147,16 +217,24 @@ export default function RegisterPage() {
               )}
             </div>
             <button onClick={handleSubmit} disabled={loading || !strength}
-              style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '12px', fontSize: '13px', fontWeight: 700, cursor: (loading || !strength) ? 'not-allowed' : 'pointer', opacity: (loading || !strength) ? 0.6 : 1, transition: 'opacity 0.15s', marginTop: '4px' }}>
+              style={{ background: '#632148', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '13px', fontSize: '14px', fontWeight: 700, cursor: (loading || !strength) ? 'not-allowed' : 'pointer', opacity: (loading || !strength) ? 0.6 : 1, transition: 'all 0.15s', marginTop: '4px', boxShadow: '0 4px 20px rgba(99,33,72,0.3)' }}
+              onMouseEnter={e => { if (!loading && strength) { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(99,33,72,0.45)' } }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(99,33,72,0.3)' }}>
               {loading ? t('auth.creatingAccount') : t('auth.createAccountArrow')}
             </button>
           </div>
-          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text-primary)' }}>
-            {t('auth.alreadyHave')}{' '}<Link href="/login" style={{ color: 'var(--gold-light)', textDecoration: 'none' }}>{t('auth.signInLink')}</Link>
+
+          <p style={{ textAlign: 'center', marginTop: '24px', fontSize: '13px', color: '#c8b0be' }}>
+            {t('auth.alreadyHave')}{' '}
+            <Link href="/login" style={{ color: '#FFFCFC', textDecoration: 'none', fontWeight: 600 }}>{t('auth.signInLink')}</Link>
           </p>
         </div>
       </div>
-      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg) } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.08); opacity: 0.7; } }
+      `}</style>
     </div>
   )
 }
