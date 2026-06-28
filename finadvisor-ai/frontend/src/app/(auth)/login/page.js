@@ -94,8 +94,11 @@ export default function LoginPage() {
         position: 'relative', overflow: 'hidden',
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         padding: '48px',
-        background: 'linear-gradient(135deg, #021526 0%, #033E5B 50%, #02243a 100%)',
+        background: 'url(/auth-bg.jpg) center/cover no-repeat',
       }}>
+        {/* Dark overlay so text stays readable */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(2,21,38,0.82) 0%, rgba(3,62,91,0.70) 50%, rgba(2,21,38,0.85) 100%)', zIndex: 0, pointerEvents: 'none' }} />
+
         {/* Animated orbs */}
         <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '360px', height: '360px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,33,72,0.35) 0%, transparent 70%)', animation: 'pulse 6s ease-in-out infinite', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '-60px', left: '-60px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(3,62,91,0.5) 0%, transparent 70%)', animation: 'pulse 8s ease-in-out infinite reverse', pointerEvents: 'none' }} />
