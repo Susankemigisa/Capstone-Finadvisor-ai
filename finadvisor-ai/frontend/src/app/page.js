@@ -104,62 +104,103 @@ export default function LandingPage() {
         ◆ {TICKERS[tickerIdx]}
       </div>
 
-      {/* ── Hero ── */}
-      <section style={{ textAlign: 'center', padding: '96px 24px 80px', maxWidth: '780px', margin: '0 auto' }}>
-        <div style={{
-          display: 'inline-block', marginBottom: '20px', padding: '5px 14px',
-          borderRadius: '20px', border: '1px solid var(--border-bright)',
-          background: 'var(--bg-elevated)',
-          fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em',
-          color: 'var(--text-primary)',
-        }}>
-          POWERED BY GPT-4o · CLAUDE · GEMINI · LLAMA
+      {/* ── Hero — split layout: text left, video in phone right ── */}
+      <section style={{
+        display: 'flex', alignItems: 'center', minHeight: '88vh',
+        maxWidth: '1200px', margin: '0 auto', padding: '48px 32px', gap: '48px',
+        flexWrap: 'wrap',
+      }}>
+        {/* Left: headline + CTA */}
+        <div style={{ flex: '1 1 340px', minWidth: '280px' }}>
+          <div style={{
+            display: 'inline-block', marginBottom: '20px', padding: '5px 14px',
+            borderRadius: '20px', border: '1px solid var(--border-bright)',
+            background: 'var(--bg-elevated)',
+            fontSize: '11px', fontFamily: 'DM Mono, monospace', letterSpacing: '0.1em',
+            color: 'var(--text-primary)',
+          }}>
+            POWERED BY GPT-4o · CLAUDE · GEMINI · GROQ · LLAMA
+          </div>
+
+          <h1 style={{
+            fontSize: 'clamp(32px, 5vw, 60px)', fontWeight: 800, lineHeight: 1.1,
+            margin: '0 0 24px', color: 'var(--text-primary)',
+            fontFamily: 'Cambria, Georgia, serif',
+          }}>
+            Your AI financial<br />advisor,<br />always on.
+          </h1>
+
+          <p style={{
+            fontSize: '17px', lineHeight: 1.7, color: 'var(--text-secondary)',
+            margin: '0 0 36px', maxWidth: '480px',
+          }}>
+            Ask about markets, track your portfolio, plan your budget, and get charts — all in one chat. Built for Africa, works everywhere.
+          </p>
+
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '28px' }}>
+            <button
+              onClick={() => router.push('/register')}
+              style={{
+                padding: '14px 32px', borderRadius: '10px', border: 'none',
+                background: '#632148', color: '#FFFCFC',
+                fontSize: '15px', fontWeight: 700, cursor: 'pointer',
+                boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(99,33,72,0.45)' }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(99,33,72,0.35)' }}
+            >
+              Start for free →
+            </button>
+            <button
+              onClick={() => router.push('/login')}
+              style={{
+                padding: '14px 32px', borderRadius: '10px',
+                border: '1px solid var(--border)', background: 'var(--bg-elevated)',
+                color: 'var(--text-primary)', fontSize: '15px', cursor: 'pointer',
+              }}
+            >
+              Log in
+            </button>
+          </div>
+
+          {/* Trust badges */}
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+            {['12 real users', 'Live on Vercel', '5 AI models', '17 languages'].map(badge => (
+              <div key={badge} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-secondary)', fontFamily: 'DM Mono, monospace' }}>
+                <span style={{ color: '#2ecc8a' }}>✓</span> {badge}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <h1 style={{
-          fontSize: 'clamp(36px, 7vw, 68px)', fontWeight: 800, lineHeight: 1.1,
-          margin: '0 0 24px',
-          color: 'var(--text-primary)',
-        }}>
-          Your AI financial<br />advisor, always on
-        </h1>
-
-        <p style={{
-          fontSize: '17px', lineHeight: 1.7, color: 'var(--text-primary)',
-          margin: '0 auto 40px', maxWidth: '560px',
-        }}>
-          Ask about markets, track your portfolio, plan your budget, and get charts — all in one chat. Built for Africa, works everywhere.
-        </p>
-
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button
-            onClick={() => router.push('/register')}
-            style={{
-              padding: '14px 32px', borderRadius: '10px', border: 'none',
-              background: 'var(--gold)', color: 'var(--text-primary)',
-              fontSize: '15px', fontWeight: 700, cursor: 'pointer',
-              boxShadow: '0 4px 24px rgba(99,33,72,0.35)',
-              transition: 'transform 0.2s, box-shadow 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(99,33,72,0.45)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(99,33,72,0.35)' }}
-          >
-            Start for free →
-          </button>
-          <button
-            onClick={() => router.push('/login')}
-            style={{
-              padding: '14px 32px', borderRadius: '10px',
-              border: '1px solid var(--border)',
-              background: 'var(--bg-elevated)',
-              color: 'var(--text-primary, var(--text-primary))',
-              fontSize: '15px', cursor: 'pointer', transition: 'border-color 0.2s',
-            }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--border-bright)'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-          >
-            Log in
-          </button>
+        {/* Right: video inside phone frame */}
+        <div style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ position: 'relative', width: '260px' }}>
+            {/* Glow behind phone */}
+            <div style={{ position: 'absolute', inset: '-40px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,33,72,0.25) 0%, transparent 70%)', zIndex: 0, pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', inset: '-30px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(3,62,91,0.35) 0%, transparent 70%)', zIndex: 0, pointerEvents: 'none' }} />
+            {/* Phone shell */}
+            <div style={{
+              position: 'relative', zIndex: 1,
+              background: '#040B14', borderRadius: '38px', padding: '10px',
+              boxShadow: '0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.07)',
+              border: '2px solid rgba(255,255,255,0.05)',
+            }}>
+              {/* Notch */}
+              <div style={{ position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: '18px', background: '#040B14', borderRadius: '0 0 12px 12px', zIndex: 3 }} />
+              {/* Screen with video */}
+              <div style={{ borderRadius: '30px', overflow: 'hidden', aspectRatio: '9/16', background: '#021526', position: 'relative' }}>
+                <img
+                  src="/hero.jpg"
+                  alt="FinAdvisor AI dashboard"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+                />
+              </div>
+              {/* Home bar */}
+              <div style={{ margin: '8px auto 2px', width: '80px', height: '4px', background: 'rgba(255,255,255,0.12)', borderRadius: '2px' }} />
+            </div>
+          </div>
         </div>
       </section>
 
