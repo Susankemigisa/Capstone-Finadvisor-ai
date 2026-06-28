@@ -191,17 +191,11 @@ export default function LandingPage() {
               <div style={{ position: 'absolute', top: '10px', left: '50%', transform: 'translateX(-50%)', width: '60px', height: '18px', background: '#040B14', borderRadius: '0 0 12px 12px', zIndex: 3 }} />
               {/* Screen with video */}
               <div style={{ borderRadius: '30px', overflow: 'hidden', aspectRatio: '9/16', background: '#021526', position: 'relative' }}>
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                  onError={(e) => console.error('Video failed to load:', e)}
-                >
-                  <source src="/hero.mp4" type="video/mp4" />
-                  {/* Fallback: show a dark background if video fails */}
-                </video>
+                <img
+                  src="/hero.jpg"
+                  alt="FinAdvisor AI dashboard"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+                />
               </div>
               {/* Home bar */}
               <div style={{ margin: '8px auto 2px', width: '80px', height: '4px', background: 'rgba(255,255,255,0.12)', borderRadius: '2px' }} />
