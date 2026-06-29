@@ -21,7 +21,7 @@ function fmt(n) {
 }
 
 const PROVIDERS = [
-  { id: 'mtn',    name: 'MTN MoMo',     color: '#FFCC00', textColor: '#000', icon: '📱', prefix: '077 / 078 / 076 / 079' },
+  { id: 'mtn',    name: 'MTN MoMo',     color: '#FFCC00', textColor: '#021526', icon: '📱', prefix: '077 / 078 / 076 / 079' },
   { id: 'airtel', name: 'Airtel Money',  color: '#FF0000', textColor: '#fff', icon: '📡', prefix: '070 / 075 / 074' },
 ]
 
@@ -212,8 +212,8 @@ export default function BillingPage() {
                   <div style={{ position: 'absolute', top: '-11px', left: '50%', transform: 'translateX(-50%)', background: 'var(--gold)', color: '#FFFCFC', fontSize: '10px', fontWeight: 700, padding: '3px 12px', borderRadius: '20px', whiteSpace: 'nowrap' }}>
                     {t('billing.mostPopular')}
                   </div>
-                  <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--gold-light)', marginBottom: '8px' }}>Pro</div>
-                  <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '28px', fontWeight: 700, color: 'var(--gold)', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#FFFCFC', marginBottom: '8px' }}>Pro</div>
+                  <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '28px', fontWeight: 700, color: '#FFFCFC', marginBottom: '4px' }}>
                     UGX {selectedPlan ? fmt(selectedPlan.amount_ugx) : '—'}
                   </div>
                   <div style={{ fontSize: '12px', color: 'var(--text-primary)', marginBottom: '20px' }}>
@@ -221,7 +221,7 @@ export default function BillingPage() {
                   </div>
                   {(selectedPlan?.features || []).map(f => (
                     <div key={f} style={{ fontSize: '12px', marginBottom: '8px', display: 'flex', gap: '8px' }}>
-                      <span style={{ color: 'var(--gold-light)' }}>◆</span> {f}
+                      <span style={{ color: '#2ecc8a' }}>✓</span> {f}
                     </div>
                   ))}
                   <button onClick={() => setStep('pay')}
@@ -245,7 +245,7 @@ export default function BillingPage() {
                 ← {t('billing.backBtn')}
               </button>
               <div style={{ fontSize: '13px', color: 'var(--text-primary)', marginBottom: '20px' }}>
-                {t('billing.payingLabel')} <strong style={{ color: 'var(--gold-light)' }}>UGX {selectedPlan ? fmt(selectedPlan.amount_ugx) : '—'}</strong>
+                {t('billing.payingLabel')} <strong style={{ color: '#FFFCFC' }}>UGX {selectedPlan ? fmt(selectedPlan.amount_ugx) : '—'}</strong>
                 {' '}{t('billing.forLabel')} <strong style={{ color: 'var(--text-primary)' }}>{selectedPlan?.name}</strong>
               </div>
 

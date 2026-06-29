@@ -55,7 +55,7 @@ function PocketCard({ pocket, onTransact, onDelete }) {
   return (
     <div style={{ background: 'var(--bg-surface)', border: `1px solid ${reached ? '#34d399' : 'var(--border)'}`, borderRadius: '14px', padding: '20px', position: 'relative', overflow: 'hidden' }}>
       {/* Top accent bar */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: pocket.color || 'var(--gold)' }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: pocket.color || '#033E5B' }} />
 
       {reached && (
         <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#34d399', color: '#000', fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '20px' }}>
@@ -73,8 +73,8 @@ function PocketCard({ pocket, onTransact, onDelete }) {
         </div>
         {pct !== null && (
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <ProgressRing pct={pct} color={pocket.color || 'var(--gold)'} />
-            <span style={{ position: 'absolute', fontSize: '10px', fontFamily: 'DM Mono, monospace', fontWeight: 700, color: pocket.color || 'var(--gold)' }}>
+            <ProgressRing pct={pct} color={pocket.color || '#1a6a8a'} />
+            <span style={{ position: 'absolute', fontSize: '10px', fontFamily: 'DM Mono, monospace', fontWeight: 700, color: pocket.color || '#FFFCFC' }}>
               {pct.toFixed(0)}%
             </span>
           </div>
@@ -82,7 +82,7 @@ function PocketCard({ pocket, onTransact, onDelete }) {
       </div>
 
       <div style={{ marginBottom: '14px' }}>
-        <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '24px', fontWeight: 700, color: pocket.color || 'var(--gold)' }}>
+        <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '24px', fontWeight: 700, color: pocket.color || '#FFFCFC' }}>
           {fmt(pocket.current_amount, pocket.currency)}
         </div>
         {pocket.target_amount > 0 && (
@@ -96,13 +96,13 @@ function PocketCard({ pocket, onTransact, onDelete }) {
       {/* Progress bar */}
       {pct !== null && (
         <div style={{ background: 'var(--bg-base)', borderRadius: '4px', height: '5px', marginBottom: '14px', overflow: 'hidden' }}>
-          <div style={{ width: `${pct}%`, height: '100%', background: pocket.color || 'var(--gold)', borderRadius: '4px', transition: 'width 0.6s ease' }} />
+          <div style={{ width: `${pct}%`, height: '100%', background: pocket.color || '#033E5B', borderRadius: '4px', transition: 'width 0.6s ease' }} />
         </div>
       )}
 
       <div style={{ display: 'flex', gap: '8px' }}>
         <button onClick={() => { setTxType('deposit'); setShowTransact(!showTransact) }}
-          style={{ flex: 1, background: pocket.color || 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
+          style={{ flex: 1, background: pocket.color || '#033E5B', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
           + Save
         </button>
         <button onClick={() => { setTxType('withdrawal'); setShowTransact(!showTransact) }}
@@ -124,7 +124,7 @@ function PocketCard({ pocket, onTransact, onDelete }) {
           <input placeholder="Note (optional)" value={txNote} onChange={e => setTxNote(e.target.value)}
             style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none', marginBottom: '8px', boxSizing: 'border-box' }} />
           <button onClick={handleTransact} disabled={loading}
-            style={{ width: '100%', background: txType === 'deposit' ? (pocket.color || 'var(--gold)') : '#f87171', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '9px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+            style={{ width: '100%', background: txType === 'deposit' ? '#632148' : '#e05252', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '9px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
             {loading ? 'Processing...' : txType === 'deposit' ? `Deposit to ${pocket.name}` : `Withdraw from ${pocket.name}`}
           </button>
         </div>
@@ -220,7 +220,7 @@ export default function SavingsPage() {
           {pockets.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px', marginBottom: '24px' }}>
               {[
-                { label: 'TOTAL SAVED', value: fmt(totalSaved), color: 'var(--gold-light)' },
+                { label: 'TOTAL SAVED', value: fmt(totalSaved), color: '#FFFCFC' },
                 { label: 'TOTAL TARGET', value: fmt(totalTarget), color: 'var(--text-primary)' },
                 { label: 'POCKETS', value: pockets.length, color: 'var(--text-primary)' },
                 { label: 'GOALS REACHED', value: `${reached} 🎉`, color: '#34d399' },

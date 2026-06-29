@@ -199,7 +199,7 @@ export default function InsightsPage() {
             {/* Net Worth */}
             <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px', gridColumn: '1 / 2' }}>
               <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '12px' }}>{t('insights.netWorth')}</div>
-              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '32px', fontWeight: 700, color: netWorth >= 0 ? 'var(--gold)' : '#f87171', marginBottom: '16px' }}>
+              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '32px', fontWeight: 700, color: netWorth >= 0 ? '#FFFCFC' : '#f87171', marginBottom: '16px' }}>
                 {fmt(netWorth)}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

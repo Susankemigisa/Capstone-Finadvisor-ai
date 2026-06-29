@@ -69,7 +69,7 @@ const EXPORTS = [
     titleKey: 'export.exportAll',
     descKey: 'export.descAll',
     path: '/export/all',
-    color: 'var(--gold)',
+    color: '#c8b0be',
     jsonOnly: true,
     featured: true,
   },

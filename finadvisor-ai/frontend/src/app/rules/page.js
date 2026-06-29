@@ -67,7 +67,7 @@ function RuleCard({ rule, onToggle, onDelete, t }) {
       {rule.times_triggered > 0 && (
         <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border)', display: 'flex', gap: '20px', fontSize: '12px', color: 'var(--text-primary)' }}>
           <span>{t('rules.triggeredCount')} <strong style={{ color: 'var(--text-primary)' }}>{rule.times_triggered}×</strong></span>
-          <span>{t('rules.totalSaved')} <strong style={{ color: 'var(--gold-light)' }}>{fmt(rule.total_saved)}</strong></span>
+          <span>{t('rules.totalSaved')} <strong style={{ color: '#c8b0be' }}>{fmt(rule.total_saved)}</strong></span>
           {rule.last_triggered_at && <span>{t('rules.lastTriggered')}: {new Date(rule.last_triggered_at).toLocaleDateString()}</span>}
         </div>
       )}
@@ -171,7 +171,7 @@ export default function RulesPage() {
               {[
                 { label: t('rules.activeRules'), value: activeRules, color: '#34d399' },
                 { label: t('rules.totalRules'), value: rules.length, color: 'var(--text-primary)' },
-                { label: t('rules.autoSaved'), value: new Intl.NumberFormat('en-UG', { style: 'currency', currency: 'UGX', maximumFractionDigits: 0 }).format(totalAutoSaved), color: 'var(--gold-light)' },
+                { label: t('rules.autoSaved'), value: new Intl.NumberFormat('en-UG', { style: 'currency', currency: 'UGX', maximumFractionDigits: 0 }).format(totalAutoSaved), color: '#FFFCFC' },
               ].map((s, i) => (
                 <div key={i} style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
                   <div style={{ fontSize: '10px', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '8px' }}>{s.label}</div>
@@ -183,8 +183,8 @@ export default function RulesPage() {
 
           {/* No pockets warning */}
           {pockets.length === 0 && !loading && (
-            <div style={{ background: 'var(--bg-main)', border: '1px solid var(--gold-dim)', borderRadius: '10px', padding: '14px 18px', marginBottom: '20px', fontSize: '13px', color: 'var(--gold-light)' }}>
-              ⚠️ {t('rules.needPocketWarning')} <a href="/savings" style={{ color: 'var(--gold)', fontWeight: 600, textDecoration: 'underline' }}>{t('rules.createPocketFirst')} →</a>
+            <div style={{ background: 'var(--bg-main)', border: '1px solid var(--gold-dim)', borderRadius: '10px', padding: '14px 18px', marginBottom: '20px', fontSize: '13px', color: '#c8b0be' }}>
+              ⚠️ {t('rules.needPocketWarning')} <a href="/savings" style={{ color: '#FFFCFC', fontWeight: 600, textDecoration: 'underline' }}>{t('rules.createPocketFirst')} →</a>
             </div>
           )}
 
@@ -252,7 +252,7 @@ export default function RulesPage() {
                 {/* Preview */}
                 {form.amount_value && form.pocket_id && (
                   <div style={{ gridColumn: '1 / -1', background: 'var(--bg-elevated)', borderRadius: '8px', padding: '12px', fontSize: '12px', color: 'var(--text-primary)' }}>
-                    <strong style={{ color: 'var(--gold-light)' }}>{t('rules.preview')}</strong> {t('rules.whenMoneyArrives')}
+                    <strong style={{ color: '#c8b0be' }}>{t('rules.preview')}</strong> {t('rules.whenMoneyArrives')}
                     {form.trigger_keyword ? ` ${t('rules.keywordMatch')} "${form.trigger_keyword}"` : ` (${t('rules.anyIncome')})`}
                     {form.trigger_amount_min ? ` ${t('rules.minimumMatch')} ${fmt(parseFloat(form.trigger_amount_min))}` : ''},
                     {' '}{t('rules.saveIntoPocket').toLowerCase()} {form.rule_type === 'percentage' ? `${form.amount_value}%` : fmt(parseFloat(form.amount_value))} →{' '}
