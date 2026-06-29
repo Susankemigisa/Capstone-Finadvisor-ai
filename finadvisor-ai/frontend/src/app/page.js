@@ -138,7 +138,7 @@ export default function LandingPage() {
               objectFit: 'cover', display: 'block',
             }}
           >
-            <source src="/hero2.mp4" type="video/mp4" />
+            <source src="/hero.mp4" type="video/mp4" />
           </video>
           <div style={{
             position: 'absolute', inset: 0,
