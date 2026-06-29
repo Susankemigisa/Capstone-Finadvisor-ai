@@ -174,7 +174,7 @@ export default function HistoryPage() {
               <div style={{ fontSize: '18px', color: 'var(--text-primary)', fontFamily: 'Instrument Serif, serif', fontStyle: 'italic', marginBottom: '8px' }}>{t('common.empty')}</div>
               <div style={{ fontSize: '13px', marginBottom: '24px' }}>Start a chat to see your history here</div>
               <button onClick={() => router.push('/chat')}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 Start Chatting →
               </button>
             </div>

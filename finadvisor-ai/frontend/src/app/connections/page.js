@@ -24,7 +24,7 @@ const PROVIDERS = [
   { id: 'mono',         name: 'DFCU Bank',         icon: '🏦', color: '#006633', type: 'bank',         bank: 'DFCU Bank Uganda',    hint: 'Your DFCU account number' },
   { id: 'mono',         name: 'Centenary Bank',    icon: '🏦', color: '#004080', type: 'bank',         bank: 'Centenary Bank',      hint: 'Your Centenary account number' },
   { id: 'mono',         name: 'Equity Bank',       icon: '🏦', color: '#CC0000', type: 'bank',         bank: 'Equity Bank Uganda',  hint: 'Your Equity account number' },
-  { id: 'flutterwave',  name: 'Card / Other',      icon: '💳', color: '#F5A623', type: 'card',         bank: 'Flutterwave',         hint: 'Email address linked to your Flutterwave account' },
+  { id: 'flutterwave',  name: 'Card / Other',      icon: '💳', color: '#632148', type: 'card',         bank: 'Flutterwave',         hint: 'Email address linked to your Flutterwave account' },
   { id: 'manual',       name: 'Manual Entry',      icon: '✏️', color: 'var(--text-secondary)', type: 'manual',       bank: 'Manual',              hint: 'No live sync — you update the balance yourself' },
 ]
 
@@ -137,7 +137,7 @@ export default function ConnectionsPage() {
               <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '2px' }}>Connect your accounts — when money arrives, your savings rules run automatically</p>
             </div>
             <button onClick={() => { setShowForm(!showForm); setSelected(null); setError('') }}
-              style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+              style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
               {showForm ? 'Cancel' : '+ Connect Account'}
             </button>
           </div>
@@ -162,7 +162,7 @@ export default function ConnectionsPage() {
                   { step: '4', text: 'Your savings rule fires instantly — money is tracked in your pocket' },
                 ].map(({ step, text }) => (
                   <div key={step} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-                    <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--gold)', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>{step}</div>
+                    <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--gold)', color: '#FFFCFC', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>{step}</div>
                     <div style={{ fontSize: '13px', color: 'var(--text-secondary)', paddingTop: '3px' }}>{text}</div>
                   </div>
                 ))}
@@ -215,7 +215,7 @@ export default function ConnectionsPage() {
               {error && <div style={{ color: '#f87171', fontSize: '13px', marginTop: '10px' }}>{error}</div>}
               {selected && (
                 <button onClick={handleConnect} disabled={saving}
-                  style={{ marginTop: '16px', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                  style={{ marginTop: '16px', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                   {saving ? t('connections.connecting') : `Connect ${selected.name}`}
                 </button>
               )}
@@ -238,7 +238,7 @@ export default function ConnectionsPage() {
                 Connect your MTN MoMo or bank account and your savings rules will run automatically whenever money arrives.
               </div>
               <button onClick={() => setShowForm(true)}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 Connect your first account
               </button>
             </div>

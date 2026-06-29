@@ -124,7 +124,7 @@ export default function OnboardingPage() {
               ))}
             </div>
             <button onClick={() => setStep(1)}
-              style={{ width: '100%', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
+              style={{ width: '100%', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
               Get started →
             </button>
             <button onClick={() => router.push('/chat')}
@@ -162,7 +162,7 @@ export default function OnboardingPage() {
             </div>
 
             <button onClick={handleProfileSave} disabled={saving}
-              style={{ width: '100%', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
+              style={{ width: '100%', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
               {saving ? 'Saving...' : 'Continue →'}
             </button>
           </div>
@@ -208,7 +208,7 @@ export default function OnboardingPage() {
             </div>
 
             <button onClick={handleFinancesSave} disabled={saving}
-              style={{ width: '100%', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px', fontWeight: 700, cursor: 'pointer', marginBottom: '10px' }}>
+              style={{ width: '100%', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px', fontWeight: 700, cursor: 'pointer', marginBottom: '10px' }}>
               {saving ? 'Saving...' : 'Continue →'}
             </button>
             <button onClick={() => setStep(3)}
@@ -244,7 +244,7 @@ export default function OnboardingPage() {
               ))}
             </div>
             <button onClick={handleDone}
-              style={{ width: '100%', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
+              style={{ width: '100%', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
               Go to FinAdvisor →
             </button>
           </div>

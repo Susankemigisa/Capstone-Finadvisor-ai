@@ -158,7 +158,7 @@ export default function RulesPage() {
               <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>{t('rules.ruleSubtitle')}</p>
             </div>
             <button onClick={() => { setShowForm(!showForm); setError('') }}
-              style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+              style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
               {showForm ? t('rules.cancelBtn') : t('rules.newRuleBtn')}
             </button>
           </div>
@@ -263,7 +263,7 @@ export default function RulesPage() {
 
               {error && <div style={{ color: '#f87171', fontSize: '13px', marginTop: '10px' }}>{error}</div>}
               <button onClick={handleCreate} disabled={saving || pockets.length === 0}
-                style={{ marginTop: '16px', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ marginTop: '16px', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 {saving ? t('rules.creating') : t('rules.createRule')}
               </button>
             </div>
@@ -281,11 +281,11 @@ export default function RulesPage() {
               </div>
               {pockets.length > 0 ? (
                 <button onClick={() => setShowForm(true)}
-                  style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                  style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                   {t('rules.createFirstRule')}
                 </button>
               ) : (
-                <a href="/savings" style={{ background: 'var(--gold)', color: '#000', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', display: 'inline-block' }}>
+                <a href="/savings" style={{ background: 'var(--gold)', color: '#FFFCFC', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', display: 'inline-block' }}>
                   {t('rules.createPocketFirstBtn')}
                 </a>
               )}

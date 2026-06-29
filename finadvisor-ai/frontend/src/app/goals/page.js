@@ -24,7 +24,7 @@ const GOAL_ICONS = {
 }
 const GOAL_COLORS = {
   savings: '#4a9eff', investment: '#632148', debt_payoff: '#f87171',
-  emergency_fund: '#34d399', retirement: '#a78bfa', custom: '#fb923c'
+  emergency_fund: '#34d399', retirement: '#a78bfa', custom: '#8a2f63'
 }
 
 // Simple confetti burst using canvas
@@ -41,7 +41,7 @@ function Confetti({ active }) {
       y: Math.random() * -canvas.height,
       r: Math.random() * 8 + 4,
       d: Math.random() * 80 + 20,
-      color: ['#632148','#34d399','#4a9eff','#f87171','#a78bfa','#fb923c'][Math.floor(Math.random() * 6)],
+      color: ['#632148','#34d399','#4a9eff','#f87171','#a78bfa','#8a2f63'][Math.floor(Math.random() * 6)],
       tilt: Math.random() * 10 - 10,
       tiltAngle: 0,
       tiltSpeed: Math.random() * 0.1 + 0.05,
@@ -237,7 +237,7 @@ export default function GoalsPage() {
               <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>Track progress towards your financial goals</p>
             </div>
             <button onClick={() => setShowForm(!showForm)}
-              style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+              style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
               {showForm ? 'Cancel' : '+ New Goal'}
             </button>
           </div>
@@ -291,7 +291,7 @@ export default function GoalsPage() {
               </div>
               {error && <div style={{ color: '#f87171', fontSize: '13px', marginTop: '10px' }}>{error}</div>}
               <button onClick={handleCreate} disabled={saving}
-                style={{ marginTop: '16px', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ marginTop: '16px', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 {saving ? 'Creating...' : 'Create Goal'}
               </button>
             </div>
@@ -307,7 +307,7 @@ export default function GoalsPage() {
                 Goals give your savings a purpose. Whether it's an emergency fund, a holiday, or a new business — set a target and watch your progress grow.
               </div>
               <button onClick={() => setShowForm(true)}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 Set your first goal
               </button>
             </div>

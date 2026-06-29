@@ -179,7 +179,7 @@ export default function BillingPage() {
                 <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '10px', padding: '4px', display: 'flex', gap: '4px' }}>
                   {['monthly', 'yearly'].map(i => (
                     <button key={i} onClick={() => setInterval_(i)}
-                      style={{ padding: '8px 20px', borderRadius: '7px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 500, background: interval === i ? 'var(--gold)' : 'transparent', color: interval === i ? '#000' : 'var(--text-secondary)', transition: 'all 0.15s' }}>
+                      style={{ padding: '8px 20px', borderRadius: '7px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 500, background: interval === i ? 'var(--gold)' : 'transparent', color: interval === i ? '#FFFCFC' : 'var(--text-secondary)', transition: 'all 0.15s' }}>
                       {i === 'yearly' ? t('billing.yearly') : t('billing.monthly')}
                     </button>
                   ))}
@@ -209,7 +209,7 @@ export default function BillingPage() {
 
                 {/* Pro */}
                 <div style={{ background: 'var(--bg-surface)', border: '2px solid var(--gold)', borderRadius: '14px', padding: '24px', position: 'relative' }}>
-                  <div style={{ position: 'absolute', top: '-11px', left: '50%', transform: 'translateX(-50%)', background: 'var(--gold)', color: '#000', fontSize: '10px', fontWeight: 700, padding: '3px 12px', borderRadius: '20px', whiteSpace: 'nowrap' }}>
+                  <div style={{ position: 'absolute', top: '-11px', left: '50%', transform: 'translateX(-50%)', background: 'var(--gold)', color: '#FFFCFC', fontSize: '10px', fontWeight: 700, padding: '3px 12px', borderRadius: '20px', whiteSpace: 'nowrap' }}>
                     {t('billing.mostPopular')}
                   </div>
                   <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--gold-light)', marginBottom: '8px' }}>Pro</div>
@@ -225,7 +225,7 @@ export default function BillingPage() {
                     </div>
                   ))}
                   <button onClick={() => setStep('pay')}
-                    style={{ width: '100%', marginTop: '16px', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '11px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
+                    style={{ width: '100%', marginTop: '16px', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '11px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
                     {t('billing.upgradeWithMomo')} →
                   </button>
                 </div>
@@ -341,7 +341,7 @@ export default function BillingPage() {
                 {t('billing.successMsg')}
               </div>
               <button onClick={() => router.push('/chat')}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}>
                 {t('billing.startUsingPro')} →
               </button>
             </div>
@@ -354,7 +354,7 @@ export default function BillingPage() {
               <div style={{ fontSize: '16px', fontWeight: 600, color: '#f87171', marginBottom: '8px' }}>{t('billing.paymentFailed')}</div>
               <div style={{ fontSize: '13px', color: 'var(--text-primary)', marginBottom: '24px' }}>{errorMsg}</div>
               <button onClick={() => { setStep('pay'); setErrorMsg('') }}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
                 {t('billing.tryAgain')}
               </button>
             </div>

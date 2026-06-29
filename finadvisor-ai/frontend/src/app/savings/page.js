@@ -102,7 +102,7 @@ function PocketCard({ pocket, onTransact, onDelete }) {
 
       <div style={{ display: 'flex', gap: '8px' }}>
         <button onClick={() => { setTxType('deposit'); setShowTransact(!showTransact) }}
-          style={{ flex: 1, background: pocket.color || 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
+          style={{ flex: 1, background: pocket.color || 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
           + Save
         </button>
         <button onClick={() => { setTxType('withdrawal'); setShowTransact(!showTransact) }}
@@ -124,7 +124,7 @@ function PocketCard({ pocket, onTransact, onDelete }) {
           <input placeholder="Note (optional)" value={txNote} onChange={e => setTxNote(e.target.value)}
             style={{ width: '100%', background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none', marginBottom: '8px', boxSizing: 'border-box' }} />
           <button onClick={handleTransact} disabled={loading}
-            style={{ width: '100%', background: txType === 'deposit' ? (pocket.color || 'var(--gold)') : '#f87171', color: '#000', border: 'none', borderRadius: '8px', padding: '9px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+            style={{ width: '100%', background: txType === 'deposit' ? (pocket.color || 'var(--gold)') : '#f87171', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '9px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
             {loading ? 'Processing...' : txType === 'deposit' ? `Deposit to ${pocket.name}` : `Withdraw from ${pocket.name}`}
           </button>
         </div>
@@ -134,7 +134,7 @@ function PocketCard({ pocket, onTransact, onDelete }) {
 }
 
 const POCKET_ICONS = ['💰','🏠','✈️','🎓','🚗','💊','🎉','🛡️','👶','💍','📱','🌍']
-const POCKET_COLORS = ['#632148','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6']
+const POCKET_COLORS = ['#632148','#033E5B','#34d399','#e05252','#8a2f63','#054d70','#1a6a8a','#02243a']
 
 export default function SavingsPage() {
   const router = useRouter()
@@ -209,7 +209,7 @@ export default function SavingsPage() {
               <p style={{ color: 'var(--text-primary)', fontSize: '12px', marginTop: '2px' }}>Virtual buckets — your money stays in your real bank, this tracks what&apos;s earmarked</p>
             </div>
             <button onClick={() => setShowForm(!showForm)}
-              style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+              style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
               {showForm ? 'Cancel' : '+ New Pocket'}
             </button>
           </div>
@@ -288,7 +288,7 @@ export default function SavingsPage() {
               </div>
               {error && <div style={{ color: '#f87171', fontSize: '13px', marginTop: '10px' }}>{error}</div>}
               <button onClick={handleCreate} disabled={saving}
-                style={{ marginTop: '16px', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ marginTop: '16px', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 {saving ? t('savings.creating') : t('savings.createPocket')}
               </button>
             </div>
@@ -313,7 +313,7 @@ export default function SavingsPage() {
                 Create a pocket for each savings goal — Emergency Fund, Holiday Trip, New Phone. Your money stays in your real bank account, this just helps you track it.
               </div>
               <button onClick={() => setShowForm(true)}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '12px 28px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 Create your first pocket
               </button>
             </div>

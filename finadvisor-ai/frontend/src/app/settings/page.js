@@ -25,7 +25,7 @@ const PROVIDERS = [
     { id: 'gemini-1.5-pro',   label: 'Gemini Pro',   desc: 'Most capable Gemini' },
     { id: 'gemini-2.0-flash', label: 'Gemini 2.0',   desc: 'Latest generation' },
   ]},
-  { name: 'Groq', color: '#f55036', models: [
+  { name: 'Groq', color: '#632148', models: [
     { id: 'groq-llama-3.1-8b-instant', label: 'Llama 3.1 (Fast)',  desc: 'Ultra fast responses' },
     { id: 'groq-llama-3.3-70b',        label: 'Llama 3.3 (Smart)', desc: 'Powerful open-source model' },
   ]},
@@ -109,7 +109,7 @@ export default function SettingsPage() {
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
-        <div style={{ fontFamily: 'DM Mono, monospace', color: 'var(--gold-light)', fontSize: '11px' }}>{t('common.loading')}</div>
+        <div style={{ fontFamily: 'DM Mono, monospace', color: '#FFFCFC', fontSize: '11px' }}>{t('common.loading')}</div>
       </div>
     </div>
   )
@@ -172,7 +172,7 @@ export default function SettingsPage() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: provider.color }} />
                           <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>{provider.name}</span>
-                          {hasActive && <span style={{ fontSize: '10px', background: 'var(--gold-dim)', color: 'var(--gold-light)', borderRadius: '4px', padding: '1px 6px', fontFamily: 'DM Mono, monospace' }}>{t('common.active')}</span>}
+                          {hasActive && <span style={{ fontSize: '10px', background: 'var(--gold-dim)', color: '#FFFCFC', borderRadius: '4px', padding: '1px 6px', fontFamily: 'DM Mono, monospace' }}>{t('common.active')}</span>}
                         </div>
                         <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>{isOpen ? '▲' : '▼'}</span>
                       </button>
@@ -187,7 +187,7 @@ export default function SettingsPage() {
                                   <span style={{ fontSize: '13px', fontWeight: 500, color: active ? 'var(--gold-light)' : 'var(--text-primary)' }}>{m.label}</span>
                                   <span style={{ fontSize: '11px', color: 'var(--text-primary)', display: 'block', marginTop: '1px' }}>{m.desc}</span>
                                 </div>
-                                {active && <span style={{ color: 'var(--gold-light)' }}>✓</span>}
+                                {active && <span style={{ color: '#FFFCFC' }}>✓</span>}
                               </button>
                             )
                           })}

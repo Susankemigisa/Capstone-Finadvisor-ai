@@ -188,7 +188,7 @@ export default function WatchlistPage() {
                 <option value="commodity">{t('assetTypes.commodity')}</option>
               </select>
               <button onClick={handleAdd} disabled={adding || !ticker.trim()}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '9px 20px', fontSize: '13px', fontWeight: 600, cursor: adding ? 'not-allowed' : 'pointer', opacity: adding ? 0.7 : 1 }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '9px 20px', fontSize: '13px', fontWeight: 600, cursor: adding ? 'not-allowed' : 'pointer', opacity: adding ? 0.7 : 1 }}>
                 {adding ? t('watchlist.adding') : t('watchlist.add')}
               </button>
             </div>

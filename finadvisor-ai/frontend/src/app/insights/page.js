@@ -26,7 +26,7 @@ function fmt(n, currency = 'UGX') {
 }
 
 function HealthScoreRing({ score, t }) {
-  const color = score >= 75 ? '#34d399' : score >= 50 ? '#632148' : score >= 25 ? '#fb923c' : '#f87171'
+  const color = score >= 75 ? '#34d399' : score >= 50 ? '#632148' : score >= 25 ? '#8a2f63' : '#f87171'
   const label = score >= 75 ? t('insights.excellent') : score >= 50 ? t('insights.good') : score >= 25 ? t('insights.fair') : t('insights.needsWork')
   const size = 140, r = 54, circ = 2 * Math.PI * r
   const fill = (score / 100) * circ * 0.75
@@ -67,7 +67,7 @@ function SpendingBar({ category, amount, total, color }) {
   )
 }
 
-const CAT_COLORS = ['#632148','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6','#6ee7b7','#fbbf24']
+const CAT_COLORS = ['#632148','#4a9eff','#34d399','#f87171','#a78bfa','#8a2f63','#38bdf8','#f472b6','#6ee7b7','#fbbf24']
 
 function calcHealthScore({ savingsRate, goalProgress, hasEmergencyFund, debtRatio, budgetEntries }) {
   let score = 0

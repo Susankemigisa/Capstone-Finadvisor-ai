@@ -138,7 +138,7 @@ export default function AlertsPage() {
                   style={{ textAlign: 'left', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', transition: 'border-color 0.15s' }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gold-dim)'}
                   onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
-                  <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--gold-light)' }}>{s.label}</div>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: '#FFFCFC' }}>{s.label}</div>
                   <div style={{ fontSize: '10px', color: 'var(--green)', marginTop: '2px' }}>{s.desc}</div>
                 </button>
               ))}
@@ -183,7 +183,7 @@ export default function AlertsPage() {
               {alerts.map(alert => (
                 <div key={alert.id} style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '14px', fontWeight: 700, color: 'var(--gold-light)' }}>{alert.ticker}</div>
+                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '14px', fontWeight: 700, color: '#FFFCFC' }}>{alert.ticker}</div>
                     <div style={{ fontSize: '12px', color: 'var(--text-primary)' }}>
                       {alert.condition === 'above' ? '↑ above' : '↓ below'} <strong style={{ color: 'var(--text-primary)' }}>${parseFloat(alert.target_price).toFixed(2)}</strong>
                     </div>

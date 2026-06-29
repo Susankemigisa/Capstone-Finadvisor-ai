@@ -61,7 +61,7 @@ const EXPORTS = [
     titleKey: 'export.exportWatchlist',
     descKey: 'export.descWatchlist',
     path: '/export/watchlist',
-    color: '#fb923c',
+    color: '#8a2f63',
   },
   {
     key: 'all',

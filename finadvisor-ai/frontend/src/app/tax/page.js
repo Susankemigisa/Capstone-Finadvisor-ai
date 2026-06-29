@@ -164,7 +164,7 @@ export default function TaxPage() {
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button onClick={() =>{ setShowForm(!showForm); setPreview(null) }}
-            style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+            style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
             {showForm ? t('tax.cancel') : t('tax.addYear')}</button>
             </div>
           </div>
@@ -225,7 +225,7 @@ export default function TaxPage() {
                 Preview Estimate
               </button>
               <button onClick={handleSave} disabled={saving}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 {saving ? t('tax.saving') : t('tax.save')}
               </button>
             </div>

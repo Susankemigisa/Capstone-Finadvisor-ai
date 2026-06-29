@@ -23,7 +23,7 @@ const CATEGORIES = {
   expense: ['Housing', 'Food', 'Transport', 'Healthcare', 'Entertainment', 'Shopping', 'Utilities', 'Education', 'Savings', 'Other']
 }
 
-const CAT_COLORS = ['#632148','#4a9eff','#34d399','#f87171','#a78bfa','#fb923c','#38bdf8','#f472b6','#6ee7b7','#fbbf24']
+const CAT_COLORS = ['#632148','#4a9eff','#34d399','#f87171','#a78bfa','#8a2f63','#38bdf8','#f472b6','#6ee7b7','#fbbf24']
 
 function CategoryBar({ category, amount, total, color, pct }) {
   return (
@@ -164,7 +164,7 @@ export default function BudgetPage() {
                 ))}
               </select>
               <button onClick={() => setShowForm(!showForm)}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 {showForm ? 'Cancel' : '+ Add Entry'}
               </button>
             </div>
@@ -259,7 +259,7 @@ export default function BudgetPage() {
               </div>
               {error && <div style={{ color: '#f87171', fontSize: '13px', marginTop: '10px' }}>{error}</div>}
               <button onClick={handleAdd} disabled={saving}
-                style={{ marginTop: '16px', background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ marginTop: '16px', background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 {saving ? 'Adding...' : 'Add Entry'}
               </button>
             </div>
@@ -284,7 +284,7 @@ export default function BudgetPage() {
               <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>No entries this month</div>
               <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '20px' }}>Start logging your income and expenses to see insights</div>
               <button onClick={() => setShowForm(true)}
-                style={{ background: 'var(--gold)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                style={{ background: 'var(--gold)', color: '#FFFCFC', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                 Add your first entry
               </button>
             </div>
