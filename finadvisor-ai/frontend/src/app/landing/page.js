@@ -192,7 +192,7 @@ export default function LandingPage() {
               {/* Screen with video */}
               <div style={{ borderRadius: '30px', overflow: 'hidden', aspectRatio: '9/16', background: '#021526', position: 'relative' }}>
                 <img
-                  src="/hero.jpg"
+                  src="/hero.png"
                   alt="FinAdvisor AI dashboard"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
                 />
