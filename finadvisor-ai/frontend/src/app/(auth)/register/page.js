@@ -91,7 +91,7 @@ export default function RegisterPage() {
       {/* Full-page background image */}
       <div style={{
         position: 'absolute', inset: 0,
-        backgroundImage: 'url(/auth-bg.png)',
+        backgroundImage: 'url(/auth-hero.png)',
         backgroundSize: 'cover',
         backgroundPosition: '50% 20%',
         zIndex: 0,
