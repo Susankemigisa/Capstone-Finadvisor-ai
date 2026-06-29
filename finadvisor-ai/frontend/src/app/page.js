@@ -61,10 +61,8 @@ export default function LandingPage() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '18px 32px',
         position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(2,21,38,0.45)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        background: 'transparent',
+        borderBottom: 'none',
       }}>
         <span style={{
           fontFamily: 'DM Mono, monospace',
@@ -106,10 +104,8 @@ export default function LandingPage() {
 
       {/* ── Ticker strip — glass ── */}
       <div style={{
-        background: 'rgba(3,62,91,0.35)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        background: 'transparent',
+        borderBottom: 'none',
         padding: '8px 32px',
         fontSize: '12px', fontFamily: 'DM Mono, monospace',
         color: '#FFFCFC',
